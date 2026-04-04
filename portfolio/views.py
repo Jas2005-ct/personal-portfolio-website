@@ -1,8 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import AuthenticationForm
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
-from .models import Profile, Education, Certificate, Internship, Profession, Skill, Project, SocialLink, Resume, Service, Testimonial, ContactMessage, Technology
+from .models import (
+    Profile, Education, Certificate, Internship, Profession, Skill, 
+    Project, SocialLink, Resume, Service, Testimonial, ContactMessage, Technology
+)
 from .serializers import (
     ProfileSerializer, EducationSerializer, CertificateSerializer, 
     InternshipSerializer, ProfessionSerializer, SkillSerializer, 
@@ -10,11 +16,6 @@ from .serializers import (
     ServiceSerializer, TestimonialSerializer, ContactMessageSerializer,
     TechnologySerializer
 )
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
 
 def home(request):
