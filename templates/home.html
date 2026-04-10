@@ -19,6 +19,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- SEO & Metadata -->
+    <meta name="description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% else %}Full Stack Developer Portfolio{% endif %}">
+    <meta name="keywords" content="Software Developer, Full Stack, Django, Python, Portfolio">
+    <meta name="author" content="{% if profile %}{{ profile.name }}{% endif %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% if profile %}{{ profile.name }} | Portfolio{% else %}Portfolio{% endif %}">
+    <meta property="og:description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% endif %}">
+    <meta property="og:image" content="{% if profile %}{{ profile.profile_image.url }}{% endif %}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="{% if profile %}{{ profile.name }} | Portfolio{% else %}Portfolio{% endif %}">
+    <meta property="twitter:description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% endif %}">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "{{ profile.name }}",
+      "jobTitle": "{{ profile.title }}",
+      "description": "{{ profile.bio }}",
+      "url": "{{ request.build_absolute_uri }}"
+    }
+    </script>
 </head>
 <body>
 
@@ -74,6 +102,10 @@
                 <div class="col-md-8">
                     <div class="glass-card text-center p-5">
                         <p id="about-bio" class="lead mb-4" style="text-align: justify;">Loading bio...</p>
+                        <div id="philosophy-container" class="mb-4" style="display:none;">
+                            <h5 class="text-primary"><i class="fas fa-brain me-2"></i>Engineering Philosophy</h5>
+                            <p id="about-philosophy" class="text-muted italic" style="text-align: justify; font-style: italic;"></p>
+                        </div>
                         <div class="row text-start justify-content-center">
                             <div class="col-md-6 mb-3 d-flex align-items-center">
                                 <i class="fas fa-map-marker-alt text-primary me-3 fa-lg"></i> <span id="about-address"></span>
@@ -97,15 +129,15 @@
     <!-- Skills Section -->
     <section id="skills">
         <div class="container">
-            <h2 class="section-title">Skills</h2>
-            <div class="row justify-content-center" id="skills-container">
-                <!-- Skills injected here -->
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div id="skills-categories-container">
+                <!-- Skill Categories (Backend, Frontend, etc.) injected here -->
             </div>
             
-            <div class="mt-5">
-                <h3 class="text-center mb-4">Tech Stack</h3>
+            <div class="mt-5 pt-5 border-top border-secondary">
+                <h3 class="text-center mb-5 text-primary">Core Tech Stack</h3>
                 <div class="d-flex justify-content-center flex-wrap gap-4" id="tech-stack-container">
-                    <!-- Tech Stack injected here -->
+                    <!-- Tech Stack badges injected here -->
                 </div>
             </div>
         </div>
@@ -180,17 +212,25 @@
                     </div>
                     <div class="mb-3">
                         <h6 class="text-primary">Description</h6>
-                        <p id="projectModalDesc"></p>
+                        <div id="projectModalDesc"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <h6 class="text-primary">Motive</h6>
-                            <p id="projectModalMotive"></p>
+                            <div id="projectModalMotive"></div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <h6 class="text-primary">Problem Statement</h6>
-                            <p id="projectModalProblem"></p>
+                            <div id="projectModalProblem"></div>
                         </div>
+                    </div>
+                    <div class="mb-3" id="impact-container" style="display:none;">
+                        <h6 class="text-primary">Impact & Achievements</h6>
+                        <div id="projectModalImpact"></div>
+                    </div>
+                    <div class="mb-3" id="architecture-container" style="display:none;">
+                        <h6 class="text-primary">Architecture Notes</h6>
+                        <div id="projectModalArchitecture"></div>
                     </div>
                     <div class="d-flex gap-3 mt-3" id="projectModalLinks">
                         <!-- Links injected here -->
@@ -294,7 +334,9 @@
                         $('#about-bio').text(data.profile.bio || "No bio available.");
                         $('#about-address').text(data.profile.address);
                         $('#about-phone').text(data.profile.phone);
-                        $('#about-email').text(data.profile.email);
+                        $('#hero-email').text(data.profile.email);
+                        $('#about-philosophy').text(data.profile.philosophy || "");
+                        if (data.profile.philosophy) $('#philosophy-container').show();
                         
                         if (data.profile.profile_image) {
                             $('#hero-img').attr('src', data.profile.profile_image);
@@ -505,6 +547,11 @@
                             $('#projectModalDesc').html(`<p class="lead mb-4" style="text-align: justify;">${proj.description}</p>`);
                             $('#projectModalMotive').html(`<p class="lead mb-4" style="text-align: justify;">${proj.motive}</p>`);
                             $('#projectModalProblem').html(`<p class="lead mb-4" style="text-align: justify;">${proj.problem_statement}</p>`);
+                            $('#projectModalImpact').html(`<p class="lead mb-1" style="text-align: justify;">${proj.impact || ""}</p>`);
+                            $('#projectModalArchitecture').html(`<p class="lead mb-1" style="text-align: justify;">${proj.architecture_notes || ""}</p>`);
+                            
+                            if (proj.impact) $('#impact-container').show(); else $('#impact-container').hide();
+                            if (proj.architecture_notes) $('#architecture-container').show(); else $('#architecture-container').hide();
                             
                             if (proj.image) {
                                 $('#projectModalImg').attr('src', proj.image).show();
@@ -545,11 +592,11 @@
                     if (data.social_links) {
                         let socialHtml = '';
                         const links = data.social_links;
-                        if (links.github) socialHtml += `<a href="${links.github}" target="_blank"><i class="fab fa-github"></i></a>`;
-                        if (links.linkedin) socialHtml += `<a href="${links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
-                        if (links.twitter) socialHtml += `<a href="${links.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
-                        if (links.instagram) socialHtml += `<a href="${links.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-                        if (links.facebook) socialHtml += `<a href="${links.facebook}" target="_blank"><i class="fab fa-facebook"></i></a>`;
+                        if (links.github) socialHtml += `<a href="${links.github}" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>`;
+                        if (links.linkedin) socialHtml += `<a href="${links.linkedin}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>`;
+                        if (links.twitter) socialHtml += `<a href="${links.twitter}" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>`;
+                        if (links.instagram) socialHtml += `<a href="${links.instagram}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>`;
+                        if (links.facebook) socialHtml += `<a href="${links.facebook}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>`;
                         
                         $('#social-links-container').html(socialHtml);
                     }

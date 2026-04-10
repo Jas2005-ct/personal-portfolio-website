@@ -18,7 +18,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
 
 def home(request):
-    return render(request, 'home.html')
+    # Fetch the first superuser's profile for SEO metadata
+    from .models import CustomUser, Profile
+    user = CustomUser.objects.filter(is_superuser=True).first()
+    profile = Profile.objects.filter(user=user).first() if user else None
+    return render(request, 'home.html', {'profile': profile})
 
 @user_passes_test(lambda u: u.is_superuser, login_url='login')
 def dashboard(request):

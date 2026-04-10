@@ -44,6 +44,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=15)
     address = models.TextField()
     technologies = models.ManyToManyField('Technology', blank=True)
+    philosophy = models.TextField(blank=True, help_text="Your engineering mindset and development approach")
 
     def __str__(self):
         return self.name
@@ -97,9 +98,17 @@ class Skill(models.Model):
         ('Advanced', 'Advanced'),
     )
 
+    category_choices = (
+        ('Frontend', 'Frontend'),
+        ('Backend', 'Backend'),
+        ('DevOps', 'DevOps'),
+        ('Tools', 'Tools'),
+    )
+
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     skill = models.CharField(max_length=100)
     level = models.CharField(max_length=100, choices=level_choices)
+    category = models.CharField(max_length=100, choices=category_choices, default='Backend')
     image = models.ImageField(upload_to='skills/', null=True, blank=True)
     
     def __str__(self):
@@ -116,6 +125,8 @@ class Project(models.Model):
     tech_stack = models.CharField(max_length=200, help_text="Comma separated, e.g. Django, React", blank=True, null=True)
     github_link = models.URLField(null=True, blank=True)
     live_demo = models.URLField(null=True, blank=True)    
+    impact = models.TextField(blank=True, help_text="Quantifiable results, e.g., 'Reduced load time by 30%'")
+    architecture_notes = models.TextField(blank=True, help_text="Deep-dive into technical decisions and trade-offs")
 
     def __str__(self):
         return self.title
