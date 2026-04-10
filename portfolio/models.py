@@ -51,9 +51,13 @@ class Profile(models.Model):
 
 class Education(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    course = models.CharField(max_length=100)
+    course = models.CharField(max_length=100, help_text="e.g. Bachelor of Technology")
     institution = models.CharField(max_length=100)
-    course_duration = models.CharField(max_length=100)
+    field_of_study = models.CharField(max_length=100, blank=True, null=True, help_text="e.g. Computer Science")
+    location = models.CharField(max_length=100, blank=True, null=True)
+    grade = models.CharField(max_length=20, blank=True, null=True, help_text="GPA or Percentage")
+    description = models.TextField(blank=True, null=True, help_text="Key achievements or relevant coursework")
+    course_duration = models.CharField(max_length=100, blank=True, null=True)
     start_year = models.IntegerField()
     end_year = models.IntegerField(null=True, blank=True)
 
@@ -73,6 +77,8 @@ class Internship(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     company = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True, help_text="Key responsibilities and achievements")
     duration = models.CharField(max_length=100)
     start_year = models.IntegerField()
     end_year = models.IntegerField(null=True, blank=True)
@@ -84,6 +90,8 @@ class Profession(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     company = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True, help_text="Key responsibilities and achievements")
     duration = models.CharField(max_length=100)
     start_year = models.IntegerField()
     end_year = models.IntegerField(null=True, blank=True)

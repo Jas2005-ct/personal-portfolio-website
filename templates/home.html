@@ -197,14 +197,24 @@
                         <div class="timeline-item">
                             <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
                             <h5>{{ job.role }}</h5>
-                            <p class="text-muted mb-0">{{ job.company }}</p>
+                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
+                            {% if job.description %}
+                            <div class="description-text text-muted small mt-2">
+                                {{ job.description|linebreaksbr }}
+                            </div>
+                            {% endif %}
                         </div>
                         {% endfor %}
                         {% for job in internships %}
                         <div class="timeline-item">
                             <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
                             <h5>{{ job.role }} (Intern)</h5>
-                            <p class="text-muted mb-0">{{ job.company }}</p>
+                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
+                            {% if job.description %}
+                            <div class="description-text text-muted small mt-2">
+                                {{ job.description|linebreaksbr }}
+                            </div>
+                            {% endif %}
                         </div>
                         {% endfor %}
                         {% if not professions and not internships %}
@@ -219,7 +229,21 @@
                         <div class="timeline-item">
                             <span class="timeline-date">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
                             <h5>{{ edu.course }}</h5>
-                            <p class="text-muted mb-0">{{ edu.institution }}</p>
+                            <p class="text-primary mb-1">
+                                {{ edu.institution }}
+                                {% if edu.location %} | <small class="text-muted">{{ edu.location }}</small>{% endif %}
+                            </p>
+                            {% if edu.field_of_study %}
+                            <p class="mb-1"><strong>Major:</strong> {{ edu.field_of_study }}</p>
+                            {% endif %}
+                            {% if edu.grade %}
+                            <p class="mb-1"><span class="badge bg-info text-dark" style="background: var(--primary-color) !important; color: #000 !important; font-weight: 700;">{{ edu.grade }}</span></p>
+                            {% endif %}
+                            {% if edu.description %}
+                            <div class="description-text text-muted small mt-2">
+                                {{ edu.description|linebreaksbr }}
+                            </div>
+                            {% endif %}
                         </div>
                         {% empty %}
                         <p class="text-muted">No education listed.</p>

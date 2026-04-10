@@ -257,11 +257,23 @@
                         <div class="col-md-4 mb-3">
                             <input type="text" class="form-control" name="course_duration" placeholder="Duration (e.g. 4 years)">
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control" name="field_of_study" placeholder="Field of Study / Major">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control" name="location" placeholder="Location (City, Country)">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="text" class="form-control" name="grade" placeholder="Grade / GPA">
+                        </div>
                         <div class="col-md-4 mb-3">
                             <input type="number" class="form-control" name="start_year" placeholder="Start Year" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <input type="number" class="form-control" name="end_year" placeholder="End Year (leave empty if current)">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <textarea class="form-control" name="description" placeholder="Description (Bullet points, achievements, etc.)" rows="3"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Education</button>
@@ -326,6 +338,12 @@
                         <div class="col-md-4 mb-3">
                             <input type="number" class="form-control" name="end_year" placeholder="End Year">
                         </div>
+                        <div class="col-md-12 mb-3">
+                            <input type="text" class="form-control" name="location" placeholder="Location (e.g. Remote, Bangalore)">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <textarea class="form-control" name="description" placeholder="Description / Highlights / Achievements (supports bullet points)" rows="3"></textarea>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Job</button>
                 </form>
@@ -355,6 +373,12 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <input type="number" class="form-control" name="end_year" placeholder="End Year">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <input type="text" class="form-control" name="location" placeholder="Location">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <textarea class="form-control" name="description" placeholder="Description / Highlights / Achievements (supports bullet points)" rows="3"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Internship</button>
@@ -658,6 +682,7 @@
                     data.forEach(item => {
                         let title = item.course || item.role || item.skill || item.title;
                         let subtitle = item.institution || item.company || item.level || item.tech_stack || '';
+                        if (item.location) subtitle += ` | ${item.location}`;
                         
                         html += `
                             <div class="col-md-6 mb-3">
