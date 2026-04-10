@@ -1,8 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
-from .models import Profile, Education, Certificate, Internship, Profession, Skill, Project, SocialLink, Resume, Service, Testimonial, ContactMessage, Technology
+from .models import (
+    Profile, Education, Certificate, Internship, Profession, 
+    Skill, Project, SocialLink, Resume, Service, Testimonial, 
+    ContactMessage, Technology, CustomUser
+)
 from .serializers import (
     ProfileSerializer, EducationSerializer, CertificateSerializer, 
     InternshipSerializer, ProfessionSerializer, SkillSerializer, 
@@ -10,36 +15,50 @@ from .serializers import (
     ServiceSerializer, TestimonialSerializer, ContactMessageSerializer,
     TechnologySerializer
 )
-
-from django.shortcuts import render, redirect
+from .mixins import SuperAdminMixin
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm
 
-def home(request):
-    # Fetch the first superuser's profile for SEO metadata
-    from .models import CustomUser, Profile
-    user = CustomUser.objects.filter(is_superuser=True).first()
-    profile = Profile.objects.filter(user=user).first() if user else None
-    return render(request, 'home.html', {'profile': profile})
+class HomeView(TemplateView):
+    template_name = 'home.html'
 
-@user_passes_test(lambda u: u.is_superuser, login_url='login')
-def dashboard(request):
-    return render(request, 'dashboard.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Fetch the first superuser's profile for public view
+        user = CustomUser.objects.filter(is_superuser=True).first()
+        if user:
+            context['profile'] = Profile.objects.filter(user=user).first()
+            context['education'] = Education.objects.filter(user=user).order_by('-start_year')
+            context['certificates'] = Certificate.objects.filter(user=user)
+            context['internships'] = Internship.objects.filter(user=user).order_by('-start_year')
+            context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
+            context['skills'] = Skill.objects.filter(user=user)
+            context['projects'] = Project.objects.filter(user=user)
+            context['social_links'] = SocialLink.objects.filter(user=user).first()
+            context['resume'] = Resume.objects.filter(user=user).first()
+            context['services'] = Service.objects.filter(user=user)
+            context['testimonials'] = Testimonial.objects.filter(user=user)
+        return context
 
-# def register(request):
-#     if request.method == 'POST':
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             if user.is_superuser:
-#                 return redirect('dashboard')
-#             return redirect('home')
-#     else:
-#         form = CustomUserCreationForm()
-#     return render(request, 'register.html', {'form': form})
+class DashboardView(SuperAdminMixin, TemplateView):
+    template_name = 'dashboard.html'   
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['profile'] = Profile.objects.filter(user=user).first()
+        context['education'] = Education.objects.filter(user=user)
+        context['certificates'] = Certificate.objects.filter(user=user)
+        context['internships'] = Internship.objects.filter(user=user)
+        context['professions'] = Profession.objects.filter(user=user)
+        context['skills'] = Skill.objects.filter(user=user)
+        context['projects'] = Project.objects.filter(user=user)
+        context['social_links'] = SocialLink.objects.filter(user=user).first()
+        context['resume'] = Resume.objects.filter(user=user).first()
+        context['services'] = Service.objects.filter(user=user)
+        context['testimonials'] = Testimonial.objects.filter(user=user)
+        context['tech_stack'] = Technology.objects.all()
+        return context
 
 def login_view(request):
     if request.method == 'POST':
@@ -59,56 +78,32 @@ def logout_view(request):
     return redirect('login')
 
 class PortfolioDataView(APIView):
+    """
+    API endpoint that returns all portfolio data in JSON format.
+    Used for AJAX loading if needed.
+    """
     def get(self, request):
-        # Prioritize logged-in user, otherwise fallback to the first user (for public view)
         if request.user.is_authenticated:
             user = request.user
         else:
-            # Fallback to the first user found (or specific logic like is_superuser)
-            from .models import CustomUser
-            user = CustomUser.objects.first()
+            user = CustomUser.objects.filter(is_superuser=True).first()
 
-        if user:
-            profile = Profile.objects.filter(user=user).first()
-            education = Education.objects.filter(user=user)
-            certificates = Certificate.objects.filter(user=user)
-            internships = Internship.objects.filter(user=user)
-            professions = Profession.objects.filter(user=user)
-            skills = Skill.objects.filter(user=user)
-            projects = Project.objects.filter(user=user)
-            social_links = SocialLink.objects.filter(user=user).first()
-            resume = Resume.objects.filter(user=user).first()
-            services = Service.objects.filter(user=user)
-            testimonials = Testimonial.objects.filter(user=user)
-            # tech_stack is now part of profile.technologies
-            tech_stack = profile.technologies.all() if profile else []
-        else:
-            profile = None
-            education = []
-            certificates = []
-            internships = []
-            professions = []
-            skills = []
-            projects = []
-            social_links = None
-            resume = None
-            services = []
-            testimonials = []
-            tech_stack = []
+        if not user:
+            return Response({"error": "No data found"}, status=404)
 
         data = {
-            'profile': ProfileSerializer(profile).data if profile else None,
-            'education': EducationSerializer(education, many=True).data,
-            'certificates': CertificateSerializer(certificates, many=True).data,
-            'internships': InternshipSerializer(internships, many=True).data,
-            'professions': ProfessionSerializer(professions, many=True).data,
-            'skills': SkillSerializer(skills, many=True).data,
-            'projects': ProjectSerializer(projects, many=True).data,
-            'social_links': SocialLinkSerializer(social_links).data if social_links else None,
-            'resume': ResumeSerializer(resume).data if resume else None,
-            'services': ServiceSerializer(services, many=True).data,
-            'testimonials': TestimonialSerializer(testimonials, many=True).data,
-            'tech_stack': TechnologySerializer(tech_stack, many=True).data,
+            'profile': ProfileSerializer(Profile.objects.filter(user=user).first()).data,
+            'education': EducationSerializer(Education.objects.filter(user=user), many=True).data,
+            'certificates': CertificateSerializer(Certificate.objects.filter(user=user), many=True).data,
+            'internships': InternshipSerializer(Internship.objects.filter(user=user), many=True).data,
+            'professions': ProfessionSerializer(Profession.objects.filter(user=user), many=True).data,
+            'skills': SkillSerializer(Skill.objects.filter(user=user), many=True).data,
+            'projects': ProjectSerializer(Project.objects.filter(user=user), many=True).data,
+            'social_links': SocialLinkSerializer(SocialLink.objects.filter(user=user).first()).data,
+            'resume': ResumeSerializer(Resume.objects.filter(user=user).first()).data,
+            'services': ServiceSerializer(Service.objects.filter(user=user), many=True).data,
+            'testimonials': TestimonialSerializer(Testimonial.objects.filter(user=user), many=True).data,
+            'tech_stack': TechnologySerializer(Technology.objects.all(), many=True).data,
         }
         return Response(data)
 
