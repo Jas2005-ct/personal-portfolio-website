@@ -18,9 +18,8 @@ router.register(r'contact', views.ContactMessageViewSet)
 router.register(r'technologies', views.TechnologyViewSet)
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('dashboard/', views.dashboard, name='dashboard'),
-    # path('register/', views.register, name='register'),
+    path('', views.HomeView.as_view(), name='home'),
+    path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('api/', include(router.urls)),

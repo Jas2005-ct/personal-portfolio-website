@@ -79,16 +79,20 @@
     <section id="home" class="hero-section">
         <div class="container">
             <div class="hero-content">
-                <div class="profile-img-container" id="hero-img-container" style="display: none;">
-                    <img id="hero-img" src="" alt="Profile">
+                {% if profile and profile.profile_image %}
+                <div class="profile-img-container" id="hero-img-container">
+                    <img id="hero-img" src="{{ profile.profile_image.url }}" alt="Profile">
                 </div>
-                <h1 id="hero-name">Welcome</h1>
-                <p id="hero-title">Loading profile...</p>
+                {% endif %}
+                <h1 id="hero-name">{% if profile %}Hi, I'm {{ profile.name }}{% else %}Welcome{% endif %}</h1>
+                <p id="hero-title">{% if profile %}{{ profile.title }}{% else %}Full Stack Developer{% endif %}</p>
                 <div class="d-flex justify-content-center gap-3">
                     <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal" data-bs-target="#contactModal">
                         <i class="fas fa-paper-plane me-2"></i> Contact
                     </button>
-                    <a href="#" id="resume-btn" class="btn btn-outline-light btn-lg rounded-pill px-4" target="_blank">Resume</a>
+                    {% if resume %}
+                    <a href="{{ resume.resume.url }}" id="resume-btn" class="btn btn-outline-light btn-lg rounded-pill px-4" target="_blank">Resume</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -101,23 +105,22 @@
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-8">
                     <div class="glass-card text-center p-5">
-                        <p id="about-bio" class="lead mb-4" style="text-align: justify;">Loading bio...</p>
-                        <div id="philosophy-container" class="mb-4" style="display:none;">
+                        <p id="about-bio" class="lead mb-4" style="text-align: justify;">{{ profile.bio|default:"No bio available." }}</p>
+                        {% if profile.philosophy %}
+                        <div id="philosophy-container" class="mb-4">
                             <h5 class="text-primary"><i class="fas fa-brain me-2"></i>Engineering Philosophy</h5>
-                            <p id="about-philosophy" class="text-muted italic" style="text-align: justify; font-style: italic;"></p>
+                            <p id="about-philosophy" class="text-muted italic" style="text-align: justify; font-style: italic;">{{ profile.philosophy }}</p>
                         </div>
+                        {% endif %}
                         <div class="row text-start justify-content-center">
                             <div class="col-md-6 mb-3 d-flex align-items-center">
-                                <i class="fas fa-map-marker-alt text-primary me-3 fa-lg"></i> <span id="about-address"></span>
+                                <i class="fas fa-map-marker-alt text-primary me-3 fa-lg"></i> <span id="about-address">{{ profile.address }}</span>
                             </div>
                             <div class="col-md-6 mb-3 d-flex align-items-center">
-                                <i class="fas fa-phone text-primary me-3 fa-lg"></i> <span id="about-phone"></span>
+                                <i class="fas fa-phone text-primary me-3 fa-lg"></i> <span id="about-phone">{{ profile.phone }}</span>
                             </div>
                             <div class="col-md-6 mb-3 d-flex align-items-center">
-                                <i class="fas fa-envelope text-primary me-3 fa-lg"></i> <span id="about-email"></span>
-                            </div>
-                            <div class="col-md-6 mb-3 d-flex align-items-center">
-                            <!-- Download button removed as per request -->
+                                <i class="fas fa-envelope text-primary me-3 fa-lg"></i> <span id="about-email">{{ profile.user.email }}</span>
                             </div>
                         </div>
                     </div>
@@ -130,15 +133,28 @@
     <section id="skills">
         <div class="container">
             <h2 class="section-title">Skills & Expertise</h2>
-            <div id="skills-categories-container">
-                <!-- Skill Categories (Backend, Frontend, etc.) injected here -->
-            </div>
-            
-            <div class="mt-5 pt-5 border-top border-secondary">
-                <h3 class="text-center mb-5 text-primary">Core Tech Stack</h3>
-                <div class="d-flex justify-content-center flex-wrap gap-4" id="tech-stack-container">
-                    <!-- Tech Stack badges injected here -->
+            <div id="skills-categories-container" class="row">
+                {% regroup skills by category as skill_list %}
+                {% for category in skill_list %}
+                <div class="col-md-12 mb-4">
+                    <h3 class="text-primary mb-4">{{ category.grouper }}</h3>
+                    <div class="row">
+                        {% for skill in category.list %}
+                        <div class="col-6 col-md-3 col-lg-2 mb-4">
+                            <div class="skill-card text-center">
+                                {% if skill.image %}
+                                <img src="{{ skill.image.url }}" alt="{{ skill.skill }}" class="skill-icon">
+                                {% endif %}
+                                <h5 class="mt-2">{{ skill.skill }}</h5>
+                                <small class="text-muted">{{ skill.level }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
+                {% empty %}
+                <p class="text-muted text-center">No skills listed.</p>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -148,7 +164,23 @@
         <div class="container">
             <h2 class="section-title">Certificates</h2>
             <div class="row g-4" id="certificates-container">
-                <!-- Certificates injected here -->
+                {% for cert in certificates %}
+                <div class="col-md-4">
+                    <div class="glass-card cert-card h-100" style="cursor: pointer;">
+                        {% if cert.image %}
+                        <img src="{{ cert.image.url }}" class="cert-img" alt="{{ cert.course }}">
+                        {% else %}
+                        <div class="cert-placeholder"><i class="fas fa-certificate fa-3x text-muted"></i></div>
+                        {% endif %}
+                        <div class="p-3">
+                            <h5>{{ cert.course }}</h5>
+                            <p class="text-muted mb-0">{{ cert.platform }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center w-100">No certificates listed.</p>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -161,13 +193,37 @@
                 <div class="col-md-6">
                     <h3 class="mb-4 text-center"><i class="fas fa-briefcase me-2"></i>Work</h3>
                     <div id="work-container">
-                        <!-- Work items injected here -->
+                        {% for job in professions %}
+                        <div class="timeline-item">
+                            <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <h5>{{ job.role }}</h5>
+                            <p class="text-muted mb-0">{{ job.company }}</p>
+                        </div>
+                        {% endfor %}
+                        {% for job in internships %}
+                        <div class="timeline-item">
+                            <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <h5>{{ job.role }} (Intern)</h5>
+                            <p class="text-muted mb-0">{{ job.company }}</p>
+                        </div>
+                        {% endfor %}
+                        {% if not professions and not internships %}
+                        <p class="text-muted">No work experience listed.</p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <h3 class="mb-4 text-center"><i class="fas fa-graduation-cap me-2"></i>Education</h3>
                     <div id="education-container">
-                        <!-- Education items injected here -->
+                        {% for edu in education %}
+                        <div class="timeline-item">
+                            <span class="timeline-date">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
+                            <h5>{{ edu.course }}</h5>
+                            <p class="text-muted mb-0">{{ edu.institution }}</p>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">No education listed.</p>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -179,7 +235,39 @@
         <div class="container">
             <h2 class="section-title">Projects</h2>
             <div class="row g-4" id="projects-container">
-                <!-- Projects injected here -->
+                {% for proj in projects %}
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card project-card h-100" style="cursor: pointer;" 
+                         data-project-title="{{ proj.title }}"
+                         data-project-desc="{{ proj.description }}"
+                         data-project-motive="{{ proj.motive }}"
+                         data-project-problem="{{ proj.problem_statement }}"
+                         data-project-impact="{{ proj.impact }}"
+                         data-project-arch="{{ proj.architecture_notes }}"
+                         data-project-github="{{ proj.github_link }}"
+                         data-project-live="{{ proj.live_demo }}"
+                         {% if proj.image %}data-project-img="{{ proj.image.url }}"{% endif %}
+                         data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
+                        
+                        {% if proj.image %}
+                        <img src="{{ proj.image.url }}" class="project-img" alt="{{ proj.title }}">
+                        {% endif %}
+                        <h4>{{ proj.title }}</h4>
+                        <div class="mb-2"><strong>Tech Used:</strong> 
+                            {% for tech in proj.technologies.all %}
+                            <span class="badge bg-primary me-1" style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">{{ tech.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <p>{{ proj.description|truncatechars:100 }}</p>
+                        <div class="project-links mt-auto">
+                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"><i class="fab fa-github"></i></a>{% endif %}
+                            {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted w-100">No projects listed.</p>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -319,297 +407,96 @@
         $(document).ready(function() {
             $('#year').text(new Date().getFullYear());
 
-            // Fetch Portfolio Data
-            $.ajax({
-                url: '/api/portfolio-data/',
-                method: 'GET',
-                success: function(data) {
-                    console.log("Data fetched:", data);
-                    
-                    // Profile
-                    if (data.profile) {
-                        document.title = data.profile.name + " | Portfolio";
-                        $('#hero-name').text("Hi, I'm " + data.profile.name);
-                        $('#hero-title').text(data.profile.title || "Developer");
-                        $('#about-bio').text(data.profile.bio || "No bio available.");
-                        $('#about-address').text(data.profile.address);
-                        $('#about-phone').text(data.profile.phone);
-                        $('#hero-email').text(data.profile.email);
-                        $('#about-philosophy').text(data.profile.philosophy || "");
-                        if (data.profile.philosophy) $('#philosophy-container').show();
-                        
-                        if (data.profile.profile_image) {
-                            $('#hero-img').attr('src', data.profile.profile_image);
-                            $('#hero-img-container').show();
-                        }
-                    }
+            // Hide Loader once page is ready
+            setTimeout(function() {
+                $('#loader').fadeOut();
+            }, 500);
 
-                    // Resume
-                    if (data.resume) {
-                        // Hero Button: Open Modal
-                        $('#resume-btn').attr('href', '#').off('click').click(function(e) {
-                            e.preventDefault();
-                            
-                            const fileUrl = data.resume.file_url;
-                            const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+            // Project Card Click Handler
+            $('.project-card').click(function(e) {
+                // Prevent modal if clicking directly on links
+                if ($(e.target).closest('a').length) return;
 
-                            // Reset Modal Elements
-                            $('#resumeModalImg').hide();
-                            $('#resumeModalFrame').hide();
-                            
-                            if (isPdf) {
-                                // 1. Try JPG Preview (Page 1) - Best for Cloudinary
-                                const jpgUrl = fileUrl.replace(/\.pdf$/i, '.jpg');
-                                $('#resumeModalImg').attr('src', jpgUrl).show();
-
-                                // 2. Fallback to Google Viewer if JPG fails
-                                $('#resumeModalImg').off('error').on('error', function() {
-                                    $(this).hide();
-                                    const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-                                    $('#resumeModalFrame').attr('src', viewerUrl).show();
-                                });
-                            } else {
-                                // Non-PDF: Use Google Viewer
-                                const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-                                $('#resumeModalFrame').attr('src', viewerUrl).show();
-                            }
-
-                            $('#resumeModal').modal('show');
-                        });
-
-                        // About Button: Force Download logic removed
-                        // $('#about-resume-btn').attr('href', downloadUrl).show();
-                    } else {
-                        $('#resume-btn').hide();
-                        $('#about-resume-btn').hide();
-                    }
-
-                    // Skills
-                    if (data.skills && data.skills.length > 0) {
-                        let skillsHtml = '';
-                        data.skills.forEach(skill => {
-                            let imgHtml = '';
-                            if (skill.image) {
-                                imgHtml = `<img src="${skill.image}" alt="${skill.skill}" class="skill-icon">`;
-                            }
-                            // If no image, we just don't show an icon, or we could show a default. 
-                            // User asked to remove icon if not compulsory. Let's make it so if no image, no icon.
-                            // But to keep layout, maybe just a spacer or nothing.
-                            // Let's just show nothing if no image, as requested "remove the icon".
-                            
-                            skillsHtml += `
-                                <div class="col-6 col-md-3 col-lg-2 mb-4">
-                                    <div class="skill-card text-center">
-                                        ${imgHtml}
-                                        <h5 class="mt-2">${skill.skill}</h5>
-                                        <small class="text-muted">${skill.level}</small>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        $('#skills-container').html(skillsHtml);
-                    } else {
-                        $('#skills-container').html('<p class="text-muted text-center">No skills listed.</p>');
-                    }
-
-                    // Tech Stack
-                    if (data.tech_stack && data.tech_stack.length > 0) {
-                        let techHtml = '';
-                        data.tech_stack.forEach(tech => {
-                            techHtml += `<div class="tech-item"><span class="badge bg-secondary p-2">${tech.name}</span></div>`;
-                        });
-                        $('#tech-stack-container').html(techHtml);
-                    } else {
-                        $('#tech-stack-container').html('<p class="text-muted text-center">No tech stack listed.</p>');
-                    }
-
-                    // Certificates
-                    if (data.certificates && data.certificates.length > 0) {
-                        let certHtml = '';
-                        data.certificates.forEach(cert => {
-                            let imgHtml = '';
-                            if (cert.image) {
-                                imgHtml = `<img src="${cert.image}" class="cert-img" alt="${cert.course}">`;
-                            } else {
-                                imgHtml = `<div class="cert-placeholder"><i class="fas fa-certificate fa-3x text-muted"></i></div>`;
-                            }
-
-                            certHtml += `
-                                <div class="col-md-4">
-                                    <div class="glass-card cert-card" style="cursor: pointer;">
-                                        ${imgHtml}
-                                        <div class="p-3">
-                                            <h5>${cert.course}</h5>
-                                            <p class="text-muted mb-0">${cert.platform}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        $('#certificates-container').html(certHtml);
-                    } else {
-                        $('#certificates-container').html('<p class="text-muted text-center">No certificates listed.</p>');
-                    }
-
-                    // Experience (Internship + Profession)
-                    let workHtml = '';
-                    let works = [...data.professions, ...data.internships];
-                    works.sort((a, b) => b.start_year - a.start_year);
-
-                    if (works.length > 0) {
-                        works.forEach(work => {
-                            let endYear = work.end_year ? work.end_year : 'Present';
-                            let title = work.role || work.role; 
-                            let company = work.company;
-                            
-                            workHtml += `
-                                <div class="timeline-item">
-                                    <span class="timeline-date">${work.start_year} - ${endYear}</span>
-                                    <h5>${title}</h5>
-                                    <p class="text-muted mb-0">${company}</p>
-                                </div>
-                            `;
-                        });
-                        $('#work-container').html(workHtml);
-                    } else {
-                        $('#work-container').html('<p class="text-muted">No work experience listed.</p>');
-                    }
-
-                    // Education
-                    if (data.education && data.education.length > 0) {
-                        let eduHtml = '';
-                        data.education.forEach(edu => {
-                            let endYear = edu.end_year ? edu.end_year : 'Present';
-                            eduHtml += `
-                                <div class="timeline-item">
-                                    <span class="timeline-date">${edu.start_year} - ${endYear}</span>
-                                    <h5>${edu.course}</h5>
-                                    <p class="text-muted mb-0">${edu.institution}</p>
-                                </div>
-                            `;
-                        });
-                        $('#education-container').html(eduHtml);
-                    } else {
-                        $('#education-container').html('<p class="text-muted">No education listed.</p>');
-                    }
-
-                    // Projects
-                    if (data.projects && data.projects.length > 0) {
-                        let projHtml = '';
-                        data.projects.forEach(proj => {
-                            let imgHtml = '';
-                            if (proj.image) {
-                                imgHtml = `<img src="${proj.image}" class="project-img" alt="${proj.title}">`;
-                            }
-                            
-                            let github = proj.github_link ? `<a href="${proj.github_link}" target="_blank"><i class="fab fa-github"></i></a>` : '';
-                            let live = proj.live_demo ? `<a href="${proj.live_demo}" target="_blank"><i class="fas fa-external-link-alt"></i></a>` : '';
-                            
-                            let techStackHtml = '';
-                            if (proj.technologies && proj.technologies.length > 0) {
-                                proj.technologies.forEach(tech => {
-                                    techStackHtml += `<span class="badge bg-primary me-1" style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">${tech.name}</span>`;
-                                });
-                            } else if (proj.tech_stack) {
-                                proj.tech_stack.split(',').forEach(tech => {
-                                    techStackHtml += `<span class="badge bg-secondary me-1">${tech.trim()}</span>`;
-                                });
-                            }
-
-                            // Escape single quotes for JSON attribute
-                            let projData = JSON.stringify(proj).replace(/'/g, "&#39;");
-
-                            projHtml += `
-                                <div class="col-md-4 mb-4">
-                                    <div class="glass-card project-card h-100" style="cursor: pointer;" data-project='${projData}'>
-                                        ${imgHtml}
-                                        <h4>${proj.title}</h4>
-                                        <div class="mb-2"><strong>Tech Used:</strong> ${techStackHtml}</div>
-                                        <p>${proj.description.substring(0, 100)}...</p>
-                                        <div class="project-links mt-auto">
-                                            ${github}
-                                            ${live}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        $('#projects-container').html(projHtml);
-                        
-                        // Project Card Click Handler
-                        $('.project-card').click(function(e) {
-                            // Prevent modal if clicking directly on links
-                            if ($(e.target).closest('a').length) return;
-
-                            let proj = $(this).data('project');
-                            
-                            $('#projectModalTitle').text(proj.title);
-                            $('#projectModalDesc').html(`<p class="lead mb-4" style="text-align: justify;">${proj.description}</p>`);
-                            $('#projectModalMotive').html(`<p class="lead mb-4" style="text-align: justify;">${proj.motive}</p>`);
-                            $('#projectModalProblem').html(`<p class="lead mb-4" style="text-align: justify;">${proj.problem_statement}</p>`);
-                            $('#projectModalImpact').html(`<p class="lead mb-1" style="text-align: justify;">${proj.impact || ""}</p>`);
-                            $('#projectModalArchitecture').html(`<p class="lead mb-1" style="text-align: justify;">${proj.architecture_notes || ""}</p>`);
-                            
-                            if (proj.impact) $('#impact-container').show(); else $('#impact-container').hide();
-                            if (proj.architecture_notes) $('#architecture-container').show(); else $('#architecture-container').hide();
-                            
-                            if (proj.image) {
-                                $('#projectModalImg').attr('src', proj.image).show();
-                            } else {
-                                $('#projectModalImg').hide();
-                            }
-
-                            // Tech Stack
-                            let techHtml = '';
-                            if (proj.technologies && proj.technologies.length > 0) {
-                                proj.technologies.forEach(tech => {
-                                    techHtml += `<span class="badge bg-primary me-1 mb-1" style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">${tech.name}</span>`;
-                                });
-                            } else if (proj.tech_stack) {
-                                proj.tech_stack.split(',').forEach(tech => {
-                                    techHtml += `<span class="badge bg-secondary me-1 mb-1">${tech.trim()}</span>`;
-                                });
-                            }
-                            $('#projectModalTech').html(techHtml);
-
-                            // Links
-                            let linksHtml = '';
-                            if (proj.github_link) {
-                                linksHtml += `<a href="${proj.github_link}" target="_blank" class="btn btn-outline-light"><i class="fab fa-github me-2"></i>GitHub</a>`;
-                            }
-                            if (proj.live_demo) {
-                                linksHtml += `<a href="${proj.live_demo}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt me-2"></i>Live Demo</a>`;
-                            }
-                            $('#projectModalLinks').html(linksHtml);
-
-                            $('#projectModal').modal('show');
-                        });
-                    } else {
-                        $('#projects-container').html('<p class="text-center text-muted">No projects listed.</p>');
-                    }
-
-                    // Social Links
-                    if (data.social_links) {
-                        let socialHtml = '';
-                        const links = data.social_links;
-                        if (links.github) socialHtml += `<a href="${links.github}" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>`;
-                        if (links.linkedin) socialHtml += `<a href="${links.linkedin}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>`;
-                        if (links.twitter) socialHtml += `<a href="${links.twitter}" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>`;
-                        if (links.instagram) socialHtml += `<a href="${links.instagram}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>`;
-                        if (links.facebook) socialHtml += `<a href="${links.facebook}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>`;
-                        
-                        $('#social-links-container').html(socialHtml);
-                    }
-
-                    // Hide Loader
-                    setTimeout(function() {
-                        $('#loader').fadeOut();
-                    }, 500);
-                },
-                error: function(err) {
-                    console.error("Error fetching data:", err);
-                    $('#loader').html('<p class="text-danger text-center">Failed to load data.</p>');
+                let card = $(this);
+                
+                $('#projectModalTitle').text(card.data('project-title'));
+                $('#projectModalDesc').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-desc')}</p>`);
+                $('#projectModalMotive').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-motive')}</p>`);
+                $('#projectModalProblem').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-problem')}</p>`);
+                
+                let impact = card.data('project-impact');
+                let arch = card.data('project-arch');
+                
+                if (impact && impact !== 'None') {
+                    $('#projectModalImpact').html(`<p class="lead mb-1" style="text-align: justify;">${impact}</p>`);
+                    $('#impact-container').show();
+                } else {
+                    $('#impact-container').hide();
                 }
+
+                if (arch && arch !== 'None') {
+                    $('#projectModalArchitecture').html(`<p class="lead mb-1" style="text-align: justify;">${arch}</p>`);
+                    $('#architecture-container').show();
+                } else {
+                    $('#architecture-container').hide();
+                }
+                
+                let img = card.data('project-img');
+                if (img) {
+                    $('#projectModalImg').attr('src', img).show();
+                } else {
+                    $('#projectModalImg').hide();
+                }
+
+                // Tech Stack
+                let tech = card.data('project-tech');
+                let techHtml = '';
+                if (tech) {
+                    tech.split(',').forEach(t => {
+                        techHtml += `<span class="badge bg-primary me-1 mb-1" style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">${t.trim()}</span>`;
+                    });
+                }
+                $('#projectModalTech').html(techHtml);
+
+                // Links
+                let linksHtml = '';
+                let github = card.data('project-github');
+                let live = card.data('project-live');
+                if (github && github !== 'None') {
+                    linksHtml += `<a href="${github}" target="_blank" class="btn btn-outline-light"><i class="fab fa-github me-2"></i>GitHub</a>`;
+                }
+                if (live && live !== 'None') {
+                    linksHtml += `<a href="${live}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt me-2"></i>Live Demo</a>`;
+                }
+                $('#projectModalLinks').html(linksHtml);
+
+                $('#projectModal').modal('show');
+            });
+
+            // Resume Button Modal Handler
+            $('#resume-btn').click(function(e) {
+                e.preventDefault();
+                const fileUrl = $(this).attr('href');
+                const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+
+                $('#resumeModalImg').hide();
+                $('#resumeModalFrame').hide();
+                
+                if (isPdf) {
+                    // Try JPG Preview (Page 1) - Best for Cloudinary fallback
+                    const jpgUrl = fileUrl.replace(/\.pdf$/i, '.jpg');
+                    $('#resumeModalImg').attr('src', jpgUrl).show();
+
+                    $('#resumeModalImg').off('error').on('error', function() {
+                        $(this).hide();
+                        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
+                        $('#resumeModalFrame').attr('src', viewerUrl).show();
+                    });
+                } else {
+                    const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
+                    $('#resumeModalFrame').attr('src', viewerUrl).show();
+                }
+                $('#resumeModal').modal('show');
             });
 
             // Contact Form Submission
@@ -657,7 +544,7 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Only animate once
+                        observer.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
