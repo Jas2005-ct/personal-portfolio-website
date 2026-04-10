@@ -1,0 +1,12 @@
+DEBUG=True
+SECRET_KEY=django-insecure-your-secret-key-here
+# Remove DATABASE_URL to use local SQLite, or set it to your Render DB URL if you want
+# DATABASE_URL=
+
+# Cloudinary Settings (Required for Resume/Images)
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# Admin Settings
+DATABASE_URL=
