@@ -99,28 +99,45 @@ class Profession(models.Model):
     def __str__(self):
         return self.company
 
-class Skill(models.Model):
-    level_choices = (
+class SkillMaster(models.Model):
+    CATEGORY_CHOICES = (
+        ('Programming', 'Programming'),
+        ('Backend', 'Backend'),
+        ('Frontend', 'Frontend'),
+        ('Database', 'Database'),
+        ('Data/AI', 'Data/AI'),
+        ('Tools', 'Tools'),
+    )
+    name = models.CharField(max_length=100, unique=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    image = models.ImageField(upload_to='skills/icons/', null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Skill Master"
+        verbose_name_plural = "Skill Master"
+        ordering = ['category', 'name']
+
+    def __str__(self):
+        return f"{self.name} ({self.category})"
+
+
+class UserSkill(models.Model):
+    LEVEL_CHOICES = (
         ('Beginner', 'Beginner'),
         ('Intermediate', 'Intermediate'),
         ('Advanced', 'Advanced'),
     )
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_skills')
+    skill = models.ForeignKey(SkillMaster, on_delete=models.CASCADE)
+    level = models.CharField(max_length=50, choices=LEVEL_CHOICES)
+    order = models.IntegerField(default=0, help_text="Priority for display")
 
-    category_choices = (
-        ('Frontend', 'Frontend'),
-        ('Backend', 'Backend'),
-        ('DevOps', 'DevOps'),
-        ('Tools', 'Tools'),
-    )
+    class Meta:
+        ordering = ['order', 'skill__name']
+        unique_together = ('user', 'skill')
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    skill = models.CharField(max_length=100)
-    level = models.CharField(max_length=100, choices=level_choices)
-    category = models.CharField(max_length=100, choices=category_choices, default='Backend')
-    image = models.ImageField(upload_to='skills/', null=True, blank=True)
-    
     def __str__(self):
-        return self.skill
+        return f"{self.user.email} - {self.skill.name} ({self.level})"
 
 class Project(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

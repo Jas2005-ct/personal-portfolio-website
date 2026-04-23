@@ -1,41 +1,44 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Loading...</title>
     <link rel="icon" href="{% static 'favicon.jpg' %}" type="image/jpeg">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="/static/css/style.css">
-    
+
     <!-- SEO & Metadata -->
-    <meta name="description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% else %}Full Stack Developer Portfolio{% endif %}">
+    <meta name="description"
+        content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% else %}Full Stack Developer Portfolio{% endif %}">
     <meta name="keywords" content="Software Developer, Full Stack, Django, Python, Portfolio">
     <meta name="author" content="{% if profile %}{{ profile.name }}{% endif %}">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="{% if profile %}{{ profile.name }} | Portfolio{% else %}Portfolio{% endif %}">
     <meta property="og:description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% endif %}">
     <meta property="og:image" content="{% if profile %}{{ profile.profile_image.url }}{% endif %}">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="{% if profile %}{{ profile.name }} | Portfolio{% else %}Portfolio{% endif %}">
+    <meta property="twitter:title"
+        content="{% if profile %}{{ profile.name }} | Portfolio{% else %}Portfolio{% endif %}">
     <meta property="twitter:description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% endif %}">
-    
+
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
@@ -48,6 +51,7 @@
     }
     </script>
 </head>
+
 <body>
 
     <!-- Loader -->
@@ -87,11 +91,13 @@
                 <h1 id="hero-name">{% if profile %}Hi, I'm {{ profile.name }}{% else %}Welcome{% endif %}</h1>
                 <p id="hero-title">{% if profile %}{{ profile.title }}{% else %}Full Stack Developer{% endif %}</p>
                 <div class="d-flex justify-content-center gap-3">
-                    <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal" data-bs-target="#contactModal">
+                    <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal"
+                        data-bs-target="#contactModal">
                         <i class="fas fa-paper-plane me-2"></i> Contact
                     </button>
                     {% if resume %}
-                    <a href="{{ resume.resume.url }}" id="resume-btn" class="btn btn-outline-light btn-lg rounded-pill px-4" target="_blank">Resume</a>
+                    <a href="{{ resume.resume.url }}" id="resume-btn"
+                        class="btn btn-outline-light btn-lg rounded-pill px-4" target="_blank">Resume</a>
                     {% endif %}
                 </div>
             </div>
@@ -109,18 +115,34 @@
                         {% if profile.philosophy %}
                         <div id="philosophy-container" class="mb-4">
                             <h5 class="text-primary"><i class="fas fa-brain me-2"></i>Engineering Philosophy</h5>
-                            <p id="about-philosophy" class="text-muted italic" style="text-align: justify; font-style: italic;">{{ profile.philosophy }}</p>
+                            <p id="about-philosophy" class="text-muted italic"
+                                style="text-align: justify; font-style: italic;">{{ profile.philosophy }}</p>
                         </div>
                         {% endif %}
-                        <div class="row text-start justify-content-center">
-                            <div class="col-md-6 mb-3 d-flex align-items-center">
-                                <i class="fas fa-map-marker-alt text-primary me-3 fa-lg"></i> <span id="about-address">{{ profile.address }}</span>
+                        <div class="row mt-5 pt-4 border-top border-secondary-subtle justify-content-center">
+                            <div class="col-md-4 mb-4">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="icon-container mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(0, 242, 234, 0.1); border-radius: 50%; border: 1px solid var(--primary-color);">
+                                        <i class="fas fa-map-marker-alt text-primary fa-lg"></i>
+                                    </div>
+                                    <span id="about-address" class="text-center">{{ profile.address }}</span>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3 d-flex align-items-center">
-                                <i class="fas fa-phone text-primary me-3 fa-lg"></i> <span id="about-phone">{{ profile.phone }}</span>
+                            <div class="col-md-4 mb-4">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="icon-container mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(0, 242, 234, 0.1); border-radius: 50%; border: 1px solid var(--primary-color);">
+                                        <i class="fas fa-phone text-primary fa-lg"></i>
+                                    </div>
+                                    <span id="about-phone" class="text-center">{{ profile.phone }}</span>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3 d-flex align-items-center">
-                                <i class="fas fa-envelope text-primary me-3 fa-lg"></i> <span id="about-email">{{ profile.user.email }}</span>
+                            <div class="col-md-4 mb-4">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="icon-container mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(0, 242, 234, 0.1); border-radius: 50%; border: 1px solid var(--primary-color);">
+                                        <i class="fas fa-envelope text-primary fa-lg"></i>
+                                    </div>
+                                    <span id="about-email" class="text-center">{{ profile.user.email }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -130,34 +152,34 @@
     </section>
 
     <!-- Skills Section -->
+    {% if grouped_skills %}
     <section id="skills">
         <div class="container">
             <h2 class="section-title">Skills & Expertise</h2>
             <div id="skills-categories-container" class="row">
-                {% regroup skills by category as skill_list %}
-                {% for category in skill_list %}
+                {% for category, skills_list in grouped_skills.items %}
                 <div class="col-md-12 mb-4">
-                    <h3 class="text-primary mb-4">{{ category.grouper }}</h3>
+                    <h3 class="text-primary mb-4">{{ category }}</h3>
                     <div class="row">
-                        {% for skill in category.list %}
+                        {% for uskill in skills_list %}
                         <div class="col-6 col-md-3 col-lg-2 mb-4">
                             <div class="skill-card text-center">
-                                {% if skill.image %}
-                                <img src="{{ skill.image.url }}" alt="{{ skill.skill }}" class="skill-icon">
+                                {% if uskill.skill.image %}
+                                <img src="{{ uskill.skill.image.url }}" alt="{{ uskill.skill.name }}"
+                                    class="skill-icon">
                                 {% endif %}
-                                <h5 class="mt-2">{{ skill.skill }}</h5>
-                                <small class="text-muted">{{ skill.level }}</small>
+                                <h5 class="mt-2">{{ uskill.skill.name }}</h5>
+                                <small class="text-muted">{{ uskill.level }}</small>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-                {% empty %}
-                <p class="text-muted text-center">No skills listed.</p>
                 {% endfor %}
             </div>
         </div>
     </section>
+    {% endif %}
 
     <!-- Certificates Section -->
     <section id="certificates">
@@ -197,7 +219,8 @@
                         <div class="timeline-item">
                             <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
                             <h5>{{ job.role }}</h5>
-                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
+                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small
+                                    class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
                             {% if job.description %}
                             <div class="description-text text-muted small mt-2">
                                 {{ job.description|linebreaksbr }}
@@ -209,7 +232,8 @@
                         <div class="timeline-item">
                             <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
                             <h5>{{ job.role }} (Intern)</h5>
-                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
+                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small
+                                    class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
                             {% if job.description %}
                             <div class="description-text text-muted small mt-2">
                                 {{ job.description|linebreaksbr }}
@@ -237,7 +261,8 @@
                             <p class="mb-1"><strong>Major:</strong> {{ edu.field_of_study }}</p>
                             {% endif %}
                             {% if edu.grade %}
-                            <p class="mb-1"><span class="badge bg-info text-dark" style="background: var(--primary-color) !important; color: #000 !important; font-weight: 700;">{{ edu.grade }}</span></p>
+                            <p class="mb-1"><span class="badge bg-info text-dark"
+                                    style="background: var(--primary-color) !important; color: #000 !important; font-weight: 700;">{{ edu.grade }}</span></p>
                             {% endif %}
                             {% if edu.description %}
                             <div class="description-text text-muted small mt-2">
@@ -261,31 +286,29 @@
             <div class="row g-4" id="projects-container">
                 {% for proj in projects %}
                 <div class="col-md-4 mb-4">
-                    <div class="glass-card project-card h-100" style="cursor: pointer;" 
-                         data-project-title="{{ proj.title }}"
-                         data-project-desc="{{ proj.description }}"
-                         data-project-motive="{{ proj.motive }}"
-                         data-project-problem="{{ proj.problem_statement }}"
-                         data-project-impact="{{ proj.impact }}"
-                         data-project-arch="{{ proj.architecture_notes }}"
-                         data-project-github="{{ proj.github_link }}"
-                         data-project-live="{{ proj.live_demo }}"
-                         {% if proj.image %}data-project-img="{{ proj.image.url }}"{% endif %}
-                         data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
-                        
+                    <div class="glass-card project-card h-100" style="cursor: pointer;"
+                        data-project-title="{{ proj.title }}" data-project-desc="{{ proj.description }}"
+                        data-project-motive="{{ proj.motive }}" data-project-problem="{{ proj.problem_statement }}"
+                        data-project-impact="{{ proj.impact }}" data-project-arch="{{ proj.architecture_notes }}"
+                        data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}"
+                        data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
+
                         {% if proj.image %}
                         <img src="{{ proj.image.url }}" class="project-img" alt="{{ proj.title }}">
                         {% endif %}
                         <h4>{{ proj.title }}</h4>
-                        <div class="mb-2"><strong>Tech Used:</strong> 
+                        <div class="mb-2"><strong>Tech Used:</strong>
                             {% for tech in proj.technologies.all %}
-                            <span class="badge bg-primary me-1" style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">{{ tech.name }}</span>
+                            <span class="badge bg-primary me-1"
+                                style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">{{ tech.name }}</span>
                             {% endfor %}
                         </div>
                         <p>{{ proj.description|truncatechars:100 }}</p>
                         <div class="project-links mt-auto">
-                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"><i class="fab fa-github"></i></a>{% endif %}
-                            {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>{% endif %}
+                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"><i
+                                    class="fab fa-github"></i></a>{% endif %}
+                            {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank"><i
+                                    class="fas fa-external-link-alt"></i></a>{% endif %}
                         </div>
                     </div>
                 </div>
@@ -299,7 +322,8 @@
     <!-- Contact Button Section -->
     <section id="contact-btn-section" class="py-5 text-center">
         <div class="container">
-            <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal" data-bs-target="#contactModal">
+            <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal"
+                data-bs-target="#contactModal">
                 <i class="fas fa-paper-plane me-2"></i> Send a Message
             </button>
             <div class="social-icons mt-5" id="social-links-container">
@@ -314,10 +338,12 @@
             <div class="modal-content glass-card border-0">
                 <div class="modal-header border-0">
                     <h5 class="modal-title text-white" id="projectModalTitle">Project Title</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-white">
-                    <img id="projectModalImg" src="" class="img-fluid rounded mb-4 w-100" style="max-height: 400px; object-fit: cover; display: none;">
+                    <img id="projectModalImg" src="" class="img-fluid rounded mb-4 w-100"
+                        style="max-height: 400px; object-fit: cover; display: none;">
                     <div class="mb-3">
                         <h6 class="text-primary">Tech Stack</h6>
                         <div id="projectModalTech"></div>
@@ -348,9 +374,9 @@
                         <!-- Links injected here -->
                     </div>
                 </div>
-                </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Resume Modal -->
@@ -358,14 +384,18 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content glass-card border-0" style="background: transparent;">
                 <div class="modal-header border-0 pb-0" style="position: absolute; right: 0; z-index: 10;">
-                    <button type="button" class="btn-close btn-close-white bg-dark rounded-circle p-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white bg-dark rounded-circle p-2"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-0 d-flex justify-content-center align-items-center" style="height: 90vh; background: transparent;">
+                <div class="modal-body p-0 d-flex justify-content-center align-items-center"
+                    style="height: 90vh; background: transparent;">
                     <!-- Image Preview (Primary) -->
-                    <img id="resumeModalImg" src="" style="display:none; max-height: 100%; max-width: 100%; width: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-                    
+                    <img id="resumeModalImg" src=""
+                        style="display:none; max-height: 100%; max-width: 100%; width: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+
                     <!-- Iframe Fallback -->
-                    <iframe id="resumeModalFrame" src="" width="100%" height="100%" style="border: none; display:none;"></iframe>
+                    <iframe id="resumeModalFrame" src="" width="100%" height="100%"
+                        style="border: none; display:none;"></iframe>
                 </div>
             </div>
         </div>
@@ -377,7 +407,8 @@
             <div class="modal-content glass-card">
                 <div class="modal-header border-0">
                     <h5 class="modal-title">Get In Touch</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="contact-form">
@@ -410,7 +441,8 @@
             <div class="modal-content glass-card border-0">
                 <div class="modal-header border-0">
                     <h5 class="modal-title" id="certModalTitle">Certificate</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center p-0">
                     <img src="" id="certModalImg" class="img-fluid rounded" alt="Certificate">
@@ -426,31 +458,31 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#year').text(new Date().getFullYear());
 
             // Hide Loader once page is ready
-            setTimeout(function() {
+            setTimeout(function () {
                 $('#loader').fadeOut();
             }, 500);
 
             // Project Card Click Handler
-            $('.project-card').click(function(e) {
+            $('.project-card').click(function (e) {
                 // Prevent modal if clicking directly on links
                 if ($(e.target).closest('a').length) return;
 
                 let card = $(this);
-                
+
                 $('#projectModalTitle').text(card.data('project-title'));
                 $('#projectModalDesc').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-desc')}</p>`);
                 $('#projectModalMotive').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-motive')}</p>`);
                 $('#projectModalProblem').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-problem')}</p>`);
-                
+
                 let impact = card.data('project-impact');
                 let arch = card.data('project-arch');
-                
+
                 if (impact && impact !== 'None') {
                     $('#projectModalImpact').html(`<p class="lead mb-1" style="text-align: justify;">${impact}</p>`);
                     $('#impact-container').show();
@@ -464,7 +496,7 @@
                 } else {
                     $('#architecture-container').hide();
                 }
-                
+
                 let img = card.data('project-img');
                 if (img) {
                     $('#projectModalImg').attr('src', img).show();
@@ -498,20 +530,20 @@
             });
 
             // Resume Button Modal Handler
-            $('#resume-btn').click(function(e) {
+            $('#resume-btn').click(function (e) {
                 e.preventDefault();
                 const fileUrl = $(this).attr('href');
                 const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
 
                 $('#resumeModalImg').hide();
                 $('#resumeModalFrame').hide();
-                
+
                 if (isPdf) {
                     // Try JPG Preview (Page 1) - Best for Cloudinary fallback
                     const jpgUrl = fileUrl.replace(/\.pdf$/i, '.jpg');
                     $('#resumeModalImg').attr('src', jpgUrl).show();
 
-                    $('#resumeModalImg').off('error').on('error', function() {
+                    $('#resumeModalImg').off('error').on('error', function () {
                         $(this).hide();
                         const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
                         $('#resumeModalFrame').attr('src', viewerUrl).show();
@@ -524,22 +556,22 @@
             });
 
             // Contact Form Submission
-            $('#contact-form').submit(function(e) {
+            $('#contact-form').submit(function (e) {
                 e.preventDefault();
                 let formData = new FormData(this);
-                
+
                 $.ajax({
                     url: '/api/contact/',
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function() {
+                    success: function () {
                         alert('Message sent successfully!');
                         $('#contact-form')[0].reset();
                         $('#contactModal').modal('hide');
                     },
-                    error: function(err) {
+                    error: function (err) {
                         console.error(err);
                         alert('Error sending message. Please try again.');
                     }
@@ -547,7 +579,7 @@
             });
 
             // Certificate Modal Click Handler
-            $(document).on('click', '.cert-card', function() {
+            $(document).on('click', '.cert-card', function () {
                 let img = $(this).find('img').attr('src');
                 let title = $(this).find('h5').text();
                 if (img) {
@@ -573,11 +605,12 @@
                 });
             }, observerOptions);
 
-            $('section').each(function() {
+            $('section').each(function () {
                 $(this).addClass('fade-in-section');
                 observer.observe(this);
             });
         });
     </script>
 </body>
+
 </html>
