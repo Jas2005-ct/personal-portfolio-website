@@ -1,7 +1,20 @@
 from rest_framework import serializers
 import cloudinary.utils # Import cloudinary utils
-from .models import CustomUser, Profile, Education, Certificate, Internship, Profession, Skill, Project, SocialLink, Resume, Service, Testimonial, ContactMessage, Technology
-
+from .models import (CustomUser, 
+                    Profile, 
+                    Education, 
+                    Certificate, 
+                    Internship,     
+                    Profession, 
+                    SkillMaster, 
+                    UserSkill, 
+                    Project, 
+                    SocialLink, 
+                    Resume, 
+                    Service, 
+                    Testimonial, 
+                    ContactMessage, 
+                    Technology)
 
 
 class EducationSerializer(serializers.ModelSerializer):
@@ -28,10 +41,17 @@ class ProfessionSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['user']
 
-class SkillSerializer(serializers.ModelSerializer):
+class SkillMasterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Skill
+        model = SkillMaster
         fields = '__all__'
+
+class UserSkillSerializer(serializers.ModelSerializer):
+    skill_details = SkillMasterSerializer(source='skill', read_only=True)
+    
+    class Meta:
+        model = UserSkill
+        fields = ['id', 'user', 'skill', 'skill_details', 'level', 'order']
         read_only_fields = ['user']
 
 class TechnologySerializer(serializers.ModelSerializer):

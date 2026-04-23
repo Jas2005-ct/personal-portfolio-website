@@ -399,9 +399,13 @@
                     <input type="hidden" name="id">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control" name="skill" placeholder="Skill Name" required>
+                            <label class="form-label">Skill (Select or Search)</label>
+                            <select class="form-control" name="skill" id="skill-master-select" required>
+                                <!-- Options loaded via JS -->
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label class="form-label">Level</label>
                             <select class="form-control" name="level">
                                 <option value="Beginner">Beginner</option>
                                 <option value="Intermediate">Intermediate</option>
@@ -409,8 +413,8 @@
                             </select>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label>Skill Icon/Image</label>
-                            <input type="file" class="form-control" name="image">
+                            <label class="form-label">Display Order</label>
+                            <input type="number" class="form-control" name="order" value="0" help_text="Higher is lower priority">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Skill</button>
@@ -604,6 +608,15 @@
                             });
                             $('#tech-select').html(options);
                             
+                            // Load Skill Master Options
+                            $.get('/api/skill-master/', function(skillMasters) {
+                                let smOptions = '<option value="">-- Select Skill --</option>';
+                                skillMasters.forEach(sm => {
+                                    smOptions += `<option value="${sm.id}">${sm.name} (${sm.category})</option>`;
+                                });
+                                $('#skill-master-select').html(smOptions);
+                            });
+                            
                             // Initialize Select2 with Tagging
                             $('#tech-select').select2({
                                 theme: 'bootstrap-5',
@@ -680,8 +693,9 @@
                 $.get('/api/' + endpoint + '/', function(data) {
                     let html = '';
                     data.forEach(item => {
-                        let title = item.course || item.role || item.skill || item.title;
-                        let subtitle = item.institution || item.company || item.level || item.tech_stack || '';
+                        let title = item.course || item.role || (item.skill_details ? item.skill_details.name : item.skill) || item.title;
+                        let subtitle = item.institution || item.company || (item.skill_details ? item.skill_details.category : item.level) || item.tech_stack || '';
+                        if (item.level && item.skill_details) subtitle += ` | ${item.level}`;
                         if (item.location) subtitle += ` | ${item.location}`;
                         
                         html += `
