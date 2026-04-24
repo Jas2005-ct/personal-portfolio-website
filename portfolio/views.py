@@ -196,7 +196,11 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
 class TechnologyViewSet(viewsets.ModelViewSet):
     queryset = Technology.objects.all()
     serializer_class = TechnologySerializer
-    permission_classes = [permissions.AllowAny]
+
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
         name = request.data.get('name')
@@ -209,4 +213,8 @@ class TechnologyViewSet(viewsets.ModelViewSet):
 class SkillMasterViewSet(viewsets.ModelViewSet):
     queryset = SkillMaster.objects.all()
     serializer_class = SkillMasterSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]

@@ -412,6 +412,7 @@
                                 <option value="Advanced">Advanced</option>
                             </select>
                         </div>
+                        <!-- help text -->
                         <div class="col-md-12 mb-3">
                             <label class="form-label">Display Order</label>
                             <input type="number" class="form-control" name="order" value="0" help_text="Higher is lower priority">
@@ -610,11 +611,25 @@
                             
                             // Load Skill Master Options
                             $.get('/api/skill-master/', function(skillMasters) {
+                                console.log('Skill masters raw response:', skillMasters);
+                                console.log('Type:', typeof skillMasters, 'Is Array:', Array.isArray(skillMasters));
+                                
+                                // Handle DRF pagination or array response
+                                let skills = Array.isArray(skillMasters) ? skillMasters : (skillMasters.results || []);
+                                
                                 let smOptions = '<option value="">-- Select Skill --</option>';
-                                skillMasters.forEach(sm => {
+                                if (skills.length === 0) {
+                                    smOptions += '<option value="" disabled>No skills available - add some in Django Admin</option>';
+                                }
+                                skills.forEach(sm => {
                                     smOptions += `<option value="${sm.id}">${sm.name} (${sm.category})</option>`;
                                 });
                                 $('#skill-master-select').html(smOptions);
+                                console.log('Loaded', skills.length, 'skill masters');
+                            }).fail(function(xhr) {
+                                console.error('Failed to load skill masters:', xhr.status, xhr.statusText);
+                                console.error('Response:', xhr.responseText);
+                                $('#skill-master-select').html('<option value="">Error: ' + xhr.status + '</option>');
                             });
                             
                             // Initialize Select2 with Tagging
