@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -11,15 +11,121 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        royal_violet: { DEFAULT: '#7400b8', 100: '#170025', 200: '#2f0049', 300: '#46006e', 400: '#5d0093', 500: '#7400b8', 600: '#9e00f9', 700: '#b73bff', 800: '#cf7cff', 900: '#e7beff' },
+                        indigo_bloom: { DEFAULT: '#6930c3', 100: '#150a27', 200: '#2a144e', 300: '#3f1d76', 400: '#54279d', 500: '#6930c3', 600: '#8655d5', 700: '#a480df', 800: '#c3aaea', 900: '#e1d5f4' },
+                        slate_blue: { DEFAULT: '#5e60ce', 100: '#0e0f2e', 200: '#1c1d5c', 300: '#2a2c8a', 400: '#393bb8', 500: '#5e60ce', 600: '#7f81d8', 700: '#9fa0e2', 800: '#bfc0eb', 900: '#dfdff5' },
+                        cloudy_sky: { DEFAULT: '#5390d9', 100: '#0b1c31', 200: '#163863', 300: '#205494', 400: '#2b71c5', 500: '#5390d9', 600: '#76a6e1', 700: '#98bce8', 800: '#bad3f0', 900: '#dde9f7' },
+                        fresh_sky: { DEFAULT: '#4ea8de', 100: '#092333', 200: '#134666', 300: '#1c6999', 400: '#258ccb', 500: '#4ea8de', 600: '#72b9e5', 700: '#95caec', 800: '#b8dcf2', 900: '#dcedf9' },
+                        sky_surge: { DEFAULT: '#48bfe3', 100: '#082a34', 200: '#105468', 300: '#187d9c', 400: '#20a7d0', 500: '#48bfe3', 600: '#6ecce8', 700: '#92d9ee', 800: '#b7e5f4', 900: '#dbf2f9' },
+                        sky_blue_light: { DEFAULT: '#56cfe1', 100: '#092f35', 200: '#135e6a', 300: '#1c8d9f', 400: '#25bcd4', 500: '#56cfe1', 600: '#78d8e7', 700: '#9ae2ed', 800: '#bbecf3', 900: '#ddf5f9' },
+                        pearl_aqua: { DEFAULT: '#64dfdf', 100: '#0b3535', 200: '#166b6b', 300: '#21a0a0', 400: '#2dd4d4', 500: '#64dfdf', 600: '#82e5e5', 700: '#a1ecec', 800: '#c0f2f2', 900: '#e0f9f9' },
+                        turquoise: { DEFAULT: '#72efdd', 100: '#073f37', 200: '#0e7f6e', 300: '#15bea5', 400: '#31e8cd', 500: '#72efdd', 600: '#8df2e3', 700: '#aaf6ea', 800: '#c6f9f1', 900: '#e3fcf8' },
+                        aquamarine: { DEFAULT: '#80ffdb', 100: '#004d37', 200: '#00996e', 300: '#00e6a4', 400: '#33ffc5', 500: '#80ffdb', 600: '#99ffe2', 700: '#b3ffe9', 800: '#ccfff1', 900: '#e5fff8' },
+                    },
+                    boxShadow: {
+                        soft: '0 4px 24px rgba(46, 0, 110, 0.06)',
+                        'soft-hover': '0 12px 32px rgba(116, 0, 184, 0.18)',
+                        'soft-strong': '0 8px 30px rgba(78, 168, 222, 0.35)',
+                    },
+                    keyframes: {
+                        fadeInDown: {
+                            from: { opacity: '0', transform: 'translateY(-2.5rem)', filter: 'blur(10px)' },
+                            to: { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
+                        },
+                        fadeInUp: {
+                            from: { opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(10px)' },
+                            to: { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
+                        },
+                        zoomIn: {
+                            from: { opacity: '0', transform: 'scale(0.5)', filter: 'blur(10px)' },
+                            to: { opacity: '1', transform: 'scale(1)', filter: 'blur(0)' },
+                        },
+                    },
+                    animation: {
+                        'fade-in-down': 'fadeInDown 1s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'fade-in-up': 'fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s backwards',
+                        'zoom-in': 'zoomIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                    },
+                    transitionTimingFunction: {
+                        smooth: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                    },
+                },
+            },
+        };
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .icon { @apply inline-block shrink-0; }
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: -0.85rem;
+                top: 0;
+                width: 1.25rem;
+                height: 1.25rem;
+                background: #ffffff;
+                border: 4px solid #7400b8;
+                border-radius: 50%;
+                box-shadow: 0 2px 8px rgba(116, 0, 184, 0.25);
+                transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+            .timeline-item:hover::before {
+                background: #7400b8;
+                box-shadow: 0 4px 12px rgba(116, 0, 184, 0.35);
+            }
+        }
+        section.scroll-reveal {
+            opacity: 0;
+            transform: translateY(3rem) scale(0.97);
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        section.scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        section.scroll-reveal.is-visible .reveal-child {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-child {
+            opacity: 0;
+            transform: translateY(1.5rem);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            section.scroll-reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .reveal-child {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+        .modal-overlay.is-open {
+            opacity: 1;
+            pointer-events: auto;
+            visibility: visible;
+        }
+        .modal-overlay.is-open .modal-panel {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    </style>
 
     <!-- SEO & Metadata -->
     <meta name="description"
@@ -52,97 +158,130 @@
     </script>
 </head>
 
-<body>
+<body class="font-outfit bg-aquamarine-900 text-slate_blue-300 overflow-x-hidden antialiased">
+
+    <!-- Background gradients -->
+    <div class="fixed inset-0 -z-10 pointer-events-none bg-aquamarine-900"
+        style="background-image: radial-gradient(circle at 12% 18%, rgba(231,190,255,0.45) 0%, transparent 42%), radial-gradient(circle at 88% 82%, rgba(220,237,249,0.55) 0%, transparent 42%), radial-gradient(circle at 50% 50%, rgba(229,255,248,0.9) 0%, transparent 55%); background-attachment: fixed;">
+    </div>
 
     <!-- Loader -->
-    <div id="loader">
-        <div class="spinner"></div>
+    <div id="loader"
+        class="fixed inset-0 z-[9999] flex items-center justify-center bg-aquamarine-900 transition-opacity duration-500 ease-smooth">
+        <div
+            class="w-20 h-20 rounded-full border-[5px] border-royal_violet/20 border-t-royal_violet border-r-fresh_sky motion-safe:animate-spin shadow-soft">
+        </div>
     </div>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">Portfolio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+    <nav class="fixed top-0 w-full z-40 backdrop-blur-xl bg-white/85 border-b border-pearl_aqua-800 shadow-soft">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20">
+            <a href="#home"
+                class="text-2xl font-extrabold text-royal_violet-300 tracking-wide transition-all duration-300 hover:text-royal_violet">Portfolio</a>
+            <button type="button" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"
+                class="md:hidden p-2 text-slate_blue-400 hover:text-royal_violet transition-colors duration-300">
+                <svg class="icon w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#certificates">Certificates</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+            <div id="navbarNav"
+                class="hidden md:flex md:items-center absolute md:static top-16 left-0 right-0 md:top-auto bg-white md:bg-transparent border-b md:border-0 border-pearl_aqua-800 md:border-none py-4 md:py-0 shadow-soft md:shadow-none">
+                <ul class="flex flex-col md:flex-row md:items-center md:gap-8 px-4 md:px-0">
+                    <li><a href="#home"
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-royal_violet">Home</a>
+                    </li>
+                    <li><a href="#about"
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-royal_violet">About</a>
+                    </li>
+                    {% if skills %}
+                    <li><a href="#skills"
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-royal_violet">Skills</a>
+                    </li>
+                    {% endif %}
+                    <li><a href="#certificates"
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-royal_violet">Certificates</a>
+                    </li>
+                    <li><a href="#experience"
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-royal_violet">Experience</a>
+                    </li>
+                    <li><a href="#projects"
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-royal_violet">Projects</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-section">
-        <div class="container">
-            <div class="hero-content">
-                {% if profile and profile.profile_image %}
-                <div class="profile-img-container" id="hero-img-container">
-                    <img id="hero-img" src="{{ profile.profile_image.url }}" alt="Profile">
-                </div>
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20 text-center px-4">
+        <div class="max-w-4xl mx-auto">
+            {% if profile and profile.profile_image %}
+            <div id="hero-img-container"
+                class="w-60 h-60 rounded-full mx-auto mb-12 overflow-hidden border-4 border-royal_violet shadow-soft-hover ring-4 ring-fresh_sky-800 motion-safe:animate-zoom-in">
+                <img id="hero-img" src="{{ profile.profile_image.url }}" alt="Profile"
+                    class="w-full h-full object-cover">
+            </div>
+            {% endif %}
+            <h1 id="hero-name"
+                class="text-4xl sm:text-5xl md:text-7xl font-black mb-4 tracking-tight bg-gradient-to-r from-royal_violet via-indigo_bloom to-fresh_sky bg-clip-text text-transparent motion-safe:animate-fade-in-down">
+                {% if profile %}Hi, I'm {{ profile.name }}{% else %}Welcome{% endif %}
+            </h1>
+            <p id="hero-title"
+                class="text-xl sm:text-2xl md:text-3xl text-slate_blue-400 mb-10 motion-safe:animate-fade-in-up">
+                {% if profile %}{{ profile.title }}{% else %}Full Stack Developer{% endif %}
+            </p>
+            <div
+                class="flex flex-wrap justify-center gap-4 motion-safe:animate-fade-in-up motion-safe:[animation-delay:600ms]">
+                <button type="button" data-modal-open="contactModal"
+                    class="inline-flex items-center justify-center gap-2 bg-royal_violet text-white font-bold uppercase tracking-wide text-lg px-8 py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-royal_violet-600 hover:shadow-soft-strong hover:-translate-y-0.5 shadow-soft">
+                    <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" /></svg> Contact
+                </button>
+                {% if resume %}
+                <a href="{{ resume.resume.url }}" id="resume-btn"
+                    class="inline-flex items-center justify-center border-2 border-indigo_bloom-700 text-indigo_bloom-300 font-bold text-lg px-8 py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-indigo_bloom hover:text-white hover:border-indigo_bloom hover:shadow-soft hover:-translate-y-0.5">Resume</a>
                 {% endif %}
-                <h1 id="hero-name">{% if profile %}Hi, I'm {{ profile.name }}{% else %}Welcome{% endif %}</h1>
-                <p id="hero-title">{% if profile %}{{ profile.title }}{% else %}Full Stack Developer{% endif %}</p>
-                <div class="d-flex justify-content-center gap-3">
-                    <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal"
-                        data-bs-target="#contactModal">
-                        <i class="fas fa-paper-plane me-2"></i> Contact
-                    </button>
-                    {% if resume %}
-                    <a href="{{ resume.resume.url }}" id="resume-btn"
-                        class="btn btn-outline-light btn-lg rounded-pill px-4" target="_blank">Resume</a>
-                    {% endif %}
-                </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="row justify-content-center align-items-center">
-                <div class="col-md-8">
-                    <div class="glass-card text-center p-5">
-                        <p id="about-bio" class="lead mb-4" style="text-align: justify;">{{ profile.bio|default:"No bio available." }}</p>
+    <section id="about" class="py-28 md:py-32 scroll-reveal bg-pearl_aqua-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-royal_violet-300">
+                About Me
+                <span class="block w-28 h-1.5 bg-gradient-to-r from-royal_violet via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+            </h2>
+            <div class="flex justify-center">
+                <div class="w-full max-w-3xl">
+                    <div
+                        class="bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-royal_violet hover:shadow-soft-hover">
+                        <p id="about-bio" class="text-lg md:text-xl text-slate_blue-400 mb-6 text-justify leading-relaxed">
+                            {{ profile.bio|default:"No bio available." }}</p>
                         {% if profile.philosophy %}
-                        <div id="philosophy-container" class="mb-4">
-                            <h5 class="text-primary"><i class="fas fa-brain me-2"></i>Engineering Philosophy</h5>
-                            <p id="about-philosophy" class="text-muted italic"
-                                style="text-align: justify; font-style: italic;">{{ profile.philosophy }}</p>
+                        <div id="philosophy-container" class="mb-6">
+                            <h5 class="text-royal_violet font-semibold text-lg mb-2 flex items-center justify-center gap-2"><svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m1.5.189V6.75a4.5 4.5 0 1 0-9 0v6.111m9 0a9.006 9.006 0 0 1-7.2 0M12 18.75v1.875c0 .621-.504 1.125-1.125 1.125h-1.5a1.125 1.125 0 0 1-1.125-1.125V18.75" /></svg>Engineering Philosophy</h5>
+                            <p id="about-philosophy" class="text-slate-500 italic text-justify">{{ profile.philosophy }}
+                            </p>
                         </div>
                         {% endif %}
-                        <div class="row mt-5 pt-4 border-top border-secondary-subtle justify-content-center">
-                            <div class="col-md-4 mb-4">
-                                <div class="d-flex flex-column align-items-center">
-                                    <div class="icon-container mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(0, 242, 234, 0.1); border-radius: 50%; border: 1px solid var(--primary-color);">
-                                        <i class="fas fa-map-marker-alt text-primary fa-lg"></i>
-                                    </div>
-                                    <span id="about-address" class="text-center">{{ profile.address }}</span>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 pt-8 border-t border-pearl_aqua-800">
+                            <div class="flex flex-col items-center reveal-child" style="transition-delay: 0ms">
+                                <div
+                                    class="w-12 h-12 mb-3 flex items-center justify-center rounded-full bg-royal_violet-900 border border-royal_violet-700">
+                                    <svg class="icon w-5 h-5 text-royal_violet" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
                                 </div>
+                                <span id="about-address" class="text-center text-slate_blue-400">{{ profile.address }}</span>
                             </div>
-                            <div class="col-md-4 mb-4">
-                                <div class="d-flex flex-column align-items-center">
-                                    <div class="icon-container mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(0, 242, 234, 0.1); border-radius: 50%; border: 1px solid var(--primary-color);">
-                                        <i class="fas fa-phone text-primary fa-lg"></i>
-                                    </div>
-                                    <span id="about-phone" class="text-center">{{ profile.phone }}</span>
+                            <div class="flex flex-col items-center reveal-child" style="transition-delay: 100ms">
+                                <div class="w-12 h-12 mb-3 flex items-center justify-center rounded-full bg-fresh_sky-900 border border-fresh_sky-700">
+                                    <svg class="icon w-5 h-5 text-fresh_sky" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
                                 </div>
+                                <span id="about-phone" class="text-center text-slate_blue-400">{{ profile.phone }}</span>
                             </div>
-                            <div class="col-md-4 mb-4">
-                                <div class="d-flex flex-column align-items-center">
-                                    <div class="icon-container mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(0, 242, 234, 0.1); border-radius: 50%; border: 1px solid var(--primary-color);">
-                                        <i class="fas fa-envelope text-primary fa-lg"></i>
-                                    </div>
-                                    <span id="about-email" class="text-center">{{ profile.user.email }}</span>
+                            <div class="flex flex-col items-center reveal-child" style="transition-delay: 200ms">
+                                <div
+                                    class="w-12 h-12 mb-3 flex items-center justify-center rounded-full bg-indigo_bloom-900 border border-indigo_bloom-700">
+                                    <svg class="icon w-5 h-5 text-indigo_bloom" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
                                 </div>
+                                <span id="about-email" class="text-center text-slate_blue-400">{{ profile.user.email }}</span>
                             </div>
                         </div>
                     </div>
@@ -153,19 +292,23 @@
 
     <!-- Skills Section -->
     {% if skills %}
-    <section id="skills">
-        <div class="container">
-            <h2 class="section-title">Skills & Expertise</h2>
-            <div class="row">
+    <section id="skills" class="py-28 md:py-32 scroll-reveal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-royal_violet-300">
+                Skills & Expertise
+                <span class="block w-28 h-1.5 bg-gradient-to-r from-royal_violet via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {% for uskill in skills %}
-                <div class="col-6 col-md-3 col-lg-2 mb-4">
-                    <div class="skill-card text-center">
+                <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
+                    <div
+                        class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl p-6 text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:border-royal_violet hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
                         {% if uskill.skill.image %}
                         <img src="{{ uskill.skill.image.url }}" alt="{{ uskill.skill.name }}"
-                            class="skill-icon">
+                            class="w-16 h-16 object-contain mb-4 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
                         {% endif %}
-                        <h5 class="mt-2">{{ uskill.skill.name }}</h5>
-                        <small class="text-muted">{{ uskill.level }}</small>
+                        <h5 class="font-semibold text-slate-800">{{ uskill.skill.name }}</h5>
+                        <small class="text-slate-500 mt-1">{{ uskill.level }}</small>
                     </div>
                 </div>
                 {% endfor %}
@@ -175,96 +318,110 @@
     {% endif %}
 
     <!-- Certificates Section -->
-    <section id="certificates">
-        <div class="container">
-            <h2 class="section-title">Certificates</h2>
-            <div class="row g-4" id="certificates-container">
+    <section id="certificates" class="py-28 md:py-32 scroll-reveal bg-sky_surge-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-royal_violet-300">
+                Certificates
+                <span class="block w-28 h-1.5 bg-gradient-to-r from-royal_violet via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="certificates-container">
                 {% for cert in certificates %}
-                <div class="col-md-4">
-                    <div class="glass-card cert-card h-100" style="cursor: pointer;">
+                <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
+                    <div class="cert-card h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-royal_violet hover:shadow-soft-hover group">
                         {% if cert.image %}
-                        <img src="{{ cert.image.url }}" class="cert-img" alt="{{ cert.course }}">
+                        <img src="{{ cert.image.url }}" class="w-full h-60 object-cover border-b border-pearl_aqua-800 transition-transform duration-500 ease-smooth group-hover:scale-110" alt="{{ cert.course }}">
                         {% else %}
-                        <div class="cert-placeholder"><i class="fas fa-certificate fa-3x text-muted"></i></div>
+                        <div class="w-full h-60 flex items-center justify-center bg-slate-50 border-b border-pearl_aqua-800">
+                            <svg class="icon w-14 h-14 text-fresh_sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m0 0a55.381 55.381 0 0 1 5.25 2.882V15" /></svg>
+                        </div>
                         {% endif %}
-                        <div class="p-3">
-                            <h5>{{ cert.course }}</h5>
-                            <p class="text-muted mb-0">{{ cert.platform }}</p>
+                        <div class="p-4">
+                            <h5 class="font-semibold text-lg">{{ cert.course }}</h5>
+                            <p class="text-slate-500 mb-0">{{ cert.platform }}</p>
                         </div>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-muted text-center w-100">No certificates listed.</p>
+                <p class="text-slate-500 text-center col-span-full w-full">No certificates listed.</p>
                 {% endfor %}
             </div>
         </div>
     </section>
 
     <!-- Experience Section -->
-    <section id="experience">
-        <div class="container">
-            <h2 class="section-title">Experience</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <h3 class="mb-4 text-center"><i class="fas fa-briefcase me-2"></i>Work</h3>
+    <section id="experience" class="py-28 md:py-32 scroll-reveal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-royal_violet-300">
+                Experience
+                <span class="block w-28 h-1.5 bg-gradient-to-r from-royal_violet via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-2 text-royal_violet-300"><svg class="icon w-6 h-6 text-royal_violet" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.89V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>Work</h3>
                     <div id="work-container">
                         {% for job in professions %}
-                        <div class="timeline-item">
-                            <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
-                            <h5>{{ job.role }}</h5>
-                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small
-                                    class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
+                        <div class="timeline-item border-l-4 border-indigo_bloom pl-10 mb-12 relative reveal-child"
+                            style="transition-delay: {% widthratio forloop.counter0 1 80 %}ms">
+                            <span
+                                class="block text-royal_violet font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <h5 class="text-xl font-semibold">{{ job.role }}</h5>
+                            <p class="text-royal_violet mb-1">{{ job.company }}{% if job.location %} | <small
+                                    class="text-slate_blue-500 inline-flex items-center gap-1"><svg class="icon w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>{{ job.location }}</small>{% endif %}</p>
                             {% if job.description %}
-                            <div class="description-text text-muted small mt-2">
+                            <div class="text-slate-500 text-sm mt-2 leading-relaxed">
                                 {{ job.description|linebreaksbr }}
                             </div>
                             {% endif %}
                         </div>
                         {% endfor %}
                         {% for job in internships %}
-                        <div class="timeline-item">
-                            <span class="timeline-date">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
-                            <h5>{{ job.role }} (Intern)</h5>
-                            <p class="text-primary mb-1">{{ job.company }}{% if job.location %} | <small
-                                    class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</small>{% endif %}</p>
+                        <div class="timeline-item border-l-4 border-indigo_bloom pl-10 mb-12 relative reveal-child">
+                            <span
+                                class="block text-royal_violet font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <h5 class="text-xl font-semibold">{{ job.role }} (Intern)</h5>
+                            <p class="text-royal_violet mb-1">{{ job.company }}{% if job.location %} | <small
+                                    class="text-slate_blue-500 inline-flex items-center gap-1"><svg class="icon w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>{{ job.location }}</small>{% endif %}</p>
                             {% if job.description %}
-                            <div class="description-text text-muted small mt-2">
+                            <div class="text-slate-500 text-sm mt-2 leading-relaxed">
                                 {{ job.description|linebreaksbr }}
                             </div>
                             {% endif %}
                         </div>
                         {% endfor %}
                         {% if not professions and not internships %}
-                        <p class="text-muted">No work experience listed.</p>
+                        <p class="text-slate-500">No work experience listed.</p>
                         {% endif %}
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <h3 class="mb-4 text-center"><i class="fas fa-graduation-cap me-2"></i>Education</h3>
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-2 text-royal_violet-300"><svg class="icon w-6 h-6 text-indigo_bloom" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m0 0a55.381 55.381 0 0 1 5.25 2.882V15" /></svg>Education</h3>
                     <div id="education-container">
                         {% for edu in education %}
-                        <div class="timeline-item">
-                            <span class="timeline-date">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
-                            <h5>{{ edu.course }}</h5>
-                            <p class="text-primary mb-1">
+                        <div class="timeline-item border-l-4 border-indigo_bloom pl-10 mb-12 relative reveal-child"
+                            style="transition-delay: {% widthratio forloop.counter0 1 80 %}ms">
+                            <span
+                                class="block text-royal_violet font-bold uppercase tracking-widest text-sm mb-2">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
+                            <h5 class="text-xl font-semibold">{{ edu.course }}</h5>
+                            <p class="text-royal_violet mb-1">
                                 {{ edu.institution }}
-                                {% if edu.location %} | <small class="text-muted">{{ edu.location }}</small>{% endif %}
+                                {% if edu.location %} | <small class="text-slate-500">{{ edu.location }}</small>{% endif %}
                             </p>
                             {% if edu.field_of_study %}
                             <p class="mb-1"><strong>Major:</strong> {{ edu.field_of_study }}</p>
                             {% endif %}
                             {% if edu.grade %}
-                            <p class="mb-1"><span class="badge bg-info text-dark"
-                                    style="background: var(--primary-color) !important; color: #000 !important; font-weight: 700;">{{ edu.grade }}</span></p>
+                            <p class="mb-1"><span
+                                    class="inline-block bg-royal_violet text-white font-bold px-3 py-1 rounded-full text-sm">{{ edu.grade }}</span>
+                            </p>
                             {% endif %}
                             {% if edu.description %}
-                            <div class="description-text text-muted small mt-2">
+                            <div class="text-slate-500 text-sm mt-2 leading-relaxed">
                                 {{ edu.description|linebreaksbr }}
                             </div>
                             {% endif %}
                         </div>
                         {% empty %}
-                        <p class="text-muted">No education listed.</p>
+                        <p class="text-slate-500">No education listed.</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -273,336 +430,377 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <h2 class="section-title">Projects</h2>
-            <div class="row g-4" id="projects-container">
+    <section id="projects" class="py-28 md:py-32 scroll-reveal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-royal_violet-300">
+                Projects
+                <span class="block w-28 h-1.5 bg-gradient-to-r from-royal_violet via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-container">
                 {% for proj in projects %}
-                <div class="col-md-4 mb-4">
-                    <div class="glass-card project-card h-100" style="cursor: pointer;"
+                <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
+                    <div class="project-card h-full flex flex-col bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-royal_violet hover:shadow-soft-hover group"
                         data-project-title="{{ proj.title }}" data-project-desc="{{ proj.description }}"
                         data-project-motive="{{ proj.motive }}" data-project-problem="{{ proj.problem_statement }}"
                         data-project-impact="{{ proj.impact }}" data-project-arch="{{ proj.architecture_notes }}"
                         data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}"
+                        {% if proj.image %}data-project-img="{{ proj.image.url }}"{% endif %}
                         data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
 
                         {% if proj.image %}
-                        <img src="{{ proj.image.url }}" class="project-img" alt="{{ proj.title }}">
+                        <img src="{{ proj.image.url }}"
+                            class="w-full h-60 object-cover rounded-2xl mb-4 border border-pearl_aqua-800 transition-transform duration-500 ease-smooth group-hover:scale-[1.03] group-hover:border-royal_violet"
+                            alt="{{ proj.title }}">
                         {% endif %}
-                        <h4>{{ proj.title }}</h4>
+                        <h4 class="text-xl font-bold mb-2">{{ proj.title }}</h4>
                         <div class="mb-2"><strong>Tech Used:</strong>
                             {% for tech in proj.technologies.all %}
-                            <span class="badge bg-primary me-1"
-                                style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">{{ tech.name }}</span>
+                            <span
+                                class="inline-block mr-1 mb-1 px-2 py-0.5 text-sm rounded-full bg-indigo_bloom/15 border border-indigo_bloom/40 text-indigo_bloom font-medium">{{ tech.name }}</span>
                             {% endfor %}
                         </div>
-                        <p>{{ proj.description|truncatechars:100 }}</p>
-                        <div class="project-links mt-auto">
-                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"><i
-                                    class="fab fa-github"></i></a>{% endif %}
-                            {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank"><i
-                                    class="fas fa-external-link-alt"></i></a>{% endif %}
+                        <p class="text-slate-600 flex-grow">{{ proj.description|truncatechars:100 }}</p>
+                        <div class="flex gap-6 mt-4 pt-4">
+                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank" aria-label="GitHub"
+                                class="text-slate_blue-400 transition-all duration-300 hover:text-royal_violet hover:scale-125"><svg class="icon w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" clip-rule="evenodd"/></svg></a>{% endif %}
+                            {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank" aria-label="Live demo"
+                                class="text-slate_blue-400 transition-all duration-300 hover:text-fresh_sky hover:scale-125"><svg class="icon w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg></a>{% endif %}
                         </div>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-center text-muted w-100">No projects listed.</p>
+                <p class="text-center text-slate-500 col-span-full w-full">No projects listed.</p>
                 {% endfor %}
             </div>
         </div>
     </section>
 
     <!-- Contact Button Section -->
-    <section id="contact-btn-section" class="py-5 text-center">
-        <div class="container">
-            <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal"
-                data-bs-target="#contactModal">
-                <i class="fas fa-paper-plane me-2"></i> Send a Message
+    <section id="contact-btn-section" class="py-20 text-center scroll-reveal bg-gradient-to-b from-transparent to-fresh_sky/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <button type="button" data-modal-open="contactModal"
+                class="inline-flex items-center justify-center gap-2 bg-royal_violet text-white font-bold uppercase tracking-wide text-lg px-8 py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-royal_violet-600 hover:shadow-soft-strong hover:-translate-y-0.5 shadow-soft">
+                <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" /></svg> Send a Message
             </button>
-            <div class="social-icons mt-5" id="social-links-container">
+            <div class="flex flex-wrap justify-center gap-8 mt-10" id="social-links-container">
                 <!-- Social links injected here -->
             </div>
         </div>
     </section>
 
     <!-- Project Details Modal -->
-    <div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content glass-card border-0">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title text-white" id="projectModalTitle">Project Title</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+    <div id="projectModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+        <div class="modal-backdrop absolute inset-0" data-modal-close></div>
+        <div class="modal-panel relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+            <div class="flex items-center justify-between mb-6">
+                <h5 class="text-xl font-bold text-slate-800" id="projectModalTitle">Project Title</h5>
+                <button type="button" data-modal-close aria-label="Close"
+                    class="text-slate-400 hover:text-slate-800 text-2xl leading-none transition-colors duration-300">&times;</button>
+            </div>
+            <div class="text-slate-700">
+                <img id="projectModalImg" src="" class="rounded-2xl mb-6 w-full max-h-[400px] object-cover hidden" alt="">
+                <div class="mb-4">
+                    <h6 class="text-royal_violet font-semibold mb-2">Tech Stack</h6>
+                    <div id="projectModalTech" class="flex flex-wrap gap-2"></div>
                 </div>
-                <div class="modal-body text-white">
-                    <img id="projectModalImg" src="" class="img-fluid rounded mb-4 w-100"
-                        style="max-height: 400px; object-fit: cover; display: none;">
-                    <div class="mb-3">
-                        <h6 class="text-primary">Tech Stack</h6>
-                        <div id="projectModalTech"></div>
+                <div class="mb-4">
+                    <h6 class="text-royal_violet font-semibold mb-2">Description</h6>
+                    <div id="projectModalDesc"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <h6 class="text-royal_violet font-semibold mb-2">Motive</h6>
+                        <div id="projectModalMotive"></div>
                     </div>
-                    <div class="mb-3">
-                        <h6 class="text-primary">Description</h6>
-                        <div id="projectModalDesc"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-primary">Motive</h6>
-                            <div id="projectModalMotive"></div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-primary">Problem Statement</h6>
-                            <div id="projectModalProblem"></div>
-                        </div>
-                    </div>
-                    <div class="mb-3" id="impact-container" style="display:none;">
-                        <h6 class="text-primary">Impact & Achievements</h6>
-                        <div id="projectModalImpact"></div>
-                    </div>
-                    <div class="mb-3" id="architecture-container" style="display:none;">
-                        <h6 class="text-primary">Architecture Notes</h6>
-                        <div id="projectModalArchitecture"></div>
-                    </div>
-                    <div class="d-flex gap-3 mt-3" id="projectModalLinks">
-                        <!-- Links injected here -->
+                    <div>
+                        <h6 class="text-royal_violet font-semibold mb-2">Problem Statement</h6>
+                        <div id="projectModalProblem"></div>
                     </div>
                 </div>
+                <div class="mb-4 hidden" id="impact-container">
+                    <h6 class="text-royal_violet font-semibold mb-2">Impact & Achievements</h6>
+                    <div id="projectModalImpact"></div>
+                </div>
+                <div class="mb-4 hidden" id="architecture-container">
+                    <h6 class="text-royal_violet font-semibold mb-2">Architecture Notes</h6>
+                    <div id="projectModalArchitecture"></div>
+                </div>
+                <div class="flex flex-wrap gap-3 mt-4" id="projectModalLinks"></div>
             </div>
         </div>
     </div>
-    </div>
 
     <!-- Resume Modal -->
-    <div class="modal fade" id="resumeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content glass-card border-0" style="background: transparent;">
-                <div class="modal-header border-0 pb-0" style="position: absolute; right: 0; z-index: 10;">
-                    <button type="button" class="btn-close btn-close-white bg-dark rounded-circle p-2"
-                        data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-0 d-flex justify-content-center align-items-center"
-                    style="height: 90vh; background: transparent;">
-                    <!-- Image Preview (Primary) -->
-                    <img id="resumeModalImg" src=""
-                        style="display:none; max-height: 100%; max-width: 100%; width: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-
-                    <!-- Iframe Fallback -->
-                    <iframe id="resumeModalFrame" src="" width="100%" height="100%"
-                        style="border: none; display:none;"></iframe>
-                </div>
-            </div>
+    <div id="resumeModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+        <div class="modal-backdrop absolute inset-0" data-modal-close></div>
+        <div class="modal-panel relative w-full max-w-6xl h-[90vh] flex items-center justify-center opacity-0 scale-95 transition-all duration-300 ease-smooth">
+            <button type="button" data-modal-close aria-label="Close"
+                class="absolute top-2 right-2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full text-slate-600 shadow-soft hover:bg-royal_violet hover:text-white transition-all duration-300">&times;</button>
+            <img id="resumeModalImg" src="" class="hidden max-h-full max-w-full object-contain rounded-lg shadow-2xl" alt="Resume preview">
+            <iframe id="resumeModalFrame" src="" class="hidden w-full h-full border-0 rounded-lg"></iframe>
         </div>
     </div>
 
     <!-- Contact Modal -->
-    <div class="modal fade" id="contactModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-card">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Get In Touch</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="contact-form">
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text" class="form-control" name="sender_name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="sender_email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Subject</label>
-                            <input type="text" class="form-control" name="subject" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Message</label>
-                            <textarea class="form-control" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Send Message</button>
-                    </form>
-                </div>
+    <div id="contactModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+        <div class="modal-backdrop absolute inset-0" data-modal-close></div>
+        <div class="modal-panel relative w-full max-w-md bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+            <div class="flex items-center justify-between mb-6">
+                <h5 class="text-xl font-bold text-slate-800">Get In Touch</h5>
+                <button type="button" data-modal-close aria-label="Close"
+                    class="text-slate-400 hover:text-slate-800 text-2xl leading-none transition-colors duration-300">&times;</button>
             </div>
+            <form id="contact-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Name</label>
+                    <input type="text" name="sender_name" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-royal_violet focus:ring-1 focus:ring-royal_violet transition-colors duration-300">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+                    <input type="email" name="sender_email" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-royal_violet focus:ring-1 focus:ring-royal_violet transition-colors duration-300">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Subject</label>
+                    <input type="text" name="subject" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-royal_violet focus:ring-1 focus:ring-royal_violet transition-colors duration-300">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Message</label>
+                    <textarea name="message" rows="5" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-royal_violet focus:ring-1 focus:ring-royal_violet transition-colors duration-300 resize-none"></textarea>
+                </div>
+                <button type="submit"
+                    class="w-full bg-royal_violet text-white font-bold uppercase tracking-wide py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-royal_violet-600 hover:shadow-soft-strong">
+                    Send Message
+                </button>
+            </form>
         </div>
     </div>
 
     <!-- Certificate Modal -->
-    <div class="modal fade" id="certificateModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content glass-card border-0">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title" id="certModalTitle">Certificate</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center p-0">
-                    <img src="" id="certModalImg" class="img-fluid rounded" alt="Certificate">
-                </div>
+    <div id="certificateModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+        <div class="modal-backdrop absolute inset-0" data-modal-close></div>
+        <div class="modal-panel relative w-full max-w-3xl bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl overflow-hidden opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+            <div class="flex items-center justify-between p-4 border-b border-pearl_aqua-800">
+                <h5 class="text-lg font-bold text-slate-800" id="certModalTitle">Certificate</h5>
+                <button type="button" data-modal-close aria-label="Close"
+                    class="text-slate-400 hover:text-slate-800 text-2xl leading-none transition-colors duration-300">&times;</button>
+            </div>
+            <div class="p-0 text-center">
+                <img src="" id="certModalImg" class="w-full h-auto rounded-b-3xl" alt="Certificate">
             </div>
         </div>
     </div>
 
-    <footer class="text-center py-4 border-top border-secondary mt-5">
-        <p class="mb-0 text-muted">&copy; <span id="year"></span> Portfolio. All rights reserved.</p>
+    <footer class="text-center py-8 border-t border-pearl_aqua-800 mt-8">
+        <p class="text-slate-500">&copy; <span id="year"></span> Portfolio. All rights reserved.</p>
     </footer>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            $('#year').text(new Date().getFullYear());
+        (function () {
+            const iconGithub = '<svg class="icon w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" clip-rule="evenodd"/></svg>';
+            const iconExternal = '<svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>';
+            const badgeClass = 'inline-block mr-1 mb-1 px-2 py-0.5 text-sm rounded-full bg-indigo_bloom-900 border border-indigo_bloom-700 text-indigo_bloom-300 font-medium';
+            const btnPrimary = 'inline-flex items-center justify-center gap-2 bg-royal_violet text-white font-bold uppercase tracking-wide px-6 py-2.5 rounded-full transition-all duration-300 ease-smooth hover:bg-royal_violet-600 hover:shadow-soft-strong';
+            const btnOutline = 'inline-flex items-center justify-center gap-2 border-2 border-slate_blue-700 text-slate_blue-300 font-bold px-6 py-2.5 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-300 hover:text-white';
 
-            // Hide Loader once page is ready
-            setTimeout(function () {
-                $('#loader').fadeOut();
-            }, 500);
+            function openModal(id) {
+                const modal = document.getElementById(id);
+                if (!modal) return;
+                modal.classList.add('is-open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
 
-            // Project Card Click Handler
-            $('.project-card').click(function (e) {
-                // Prevent modal if clicking directly on links
-                if ($(e.target).closest('a').length) return;
-
-                let card = $(this);
-
-                $('#projectModalTitle').text(card.data('project-title'));
-                $('#projectModalDesc').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-desc')}</p>`);
-                $('#projectModalMotive').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-motive')}</p>`);
-                $('#projectModalProblem').html(`<p class="lead mb-4" style="text-align: justify;">${card.data('project-problem')}</p>`);
-
-                let impact = card.data('project-impact');
-                let arch = card.data('project-arch');
-
-                if (impact && impact !== 'None') {
-                    $('#projectModalImpact').html(`<p class="lead mb-1" style="text-align: justify;">${impact}</p>`);
-                    $('#impact-container').show();
-                } else {
-                    $('#impact-container').hide();
+            function closeModal(modal) {
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+                if (!document.querySelector('.modal-overlay.is-open')) {
+                    document.body.style.overflow = '';
                 }
+            }
 
-                if (arch && arch !== 'None') {
-                    $('#projectModalArchitecture').html(`<p class="lead mb-1" style="text-align: justify;">${arch}</p>`);
-                    $('#architecture-container').show();
-                } else {
-                    $('#architecture-container').hide();
-                }
+            function closeAllModals() {
+                document.querySelectorAll('.modal-overlay.is-open').forEach(closeModal);
+            }
 
-                let img = card.data('project-img');
-                if (img) {
-                    $('#projectModalImg').attr('src', img).show();
-                } else {
-                    $('#projectModalImg').hide();
-                }
-
-                // Tech Stack
-                let tech = card.data('project-tech');
-                let techHtml = '';
-                if (tech) {
-                    tech.split(',').forEach(t => {
-                        techHtml += `<span class="badge bg-primary me-1 mb-1" style="background: rgba(112, 0, 255, 0.2) !important; border: 1px solid var(--tertiary-color);">${t.trim()}</span>`;
-                    });
-                }
-                $('#projectModalTech').html(techHtml);
-
-                // Links
-                let linksHtml = '';
-                let github = card.data('project-github');
-                let live = card.data('project-live');
-                if (github && github !== 'None') {
-                    linksHtml += `<a href="${github}" target="_blank" class="btn btn-outline-light"><i class="fab fa-github me-2"></i>GitHub</a>`;
-                }
-                if (live && live !== 'None') {
-                    linksHtml += `<a href="${live}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt me-2"></i>Live Demo</a>`;
-                }
-                $('#projectModalLinks').html(linksHtml);
-
-                $('#projectModal').modal('show');
+            document.querySelectorAll('[data-modal-open]').forEach(btn => {
+                btn.addEventListener('click', () => openModal(btn.getAttribute('data-modal-open')));
             });
 
-            // Resume Button Modal Handler
-            $('#resume-btn').click(function (e) {
-                e.preventDefault();
-                const fileUrl = $(this).attr('href');
-                const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+            document.querySelectorAll('[data-modal-close]').forEach(el => {
+                el.addEventListener('click', () => {
+                    const modal = el.closest('.modal-overlay');
+                    if (modal) closeModal(modal);
+                });
+            });
 
-                $('#resumeModalImg').hide();
-                $('#resumeModalFrame').hide();
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closeAllModals();
+            });
 
-                if (isPdf) {
-                    // Try JPG Preview (Page 1) - Best for Cloudinary fallback
-                    const jpgUrl = fileUrl.replace(/\.pdf$/i, '.jpg');
-                    $('#resumeModalImg').attr('src', jpgUrl).show();
+            // Mobile nav
+            const navToggle = document.getElementById('nav-toggle');
+            const navbarNav = document.getElementById('navbarNav');
+            if (navToggle && navbarNav) {
+                navToggle.addEventListener('click', () => {
+                    const isOpen = navbarNav.classList.toggle('hidden') === false;
+                    navbarNav.classList.toggle('flex', isOpen);
+                    navbarNav.classList.toggle('flex-col', isOpen);
+                    navToggle.setAttribute('aria-expanded', isOpen);
+                });
+                navbarNav.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth < 768) {
+                            navbarNav.classList.add('hidden');
+                            navbarNav.classList.remove('flex', 'flex-col');
+                            navToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                });
+            }
 
-                    $('#resumeModalImg').off('error').on('error', function () {
-                        $(this).hide();
+            $(document).ready(function () {
+                $('#year').text(new Date().getFullYear());
+
+                setTimeout(function () {
+                    const loader = document.getElementById('loader');
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.classList.add('hidden'), 500);
+                }, 500);
+
+                $('.project-card').click(function (e) {
+                    if ($(e.target).closest('a').length) return;
+
+                    const card = $(this);
+                    $('#projectModalTitle').text(card.data('project-title'));
+                    $('#projectModalDesc').html(`<p class="text-lg text-slate-600 text-justify leading-relaxed">${card.data('project-desc')}</p>`);
+                    $('#projectModalMotive').html(`<p class="text-slate-600 text-justify leading-relaxed">${card.data('project-motive') || ''}</p>`);
+                    $('#projectModalProblem').html(`<p class="text-slate-600 text-justify leading-relaxed">${card.data('project-problem') || ''}</p>`);
+
+                    const impact = card.data('project-impact');
+                    const arch = card.data('project-arch');
+
+                    if (impact && impact !== 'None') {
+                        $('#projectModalImpact').html(`<p class="text-slate-600 text-justify leading-relaxed">${impact}</p>`);
+                        $('#impact-container').removeClass('hidden');
+                    } else {
+                        $('#impact-container').addClass('hidden');
+                    }
+
+                    if (arch && arch !== 'None') {
+                        $('#projectModalArchitecture').html(`<p class="text-slate-600 text-justify leading-relaxed">${arch}</p>`);
+                        $('#architecture-container').removeClass('hidden');
+                    } else {
+                        $('#architecture-container').addClass('hidden');
+                    }
+
+                    const img = card.data('project-img');
+                    if (img) {
+                        $('#projectModalImg').attr('src', img).removeClass('hidden');
+                    } else {
+                        $('#projectModalImg').addClass('hidden');
+                    }
+
+                    const tech = card.data('project-tech');
+                    let techHtml = '';
+                    if (tech) {
+                        tech.split(',').forEach(t => {
+                            const trimmed = t.trim();
+                            if (trimmed) techHtml += `<span class="${badgeClass}">${trimmed}</span>`;
+                        });
+                    }
+                    $('#projectModalTech').html(techHtml);
+
+                    let linksHtml = '';
+                    const github = card.data('project-github');
+                    const live = card.data('project-live');
+                    if (github && github !== 'None') {
+                        linksHtml += `<a href="${github}" target="_blank" class="${btnOutline}">${iconGithub} GitHub</a>`;
+                    }
+                    if (live && live !== 'None') {
+                        linksHtml += `<a href="${live}" target="_blank" class="${btnPrimary}">${iconExternal} Live Demo</a>`;
+                    }
+                    $('#projectModalLinks').html(linksHtml);
+
+                    openModal('projectModal');
+                });
+
+                $('#resume-btn').click(function (e) {
+                    e.preventDefault();
+                    const fileUrl = $(this).attr('href');
+                    const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+
+                    $('#resumeModalImg').addClass('hidden');
+                    $('#resumeModalFrame').addClass('hidden');
+
+                    if (isPdf) {
+                        const jpgUrl = fileUrl.replace(/\.pdf$/i, '.jpg');
+                        $('#resumeModalImg').attr('src', jpgUrl).removeClass('hidden');
+
+                        $('#resumeModalImg').off('error').on('error', function () {
+                            $(this).addClass('hidden');
+                            const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
+                            $('#resumeModalFrame').attr('src', viewerUrl).removeClass('hidden');
+                        });
+                    } else {
                         const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-                        $('#resumeModalFrame').attr('src', viewerUrl).show();
+                        $('#resumeModalFrame').attr('src', viewerUrl).removeClass('hidden');
+                    }
+                    openModal('resumeModal');
+                });
+
+                $('#contact-form').submit(function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+
+                    $.ajax({
+                        url: '/api/contact/',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            alert('Message sent successfully!');
+                            $('#contact-form')[0].reset();
+                            closeModal(document.getElementById('contactModal'));
+                        },
+                        error: function (err) {
+                            console.error(err);
+                            alert('Error sending message. Please try again.');
+                        }
                     });
-                } else {
-                    const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-                    $('#resumeModalFrame').attr('src', viewerUrl).show();
-                }
-                $('#resumeModal').modal('show');
-            });
+                });
 
-            // Contact Form Submission
-            $('#contact-form').submit(function (e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-
-                $.ajax({
-                    url: '/api/contact/',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function () {
-                        alert('Message sent successfully!');
-                        $('#contact-form')[0].reset();
-                        $('#contactModal').modal('hide');
-                    },
-                    error: function (err) {
-                        console.error(err);
-                        alert('Error sending message. Please try again.');
+                $(document).on('click', '.cert-card', function () {
+                    const img = $(this).find('img').attr('src');
+                    const title = $(this).find('h5').text();
+                    if (img) {
+                        $('#certModalImg').attr('src', img);
+                        $('#certModalTitle').text(title);
+                        openModal('certificateModal');
                     }
                 });
-            });
 
-            // Certificate Modal Click Handler
-            $(document).on('click', '.cert-card', function () {
-                let img = $(this).find('img').attr('src');
-                let title = $(this).find('h5').text();
-                if (img) {
-                    $('#certModalImg').attr('src', img);
-                    $('#certModalTitle').text(title);
-                    $('#certificateModal').modal('show');
-                }
-            });
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { root: null, rootMargin: '0px', threshold: 0.1 });
 
-            // Scroll Animations
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
+                document.querySelectorAll('section.scroll-reveal').forEach(section => {
+                    observer.observe(section);
                 });
-            }, observerOptions);
-
-            $('section').each(function () {
-                $(this).addClass('fade-in-section');
-                observer.observe(this);
             });
-        });
+        })();
     </script>
 </body>
 
