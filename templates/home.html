@@ -245,9 +245,9 @@
     <!-- About & Tech Stack Section (Side by Side) -->
     <section id="about" class="py-28 md:py-32 scroll-reveal bg-pearl_aqua-900/40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-slate-800">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-20 text-slate-800">
                 About Me
-                <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+                <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mt-4 rounded-full"></span>
             </h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                 <!-- Left Column: About -->
@@ -291,14 +291,14 @@
                 <!-- Right Column: Tech Stack -->
                 {% if tech_stack %}
                 <div id="tech-stack" class="w-full scroll-reveal">
-                    <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-center text-slate-800">
+                    <h2 class="text-2xl md:text-3xl font-extrabold mb-10 text-slate-800">
                         Tech Stack
-                        <span class="block w-20 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-3 rounded-full"></span>
-                    </h3>
+                        <span class="block w-20 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mt-3 rounded-full"></span>
+                    </h2>
                     {% regroup tech_stack|dictsort:"section" by get_section_display as tech_sections %}
                     {% for section in tech_sections %}
-                    <div class="mb-6">
-                        <h4 class="text-xl font-bold mb-4 text-slate-700">{{ section.grouper }}</h4>
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold mb-4 text-slate_700 uppercase tracking-wide border-b border-pearl_aqua-800 pb-2">{{ section.grouper }}</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
                             {% for tech in section.list %}
                             <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
