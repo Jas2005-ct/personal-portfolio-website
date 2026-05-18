@@ -19,9 +19,20 @@ class CustomManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class Technology(models.Model):
-    name = models.CharField(max_length=100)
+class TechStack(models.Model):
 
+    sections = (
+        (1, 'Programming'),
+        (2, 'Frameworks'),
+        (3, 'Databases'),
+        (4, 'Tools'),
+        (5, 'Others'),
+        (6, 'API'),
+    )
+
+    name = models.CharField(max_length=100)
+    icon = models.ImageField(upload_to='tech_stack/',null=True,blank=True)
+    section = models.IntegerField(choices=sections, default=1)
     def __str__(self):
         return self.name
 
@@ -43,7 +54,7 @@ class Profile(models.Model):
     profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     phone = models.CharField(max_length=15)
     address = models.TextField()
-    technologies = models.ManyToManyField('Technology', blank=True)
+    technologies = models.ManyToManyField('TechStack', blank=True)
     philosophy = models.TextField(blank=True, help_text="Your engineering mindset and development approach")
 
     def __str__(self):
@@ -99,46 +110,6 @@ class Profession(models.Model):
     def __str__(self):
         return self.company
 
-class SkillMaster(models.Model):
-    CATEGORY_CHOICES = (
-        ('Programming', 'Programming'),
-        ('Backend', 'Backend'),
-        ('Frontend', 'Frontend'),
-        ('Database', 'Database'),
-        ('Data/AI', 'Data/AI'),
-        ('Tools', 'Tools'),
-    )
-    name = models.CharField(max_length=100, unique=True)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-    image = models.ImageField(upload_to='skills/icons/', null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Skill Master"
-        verbose_name_plural = "Skill Master"
-        ordering = ['category', 'name']
-
-    def __str__(self):
-        return f"{self.name} ({self.category})"
-
-
-class UserSkill(models.Model):
-    LEVEL_CHOICES = (
-        ('Beginner', 'Beginner'),
-        ('Intermediate', 'Intermediate'),
-        ('Advanced', 'Advanced'),
-    )
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_skills')
-    skill = models.ForeignKey(SkillMaster, on_delete=models.CASCADE)
-    level = models.CharField(max_length=50, choices=LEVEL_CHOICES)
-    order = models.IntegerField(default=0, help_text="Priority for display")
-
-    class Meta:
-        ordering = ['order', 'skill__name']
-        unique_together = ('user', 'skill')
-
-    def __str__(self):
-        return f"{self.user.email} - {self.skill.name} ({self.level})"
-
 class Project(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
@@ -146,7 +117,7 @@ class Project(models.Model):
     description = models.TextField()
     motive = models.CharField(max_length=100)
     problem_statement = models.TextField()
-    technologies = models.ManyToManyField(Technology, blank=True)
+    technologies = models.ManyToManyField(TechStack, blank=True)
     tech_stack = models.CharField(max_length=200, help_text="Comma separated, e.g. Django, React", blank=True, null=True)
     github_link = models.URLField(null=True, blank=True)
     live_demo = models.URLField(null=True, blank=True)    

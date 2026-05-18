@@ -191,9 +191,9 @@
                     <li><a href="#about"
                             class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-slate_blue">About</a>
                     </li>
-                    {% if skills %}
-                    <li><a href="#skills"
-                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-slate_blue">Skills</a>
+                    {% if tech_stack %}
+                    <li><a href="#tech-stack"
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-slate_blue">Tech Stack</a>
                     </li>
                     {% endif %}
                     <li><a href="#certificates"
@@ -242,15 +242,16 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About & Tech Stack Section (Side by Side) -->
     <section id="about" class="py-28 md:py-32 scroll-reveal bg-pearl_aqua-900/40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-slate-800">
                 About Me
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
-            <div class="flex justify-center">
-                <div class="w-full max-w-3xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <!-- Left Column: About -->
+                <div class="w-full">
                     <div
                         class="bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
                         <p id="about-bio" class="text-lg md:text-xl text-slate_blue-400 mb-6 text-justify leading-relaxed">
@@ -286,45 +287,47 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Skills Section -->
-    {% if skills %}
-    <section id="skills" class="py-28 md:py-32 scroll-reveal">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-slate-800">
-                Skills & Expertise
-                <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
-            </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {% for uskill in skills %}
-                <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
-                    <div
-                        class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl p-6 text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:border-slate_blue hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
-                        {% if uskill.skill.image %}
-                        <img src="{{ uskill.skill.image.url }}" alt="{{ uskill.skill.name }}"
-                            class="w-16 h-16 object-contain mb-4 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
-                        {% endif %}
-                        <h5 class="font-semibold text-slate-800">{{ uskill.skill.name }}</h5>
-                        <small class="text-slate-500 mt-1">{{ uskill.level }}</small>
+                <!-- Right Column: Tech Stack -->
+                {% if tech_stack %}
+                <div id="tech-stack" class="w-full scroll-reveal">
+                    <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-center text-slate-800">
+                        Tech Stack
+                        <span class="block w-20 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-3 rounded-full"></span>
+                    </h3>
+                    {% regroup tech_stack|dictsort:"section" by get_section_display as tech_sections %}
+                    {% for section in tech_sections %}
+                    <div class="mb-6">
+                        <h4 class="text-xl font-bold mb-4 text-slate-700">{{ section.grouper }}</h4>
+                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                            {% for tech in section.list %}
+                            <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
+                                <div class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl p-4 text-center transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-slate_blue hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
+                                    {% if tech.icon %}
+                                    <img src="{{ tech.icon.url }}" alt="{{ tech.name }}"
+                                        class="w-12 h-12 object-contain mb-3 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
+                                    {% endif %}
+                                    <h5 class="font-semibold text-slate-800 text-sm">{{ tech.name }}</h5>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                {% endif %}
             </div>
         </div>
     </section>
-    {% endif %}
 
     <!-- Certificates Section -->
     <section id="certificates" class="py-28 md:py-32 scroll-reveal bg-sky_surge-900/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-slate-800">
                 Certificates
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="certificates-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="certificates-container">
                 {% for cert in certificates %}
                 <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
                     <div class="cert-card h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover group">

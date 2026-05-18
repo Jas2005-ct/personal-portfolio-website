@@ -4,16 +4,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from .models import (
-    Profile, Education, Certificate, Internship, Profession, 
-    SkillMaster, UserSkill, Project, SocialLink, Resume, Service, Testimonial, 
-    ContactMessage, Technology, CustomUser
+    Profile, Education, Certificate, Internship, Profession,
+    TechStack, Project, SocialLink, Resume, Service, Testimonial,
+    ContactMessage, CustomUser
 )
 from .serializers import (
-    ProfileSerializer, EducationSerializer, CertificateSerializer, 
-    InternshipSerializer, ProfessionSerializer, UserSkillSerializer, 
+    ProfileSerializer, EducationSerializer, CertificateSerializer,
+    InternshipSerializer, ProfessionSerializer,
     ProjectSerializer, SocialLinkSerializer, ResumeSerializer,
     ServiceSerializer, TestimonialSerializer, ContactMessageSerializer,
-    TechnologySerializer, SkillMasterSerializer
+    TechStackSerializer
 )
 from .mixins import SuperAdminMixin
 from django.contrib.auth import login, logout, authenticate
@@ -24,25 +24,16 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Fetch the first superuser's profile for public view
         user = CustomUser.objects.filter(is_superuser=True).first()
         if user:
-            context['profile'] = Profile.objects.filter(user=user).first()
+            profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
+            context['profile'] = profile
+            context['tech_stack'] = profile.technologies.all() if profile else TechStack.objects.none()
             context['education'] = Education.objects.filter(user=user).order_by('-start_year')
             context['certificates'] = Certificate.objects.filter(user=user)
             context['internships'] = Internship.objects.filter(user=user).order_by('-start_year')
             context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
-            # Group skills by category for the frontend
-            user_skills = UserSkill.objects.filter(user=user).select_related('skill').order_by('skill__category', 'order')
-            grouped_skills = {}
-            for us in user_skills:
-                cat = us.skill.get_category_display()
-                if cat not in grouped_skills:
-                    grouped_skills[cat] = []
-                grouped_skills[cat].append(us)
-            context['grouped_skills'] = grouped_skills
-            context['skills'] = user_skills  # Keep this for backward compatibility if template uses it
-            context['projects'] = Project.objects.filter(user=user)
+            context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
             context['social_links'] = SocialLink.objects.filter(user=user).first()
             context['resume'] = Resume.objects.filter(user=user).first()
             context['services'] = Service.objects.filter(user=user)
@@ -60,13 +51,12 @@ class DashboardView(SuperAdminMixin, TemplateView):
         context['certificates'] = Certificate.objects.filter(user=user)
         context['internships'] = Internship.objects.filter(user=user)
         context['professions'] = Profession.objects.filter(user=user)
-        context['skills'] = UserSkill.objects.filter(user=user)
         context['projects'] = Project.objects.filter(user=user)
         context['social_links'] = SocialLink.objects.filter(user=user).first()
         context['resume'] = Resume.objects.filter(user=user).first()
         context['services'] = Service.objects.filter(user=user)
         context['testimonials'] = Testimonial.objects.filter(user=user)
-        context['tech_stack'] = Technology.objects.all()
+        context['tech_stack'] = TechStack.objects.all()
         return context
 
 def login_view(request):
@@ -100,19 +90,22 @@ class PortfolioDataView(APIView):
         if not user:
             return Response({"error": "No data found"}, status=404)
 
+        profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
         data = {
-            'profile': ProfileSerializer(Profile.objects.filter(user=user).first()).data,
+            'profile': ProfileSerializer(profile).data,
             'education': EducationSerializer(Education.objects.filter(user=user), many=True).data,
             'certificates': CertificateSerializer(Certificate.objects.filter(user=user), many=True).data,
             'internships': InternshipSerializer(Internship.objects.filter(user=user), many=True).data,
             'professions': ProfessionSerializer(Profession.objects.filter(user=user), many=True).data,
-            'skills': UserSkillSerializer(UserSkill.objects.filter(user=user), many=True).data,
+            'tech_stack': TechStackSerializer(TechStack.objects.all(), many=True).data,
+            'profile_tech_stack': TechStackSerializer(
+                profile.technologies.all(), many=True
+            ).data if profile else [],
             'projects': ProjectSerializer(Project.objects.filter(user=user), many=True).data,
             'social_links': SocialLinkSerializer(SocialLink.objects.filter(user=user).first()).data,
             'resume': ResumeSerializer(Resume.objects.filter(user=user).first()).data,
             'services': ServiceSerializer(Service.objects.filter(user=user), many=True).data,
             'testimonials': TestimonialSerializer(Testimonial.objects.filter(user=user), many=True).data,
-            'tech_stack': TechnologySerializer(Technology.objects.all(), many=True).data,
         }
         return Response(data)
 
@@ -146,16 +139,9 @@ class ProfessionViewSet(BasePortfolioViewSet):
     queryset = Profession.objects.all()
     serializer_class = ProfessionSerializer
 
-class UserSkillViewSet(BasePortfolioViewSet):
-    queryset = UserSkill.objects.all()
-    serializer_class = UserSkillSerializer
-
 class ProjectViewSet(BasePortfolioViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-
-
-
 
 class SocialLinkViewSet(BasePortfolioViewSet):
     queryset = SocialLink.objects.all()
@@ -188,14 +174,13 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         return self.queryset.none()
     
     def perform_create(self, serializer):
-        # Assign to the first user for now, or handle dynamic user assignment if needed
         from .models import CustomUser
         user = CustomUser.objects.first()
         serializer.save(user=user)
 
-class TechnologyViewSet(viewsets.ModelViewSet):
-    queryset = Technology.objects.all()
-    serializer_class = TechnologySerializer
+class TechStackViewSet(viewsets.ModelViewSet):
+    queryset = TechStack.objects.all()
+    serializer_class = TechStackSerializer
 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
@@ -204,17 +189,25 @@ class TechnologyViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         name = request.data.get('name')
+        section = request.data.get('section', 1)
+        icon = request.FILES.get('icon')
+
         if name:
-            technology, created = Technology.objects.get_or_create(name=name)
-            serializer = self.get_serializer(technology)
+            tech = TechStack.objects.filter(name=name).first()
+            if not tech:
+                tech = TechStack(name=name, section=section)
+                if icon:
+                    tech.icon = icon
+                tech.save()
+            else:
+                # Update if already exists but we want to change icon/section?
+                # For now just save new details if provided
+                if icon:
+                    tech.icon = icon
+                if section:
+                    tech.section = section
+                tech.save()
+                
+            serializer = self.get_serializer(tech)
             return Response(serializer.data)
         return Response({'error': 'Name is required'}, status=400)
-
-class SkillMasterViewSet(viewsets.ModelViewSet):
-    queryset = SkillMaster.objects.all()
-    serializer_class = SkillMasterSerializer
-
-    def get_permissions(self):
-        if self.request.method in permissions.SAFE_METHODS:
-            return [permissions.AllowAny()]
-        return [permissions.IsAuthenticated()]
