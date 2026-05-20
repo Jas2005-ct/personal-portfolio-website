@@ -249,18 +249,18 @@
                 About Me
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mt-4 rounded-full"></span>
             </h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-12 items-stretch">
                 <!-- Left Column: About -->
                 <div class="w-full">
                     <div
-                        class="bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
-                        <p id="about-bio" class="text-lg md:text-xl text-slate_blue-400 mb-6 text-justify leading-relaxed">
+                        class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 text-left transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
+                        <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-slate-900">About Me</h3>
+                        <p id="about-bio" class="text-base md:text-lg text-slate_blue-500 mb-8 leading-relaxed">
                             {{ profile.bio|default:"No bio available." }}</p>
                         {% if profile.philosophy %}
-                        <div id="philosophy-container" class="mb-6">
-                            <h5 class="text-slate_blue font-semibold text-lg mb-2 flex items-center justify-center gap-2"><svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m1.5.189V6.75a4.5 4.5 0 1 0-9 0v6.111m9 0a9.006 9.006 0 0 1-7.2 0M12 18.75v1.875c0 .621-.504 1.125-1.125 1.125h-1.5a1.125 1.125 0 0 1-1.125-1.125V18.75" /></svg>Engineering Philosophy</h5>
-                            <p id="about-philosophy" class="text-slate-500 italic text-justify">{{ profile.philosophy }}
-                            </p>
+                        <div id="philosophy-container" class="mb-8">
+                            <h5 class="text-slate_blue font-semibold text-lg mb-3 inline-flex items-center gap-2"><svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m1.5.189V6.75a4.5 4.5 0 1 0-9 0v6.111m9 0a9.006 9.006 0 0 1-7.2 0M12 18.75v1.875c0 .621-.504 1.125-1.125 1.125h-1.5a1.125 1.125 0 0 1-1.125-1.125V18.75" /></svg>Engineering Philosophy</h5>
+                            <p id="about-philosophy" class="text-slate_blue-400 italic leading-relaxed">{{ profile.philosophy }}</p>
                         </div>
                         {% endif %}
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 pt-8 border-t border-pearl_aqua-800">
@@ -290,30 +290,32 @@
 
                 <!-- Right Column: Tech Stack -->
                 {% if tech_stack %}
-                <div id="tech-stack" class="w-full scroll-reveal">
-                    <h2 class="text-2xl md:text-3xl font-extrabold mb-10 text-slate-800">
-                        Tech Stack
-                        <span class="block w-20 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mt-3 rounded-full"></span>
-                    </h2>
-                    {% regroup tech_stack|dictsort:"section" by get_section_display as tech_sections %}
-                    {% for section in tech_sections %}
-                    <div class="mb-8">
-                        <h3 class="text-lg font-bold mb-4 text-slate_700 uppercase tracking-wide border-b border-pearl_aqua-800 pb-2">{{ section.grouper }}</h3>
-                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                            {% for tech in section.list %}
-                            <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
-                                <div class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl p-4 text-center transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-slate_blue hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
-                                    {% if tech.icon %}
-                                    <img src="{{ tech.icon.url }}" alt="{{ tech.name }}"
-                                        class="w-12 h-12 object-contain mb-3 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
-                                    {% endif %}
-                                    <h5 class="font-semibold text-slate-800 text-sm">{{ tech.name }}</h5>
-                                </div>
-                            </div>
-                            {% endfor %}
+                <div id="tech-stack" class="w-full self-start scroll-reveal">
+                    <div class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
+                        <div class="mb-10">
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Tech Stack</h3>
+                            <p class="mt-3 text-slate_blue-400">A concise view of the tools, frameworks, and platforms I use every day.</p>
                         </div>
+                        {% regroup tech_stack by get_section_display as tech_sections %}
+                        {% for section in tech_sections %}
+                        <div class="mb-8 last:mb-0">
+                            <h4 class="text-xs font-semibold uppercase tracking-[0.28em] text-slate_blue-500 mb-4 border-b border-pearl_aqua-800 pb-3">{{ section.grouper }}</h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                {% for tech in section.list %}
+                                <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
+                                    <div class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl px-4 py-3 text-center transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-slate_blue hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
+                                        {% if tech.icon %}
+                                        <img src="{{ tech.icon.url }}" alt="{{ tech.name }}"
+                                            class="w-10 h-10 object-contain mb-2 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
+                                        {% endif %}
+                                        <h5 class="font-semibold text-slate-800 text-sm">{{ tech.name }}</h5>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
                 {% endif %}
             </div>

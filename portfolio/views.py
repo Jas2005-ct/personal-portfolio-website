@@ -4,13 +4,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from .models import (
-    Profile, Education, Certificate, Internship, Profession,
+    Profile, Education, Certificate, Profession,
     TechStack, Project, SocialLink, Resume, Service, Testimonial,
     ContactMessage, CustomUser
 )
 from .serializers import (
-    ProfileSerializer, EducationSerializer, CertificateSerializer,
-    InternshipSerializer, ProfessionSerializer,
+    ProfileSerializer, EducationSerializer, CertificateSerializer, ProfessionSerializer,
     ProjectSerializer, SocialLinkSerializer, ResumeSerializer,
     ServiceSerializer, TestimonialSerializer, ContactMessageSerializer,
     TechStackSerializer
@@ -28,16 +27,16 @@ class HomeView(TemplateView):
         if user:
             profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
             context['profile'] = profile
-            context['tech_stack'] = profile.technologies.all() if profile else TechStack.objects.none()
+            context['tech_stack'] = TechStack.objects.all()
             context['education'] = Education.objects.filter(user=user).order_by('-start_year')
             context['certificates'] = Certificate.objects.filter(user=user)
-            context['internships'] = Internship.objects.filter(user=user).order_by('-start_year')
             context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
             context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
             context['social_links'] = SocialLink.objects.filter(user=user).first()
             context['resume'] = Resume.objects.filter(user=user).first()
             context['services'] = Service.objects.filter(user=user)
             context['testimonials'] = Testimonial.objects.filter(user=user)
+        print("HomeView context:", context)  # Debugging line
         return context
 
 class DashboardView(SuperAdminMixin, TemplateView):
@@ -49,7 +48,6 @@ class DashboardView(SuperAdminMixin, TemplateView):
         context['profile'] = Profile.objects.filter(user=user).first()
         context['education'] = Education.objects.filter(user=user)
         context['certificates'] = Certificate.objects.filter(user=user)
-        context['internships'] = Internship.objects.filter(user=user)
         context['professions'] = Profession.objects.filter(user=user)
         context['projects'] = Project.objects.filter(user=user)
         context['social_links'] = SocialLink.objects.filter(user=user).first()
@@ -95,7 +93,6 @@ class PortfolioDataView(APIView):
             'profile': ProfileSerializer(profile).data,
             'education': EducationSerializer(Education.objects.filter(user=user), many=True).data,
             'certificates': CertificateSerializer(Certificate.objects.filter(user=user), many=True).data,
-            'internships': InternshipSerializer(Internship.objects.filter(user=user), many=True).data,
             'professions': ProfessionSerializer(Profession.objects.filter(user=user), many=True).data,
             'tech_stack': TechStackSerializer(TechStack.objects.all(), many=True).data,
             'profile_tech_stack': TechStackSerializer(
@@ -131,9 +128,6 @@ class CertificateViewSet(BasePortfolioViewSet):
     queryset = Certificate.objects.all()
     serializer_class = CertificateSerializer
 
-class InternshipViewSet(BasePortfolioViewSet):
-    queryset = Internship.objects.all()
-    serializer_class = InternshipSerializer
 
 class ProfessionViewSet(BasePortfolioViewSet):
     queryset = Profession.objects.all()

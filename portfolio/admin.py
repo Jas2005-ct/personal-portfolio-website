@@ -6,7 +6,6 @@ admin.site.register(CustomUser)
 admin.site.register(Profile)
 admin.site.register(Education)
 admin.site.register(Certificate)
-admin.site.register(Internship)
 admin.site.register(Profession)
 
 @admin.register(TechStack)

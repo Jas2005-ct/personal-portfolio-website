@@ -4,7 +4,6 @@ from .models import (
     Profile,
     Education,
     Certificate,
-    Internship,
     Profession,
     TechStack,
     Project,
@@ -25,12 +24,6 @@ class EducationSerializer(serializers.ModelSerializer):
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
-        fields = '__all__'
-        read_only_fields = ['user']
-
-class InternshipSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Internship
         fields = '__all__'
         read_only_fields = ['user']
 

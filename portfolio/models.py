@@ -97,7 +97,7 @@ class Profession(models.Model):
         ("professional", "Professional")
     ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    experience = models.CharField(max_length=20, choices=EXPERIENCE_TYPE)
+    experience = models.CharField(max_length=50, choices=EXPERIENCE_TYPE)
     company = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     location = models.CharField(max_length=100, blank=True, null=True)
