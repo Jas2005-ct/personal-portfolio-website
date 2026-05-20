@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from cloudinary.models import CloudinaryField
+import slugify
 
 
 class CustomManager(BaseUserManager):
@@ -17,24 +18,6 @@ class CustomManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
-
-
-class TechStack(models.Model):
-
-    sections = (
-        (1, 'Programming'),
-        (2, 'Frameworks'),
-        (3, 'Databases'),
-        (4, 'Tools'),
-        (5, 'Others'),
-        (6, 'API'),
-    )
-
-    name = models.CharField(max_length=100)
-    icon = models.ImageField(upload_to='tech_stack/',null=True,blank=True)
-    section = models.IntegerField(choices=sections, default=1)
-    def __str__(self):
-        return self.name
 
 class CustomUser(AbstractUser):
     username = None
@@ -60,6 +43,29 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
 
+
+class Tech_Section(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True,blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class TechStack(models.Model):
+
+    name = models.CharField(max_length=100)
+    icon = models.ImageField(upload_to='tech_stack/',null=True,blank=True)
+    section = models.ForeignKey(Tech_Section, on_delete=models.CASCADE, related_name='tech_section')
+    def __str__(self):
+            return f"{self.section} - {self.name}"
+
+
 class Education(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     course = models.CharField(max_length=100, help_text="e.g. Bachelor of Technology")
@@ -84,21 +90,14 @@ class Certificate(models.Model):
     def __str__(self):
         return self.course
 
-class Internship(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    company = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
-    location = models.CharField(max_length=100, blank=True, null=True)
-    description = models.TextField(blank=True, null=True, help_text="Key responsibilities and achievements")
-    duration = models.CharField(max_length=100)
-    start_year = models.IntegerField()
-    end_year = models.IntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return self.company
-
 class Profession(models.Model):
+
+    EXPERIENCE_TYPE = [
+        ("internship", "Internship"),
+        ("professional", "Professional")
+    ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    experience = models.CharField(max_length=20, choices=EXPERIENCE_TYPE)
     company = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     location = models.CharField(max_length=100, blank=True, null=True)
