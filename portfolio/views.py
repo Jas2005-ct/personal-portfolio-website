@@ -27,7 +27,7 @@ class HomeView(TemplateView):
         if user:
             profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
             context['profile'] = profile
-            context['tech_stack'] = TechStack.objects.all()
+            context['tech_stack'] = TechStack.objects.select_related('section').all()
             context['education'] = Education.objects.filter(user=user).order_by('-start_year')
             context['certificates'] = Certificate.objects.filter(user=user)
             context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
@@ -53,7 +53,7 @@ class DashboardView(SuperAdminMixin, TemplateView):
         context['resume'] = Resume.objects.filter(user=user).first()
         context['services'] = Service.objects.filter(user=user)
         context['testimonials'] = Testimonial.objects.filter(user=user)
-        context['tech_stack'] = TechStack.objects.prefetch_related('tech_section').all()
+        context['tech_stack'] = TechStack.objects.select_related('section').all()
         return context
 
 def login_view(request):
