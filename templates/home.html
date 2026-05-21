@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Loading...</title>
+    <title>Jaswant Portfolio</title>
     <link rel="icon" href="{% static 'favicon.jpg' %}" type="image/jpeg">
 
     <!-- Fonts -->
@@ -245,10 +245,10 @@
     <!-- About & Tech Stack Section (Side by Side) -->
     <section id="about" class="py-28 md:py-32 scroll-reveal bg-pearl_aqua-900/40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl md:text-5xl font-extrabold mb-20 text-slate-800">
+            <!-- <h2 class="text-4xl md:text-5xl font-extrabold mb-20 text-slate-800">
                 About Me
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mt-4 rounded-full"></span>
-            </h2>
+            </h2> -->
             <div class="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-12 items-stretch">
                 <!-- Left Column: About -->
                 <div class="w-full">
@@ -296,17 +296,16 @@
                             <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Tech Stack</h3>
                             <p class="mt-3 text-slate_blue-400">A concise view of the tools, frameworks, and platforms I use every day.</p>
                         </div>
-                        {% regroup tech_stack by get_section_display as tech_sections %}
-                        {% for section in tech_sections %}
+                        {% regroup tech_stack by section as tech_sections %}
+                        {% for section_group in tech_sections %}
                         <div class="mb-8 last:mb-0">
-                            <h4 class="text-xs font-semibold uppercase tracking-[0.28em] text-slate_blue-500 mb-4 border-b border-pearl_aqua-800 pb-3">{{ section.grouper }}</h4>
+                            <h4 class="text-xs font-semibold uppercase tracking-[0.28em] text-slate_blue-500 mb-4 border-b border-pearl_aqua-800 pb-3">{{ section_group.grouper.name }}</h4>
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                {% for tech in section.list %}
+                                {% for tech in section_group.list %}
                                 <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
                                     <div class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl px-4 py-3 text-center transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-slate_blue hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
                                         {% if tech.icon %}
-                                        <img src="{{ tech.icon.url }}" alt="{{ tech.name }}"
-                                            class="w-10 h-10 object-contain mb-2 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
+                                        <img src="{{ tech.icon.url }}" alt="{{ tech.name }}" class="w-10 h-10 object-contain mb-2 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
                                         {% endif %}
                                         <h5 class="font-semibold text-slate-800 text-sm">{{ tech.name }}</h5>
                                     </div>
@@ -333,19 +332,19 @@
                 {% for cert in certificates %}
                 <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
                     <div class="cert-card h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover group">
-                        {% if cert.image %}
+                    {% if cert.image %}
                         <img src="{{ cert.image.url }}" class="w-full h-60 object-cover border-b border-pearl_aqua-800 transition-transform duration-500 ease-smooth group-hover:scale-110" alt="{{ cert.course }}">
                         {% else %}
                         <div class="w-full h-60 flex items-center justify-center bg-slate-50 border-b border-pearl_aqua-800">
                             <svg class="icon w-14 h-14 text-fresh_sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m0 0a55.381 55.381 0 0 1 5.25 2.882V15" /></svg>
-                        </div>
-                        {% endif %}
+                    </div>
+                    {% endif %}
                         <div class="p-4">
                             <h5 class="font-semibold text-lg">{{ cert.course }}</h5>
                             <p class="text-slate-500 mb-0">{{ cert.platform }}</p>
                         </div>
                     </div>
-                </div>
+            </div>
                 {% empty %}
                 <p class="text-slate-500 text-center col-span-full w-full">No certificates listed.</p>
                 {% endfor %}
