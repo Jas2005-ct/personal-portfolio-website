@@ -184,7 +184,6 @@
         <a href="#" class="nav-link active" data-target="profile"><i class="fas fa-user"></i> Profile</a>
         <a href="#" class="nav-link" data-target="education"><i class="fas fa-graduation-cap"></i> Education</a>
         <a href="#" class="nav-link" data-target="experience"><i class="fas fa-briefcase"></i> Experience</a>
-        <a href="#" class="nav-link" data-target="skills"><i class="fas fa-code"></i> Skills</a>
         <a href="#" class="nav-link" data-target="tech-stack"><i class="fas fa-layer-group"></i> Tech Stack</a>
         <a href="#" class="nav-link" data-target="certificates"><i class="fas fa-certificate"></i> Certificates</a>
         <a href="#" class="nav-link" data-target="projects"><i class="fas fa-project-diagram"></i> Projects</a>
@@ -214,6 +213,10 @@
                     <div class="mb-3">
                         <label class="form-label">Bio</label>
                         <textarea class="form-control" name="bio" rows="3">{{ profile.bio }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Philosophy</label>
+                        <textarea class="form-control" name="philosophy" rows="3" placeholder="Your engineering mindset and development approach">{{ profile.philosophy }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Phone</label>
@@ -314,15 +317,22 @@
         <div id="experience-section" class="section" style="display:none;">
             <h2>Experience (Jobs & Internships)</h2>
             
-            <!-- Profession -->
+            <!-- Unified Profession Form -->
             <div class="card p-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Manage Job / Profession</h5>
+                    <h5>Manage Experience</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="professions">
                     <input type="hidden" name="id">
                     <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <select class="form-control" name="experience" required>
+                                <option value="">Select Experience Type</option>
+                                <option value="professional">Professional Job</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                        </div>
                         <div class="col-md-6 mb-3">
                             <input type="text" class="form-control" name="role" placeholder="Role / Job Title" required>
                         </div>
@@ -345,83 +355,10 @@
                             <textarea class="form-control" name="description" placeholder="Description / Highlights / Achievements (supports bullet points)" rows="3"></textarea>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success submit-btn">Add Job</button>
+                    <button type="submit" class="btn btn-success submit-btn">Add Experience</button>
                 </form>
             </div>
-            <div id="professions-list" class="row mb-5"></div>
-
-            <!-- Internship -->
-            <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Manage Internship</h5>
-                    <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
-                </div>
-                <form class="add-form" data-endpoint="internships">
-                    <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control" name="role" placeholder="Role" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control" name="company" placeholder="Company" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" class="form-control" name="duration" placeholder="Duration">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="number" class="form-control" name="start_year" placeholder="Start Year" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="number" class="form-control" name="end_year" placeholder="End Year">
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <input type="text" class="form-control" name="location" placeholder="Location">
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <textarea class="form-control" name="description" placeholder="Description / Highlights / Achievements (supports bullet points)" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success submit-btn">Add Internship</button>
-                </form>
-            </div>
-            <div id="internships-list" class="row"></div>
-        </div>
-
-        <!-- Skills Section -->
-        <div id="skills-section" class="section" style="display:none;">
-            <h2>Skills</h2>
-            <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Manage Skill</h5>
-                    <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
-                </div>
-                <form class="add-form" data-endpoint="skills">
-                    <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Skill (Select or Search)</label>
-                            <select class="form-control" name="skill" id="skill-master-select" required>
-                                <!-- Options loaded via JS -->
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Level</label>
-                            <select class="form-control" name="level">
-                                <option value="Beginner">Beginner</option>
-                                <option value="Intermediate">Intermediate</option>
-                                <option value="Advanced">Advanced</option>
-                            </select>
-                        </div>
-                        <!-- help text -->
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label">Display Order</label>
-                            <input type="number" class="form-control" name="order" value="0" help_text="Higher is lower priority">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success submit-btn">Add Skill</button>
-                </form>
-            </div>
-            <div id="skills-list" class="row"></div>
+            <div id="professions-list" class="row"></div>
         </div>
 
         <!-- Tech Stack Section -->
@@ -435,12 +372,34 @@
                     <input type="hidden" name="id" id="profile-tech-id">
                     <div class="mb-3">
                         <label class="form-label">Select Technologies</label>
-                        <select class="form-control" name="technology_ids" id="tech-select" multiple style="height: 200px;">
+                        <select class="form-control" name="tech_stack_ids" id="tech-select" multiple style="height: 200px;">
                             <!-- Options injected here -->
                         </select>
                         <small class="text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple options.</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Save Tech Stack</button>
+                </form>
+            </div>
+            <div class="card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>Create New Technology</h5>
+                </div>
+                <form id="create-tech-form" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <input type="text" class="form-control" name="name" placeholder="Technology Name" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <select class="form-control" name="section" id="create-tech-section" required>
+                                <option value="">Select Section</option>
+                                <!-- Options loaded dynamically -->
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="file" class="form-control" name="icon" accept="image/*">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Create Technology</button>
                 </form>
             </div>
             <div id="selected-tech-list" class="row"></div>
@@ -462,7 +421,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Technologies</label>
-                            <select class="form-control project-tech-select" name="technology_ids" multiple required>
+                            <select class="form-control project-tech-select" name="tech_stack_ids" multiple required>
                                 <!-- Options loaded via JS -->
                             </select>
                         </div>
@@ -595,42 +554,20 @@
                         $('input[name="name"]').val(profile.name);
                         $('input[name="title"]').val(profile.title);
                         $('textarea[name="bio"]').val(profile.bio);
+                        $('textarea[name="philosophy"]').val(profile.philosophy);
                         $('input[name="phone"]').val(profile.phone);
                         $('textarea[name="address"]').val(profile.address);
                         
                         $('#profile-tech-id').val(profile.id);
                         
                         // Load Tech Stack Options
-                        $.get('/api/technologies/', function(techs) {
+                        $.get('/api/tech-stack/', function(techs) {
                             let options = '';
                             techs.forEach(tech => {
                                 let selected = profile.technologies && profile.technologies.some(t => t.id === tech.id) ? 'selected' : '';
                                 options += `<option value="${tech.id}" ${selected}>${tech.name}</option>`;
                             });
                             $('#tech-select').html(options);
-                            
-                            // Load Skill Master Options
-                            $.get('/api/skill-master/', function(skillMasters) {
-                                console.log('Skill masters raw response:', skillMasters);
-                                console.log('Type:', typeof skillMasters, 'Is Array:', Array.isArray(skillMasters));
-                                
-                                // Handle DRF pagination or array response
-                                let skills = Array.isArray(skillMasters) ? skillMasters : (skillMasters.results || []);
-                                
-                                let smOptions = '<option value="">-- Select Skill --</option>';
-                                if (skills.length === 0) {
-                                    smOptions += '<option value="" disabled>No skills available - add some in Django Admin</option>';
-                                }
-                                skills.forEach(sm => {
-                                    smOptions += `<option value="${sm.id}">${sm.name} (${sm.category})</option>`;
-                                });
-                                $('#skill-master-select').html(smOptions);
-                                console.log('Loaded', skills.length, 'skill masters');
-                            }).fail(function(xhr) {
-                                console.error('Failed to load skill masters:', xhr.status, xhr.statusText);
-                                console.error('Response:', xhr.responseText);
-                                $('#skill-master-select').html('<option value="">Error: ' + xhr.status + '</option>');
-                            });
                             
                             // Initialize Select2 with Tagging
                             $('#tech-select').select2({
@@ -669,6 +606,15 @@
                             });
 
                             renderSelectedTechs(profile.technologies);
+                            
+                            // Load sections for creating new tech
+                            $.get('/api/tech-sections/', function(sections) {
+                                let sectionOptions = '';
+                                sections.forEach(section => {
+                                    sectionOptions += `<option value="${section.id}">${section.name}</option>`;
+                                });
+                                $('#create-tech-section').html(sectionOptions);
+                            });
                         });
                     }
                 });
@@ -698,8 +644,6 @@
                 // Lists
                 loadList('education', '#education-list');
                 loadList('professions', '#professions-list');
-                loadList('internships', '#internships-list');
-                loadList('skills', '#skills-list');
                 loadList('certificates', '#certificates-list');
                 loadList('projects', '#projects-list');
             }
@@ -708,9 +652,15 @@
                 $.get('/api/' + endpoint + '/', function(data) {
                     let html = '';
                     data.forEach(item => {
-                        let title = item.course || item.role || (item.skill_details ? item.skill_details.name : item.skill) || item.title;
-                        let subtitle = item.institution || item.company || (item.skill_details ? item.skill_details.category : item.level) || item.tech_stack || '';
-                        if (item.level && item.skill_details) subtitle += ` | ${item.level}`;
+                        let title = item.course || item.role || item.title;
+                        let subtitle = item.institution || item.company || item.tech_stack || '';
+                        
+                        // For professions, show experience type
+                        if (endpoint === 'professions') {
+                            let expType = item.experience === 'professional' ? '💼 Professional' : '🎓 Internship';
+                            subtitle = expType + ' | ' + subtitle;
+                        }
+                        
                         if (item.location) subtitle += ` | ${item.location}`;
                         
                         html += `
@@ -803,7 +753,7 @@
                 // Function to create new technologies first
                 let createPromises = newTags.map(tagName => {
                     return $.ajax({
-                        url: '/api/technologies/',
+                        url: '/api/tech-stack/',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({ name: tagName })
@@ -823,7 +773,7 @@
                             url: `/api/profile/${id}/`,
                             type: 'PATCH',
                             contentType: 'application/json',
-                            data: JSON.stringify({ technology_ids: existingIds })
+                            data: JSON.stringify({ tech_stack_ids: existingIds })
                         });
                     })
                     .then(data => {
@@ -848,6 +798,38 @@
                             text: 'Failed to update tech stack.'
                         });
                     });
+            });
+
+            // Handle Create Tech Form
+            $('#create-tech-form').submit(function(e) {
+                e.preventDefault();
+                let formData = new FormData(this);
+                $.ajax({
+                    url: '/api/tech-stack/',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Created!',
+                            text: 'Technology option created.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        $('#create-tech-form')[0].reset();
+                        loadData(); // To refresh select options
+                    },
+                    error: function(err) {
+                        console.error(err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to create technology.'
+                        });
+                    }
+                });
             });
 
             function renderSelectedTechs(technologies) {
@@ -933,7 +915,7 @@
                     $.each(data, function(key, value) {
                         let input = form.find(`[name="${key}"]`);
                         if (input.attr('type') !== 'file') {
-                            if (key === 'technology_ids' && endpoint === 'projects') {
+                            if (key === 'tech_stack_ids' && endpoint === 'projects') {
                                 // Handle Select2 for Projects
                                 // Assuming 'technologies' is returned with full objects, map to IDs
                                 let selectedIds = data.technologies.map(t => t.id);
