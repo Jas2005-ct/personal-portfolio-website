@@ -7,6 +7,7 @@ admin.site.register(Profile)
 admin.site.register(Education)
 admin.site.register(Certificate)
 admin.site.register(Profession)
+admin.site.register(Tech_Section)
 
 @admin.register(TechStack)
 class TechStackAdmin(admin.ModelAdmin):

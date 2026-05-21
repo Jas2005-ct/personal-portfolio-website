@@ -14,6 +14,7 @@ router.register(r'services', views.ServiceViewSet)
 router.register(r'testimonials', views.TestimonialViewSet)
 router.register(r'contact', views.ContactMessageViewSet)
 router.register(r'tech-stack', views.TechStackViewSet)
+router.register(r'tech-sections', views.Tech_SectionViewSet)
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),

@@ -6,6 +6,7 @@ from .models import (
     Certificate,
     Profession,
     TechStack,
+    Tech_Section,
     Project,
     SocialLink,
     Resume,
@@ -14,6 +15,11 @@ from .models import (
     ContactMessage,
 )
 
+
+class Tech_SectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tech_Section
+        fields = '__all__'
 
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:

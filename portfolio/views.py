@@ -5,14 +5,14 @@ from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from .models import (
     Profile, Education, Certificate, Profession,
-    TechStack, Project, SocialLink, Resume, Service, Testimonial,
+    TechStack, Tech_Section, Project, SocialLink, Resume, Service, Testimonial,
     ContactMessage, CustomUser
 )
 from .serializers import (
     ProfileSerializer, EducationSerializer, CertificateSerializer, ProfessionSerializer,
     ProjectSerializer, SocialLinkSerializer, ResumeSerializer,
     ServiceSerializer, TestimonialSerializer, ContactMessageSerializer,
-    TechStackSerializer
+    TechStackSerializer, Tech_SectionSerializer
 )
 from .mixins import SuperAdminMixin
 from django.contrib.auth import login, logout, authenticate
@@ -36,7 +36,6 @@ class HomeView(TemplateView):
             context['resume'] = Resume.objects.filter(user=user).first()
             context['services'] = Service.objects.filter(user=user)
             context['testimonials'] = Testimonial.objects.filter(user=user)
-        print("HomeView context:", context)  # Debugging line
         return context
 
 class DashboardView(SuperAdminMixin, TemplateView):
@@ -54,7 +53,7 @@ class DashboardView(SuperAdminMixin, TemplateView):
         context['resume'] = Resume.objects.filter(user=user).first()
         context['services'] = Service.objects.filter(user=user)
         context['testimonials'] = Testimonial.objects.filter(user=user)
-        context['tech_stack'] = TechStack.objects.all()
+        context['tech_stack'] = TechStack.objects.prefetch_related('tech_section').all()
         return context
 
 def login_view(request):
@@ -183,25 +182,35 @@ class TechStackViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         name = request.data.get('name')
-        section = request.data.get('section', 1)
+        section_id = request.data.get('section')
         icon = request.FILES.get('icon')
 
-        if name:
-            tech = TechStack.objects.filter(name=name).first()
-            if not tech:
-                tech = TechStack(name=name, section=section)
-                if icon:
-                    tech.icon = icon
-                tech.save()
-            else:
-                # Update if already exists but we want to change icon/section?
-                # For now just save new details if provided
-                if icon:
-                    tech.icon = icon
-                if section:
-                    tech.section = section
-                tech.save()
+        if not name or not section_id:
+            return Response({'error': 'Name and section are required'}, status=400)
+
+        try:
+            section = Tech_Section.objects.get(id=section_id)
+        except Tech_Section.DoesNotExist:
+            return Response({'error': 'Invalid section'}, status=400)
+
+        tech = TechStack.objects.filter(name=name).first()
+        if not tech:
+            tech = TechStack(name=name, section=section)
+            if icon:
+                tech.icon = icon
+            tech.save()
+        else:
+            # Update if already exists
+            if icon:
+                tech.icon = icon
+            if section:
+                tech.section = section
+            tech.save()
                 
-            serializer = self.get_serializer(tech)
-            return Response(serializer.data)
-        return Response({'error': 'Name is required'}, status=400)
+        serializer = self.get_serializer(tech)
+        return Response(serializer.data)
+
+class Tech_SectionViewSet(viewsets.ModelViewSet):
+    queryset = Tech_Section.objects.all()
+    serializer_class = Tech_SectionSerializer
+    permission_classes = [permissions.AllowAny]

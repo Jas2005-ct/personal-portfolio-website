@@ -290,7 +290,7 @@
 
                 <!-- Right Column: Tech Stack -->
                 {% if tech_stack %}
-                <div id="tech-stack" class="w-full self-start scroll-reveal">
+                <div id="tech-stack" class="w-full scroll-reveal">
                     <div class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
                         <div class="mb-10">
                             <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Tech Stack</h3>
@@ -300,7 +300,7 @@
                         {% for section in tech_sections %}
                         <div class="mb-8 last:mb-0">
                             <h4 class="text-xs font-semibold uppercase tracking-[0.28em] text-slate_blue-500 mb-4 border-b border-pearl_aqua-800 pb-3">{{ section.grouper }}</h4>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                                 {% for tech in section.list %}
                                 <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
                                     <div class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl px-4 py-3 text-center transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-slate_blue hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
