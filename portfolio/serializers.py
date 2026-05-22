@@ -19,7 +19,15 @@ from .models import (
 class Tech_SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tech_Section
-        fields = '__all__'
+        fields = ['id', 'name', 'slug']
+
+class TechStackSerializer(serializers.ModelSerializer):
+    section_name = serializers.CharField(source='section.name', read_only=True)
+    section_details = Tech_SectionSerializer(source='section', read_only=True)
+    
+    class Meta:
+        model = TechStack
+        fields = ['id', 'name', 'icon', 'section', 'section_name', 'section_details']
 
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,11 +46,6 @@ class ProfessionSerializer(serializers.ModelSerializer):
         model = Profession
         fields = '__all__'
         read_only_fields = ['user']
-
-class TechStackSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TechStack
-        fields = '__all__'
 
 class ProjectSerializer(serializers.ModelSerializer):
     technologies = TechStackSerializer(many=True, read_only=True)
