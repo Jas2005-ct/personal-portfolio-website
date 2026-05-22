@@ -168,7 +168,10 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         from .models import CustomUser
-        user = CustomUser.objects.first()
+        # Assign message to superuser (portfolio owner)
+        user = CustomUser.objects.filter(is_superuser=True).first()
+        if not user:
+            user = CustomUser.objects.first()  # Fallback if no superuser exists
         serializer.save(user=user)
 
 class TechStackViewSet(viewsets.ModelViewSet):
