@@ -117,7 +117,6 @@ class Project(models.Model):
     motive = models.CharField(max_length=100)
     problem_statement = models.TextField()
     technologies = models.ManyToManyField(TechStack, blank=True)
-    tech_stack = models.CharField(max_length=200, help_text="Comma separated, e.g. Django, React", blank=True, null=True)
     github_link = models.URLField(null=True, blank=True)
     live_demo = models.URLField(null=True, blank=True)    
     impact = models.TextField(blank=True, help_text="Quantifiable results, e.g., 'Reduced load time by 30%'")
