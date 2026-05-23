@@ -48,7 +48,7 @@ class HomeView(TemplateView):
         return context
 
 class DashboardView(SuperAdminMixin, TemplateView):
-    template_name = 'dashboard.html'   
+    template_name = 'dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -82,10 +82,6 @@ def logout_view(request):
     return redirect('login')
 
 class PortfolioDataView(APIView):
-    """
-    API endpoint that returns all portfolio data in JSON format.
-    Used for AJAX loading if needed.
-    """
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
@@ -96,8 +92,11 @@ class PortfolioDataView(APIView):
             return Response({"error": "No data found"}, status=404)
 
         profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
+        social = SocialLink.objects.filter(user=user).first()
+        resume_obj = Resume.objects.filter(user=user).first()
+
         data = {
-            'profile': ProfileSerializer(profile).data,
+            'profile': ProfileSerializer(profile).data if profile else None,
             'education': EducationSerializer(Education.objects.filter(user=user), many=True).data,
             'certificates': CertificateSerializer(Certificate.objects.filter(user=user), many=True).data,
             'professions': ProfessionSerializer(Profession.objects.filter(user=user), many=True).data,
@@ -106,14 +105,13 @@ class PortfolioDataView(APIView):
                 profile.technologies.all(), many=True
             ).data if profile else [],
             'projects': ProjectSerializer(Project.objects.filter(user=user), many=True).data,
-            'social_links': SocialLinkSerializer(SocialLink.objects.filter(user=user).first()).data,
-            'resume': ResumeSerializer(Resume.objects.filter(user=user).first()).data,
+            'social_links': SocialLinkSerializer(social).data if social else None,
+            'resume': ResumeSerializer(resume_obj).data if resume_obj else None,
             'services': ServiceSerializer(Service.objects.filter(user=user), many=True).data,
             'testimonials': TestimonialSerializer(Testimonial.objects.filter(user=user), many=True).data,
         }
         return Response(data)
 
-# Base ViewSet for user-specific data
 class BasePortfolioViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
@@ -135,7 +133,6 @@ class EducationViewSet(BasePortfolioViewSet):
 class CertificateViewSet(BasePortfolioViewSet):
     queryset = Certificate.objects.all()
     serializer_class = CertificateSerializer
-
 
 class ProfessionViewSet(BasePortfolioViewSet):
     queryset = Profession.objects.all()
@@ -164,7 +161,7 @@ class TestimonialViewSet(BasePortfolioViewSet):
 class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    
+
     def get_permissions(self):
         if self.action == 'create':
             return [permissions.AllowAny()]
@@ -174,13 +171,11 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             return self.queryset.filter(user=self.request.user)
         return self.queryset.none()
-    
+
     def perform_create(self, serializer):
-        from .models import CustomUser
-        # Assign message to superuser (portfolio owner)
         user = CustomUser.objects.filter(is_superuser=True).first()
         if not user:
-            user = CustomUser.objects.first()  # Fallback if no superuser exists
+            user = CustomUser.objects.first()
         serializer.save(user=user)
 
 class TechStackViewSet(viewsets.ModelViewSet):
