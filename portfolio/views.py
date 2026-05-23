@@ -24,18 +24,20 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = CustomUser.objects.filter(is_superuser=True).first()
-        if user:
-            profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
-            context['profile'] = profile
-            context['tech_stack'] = TechStack.objects.select_related('section').all()
-            context['education'] = Education.objects.filter(user=user).order_by('-start_year')
-            context['certificates'] = Certificate.objects.filter(user=user)
-            context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
-            context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
-            context['social_links'] = SocialLink.objects.filter(user=user).first()
-            context['resume'] = Resume.objects.filter(user=user).first()
-            context['services'] = Service.objects.filter(user=user)
-            context['testimonials'] = Testimonial.objects.filter(user=user)
+        if not user:
+            return context
+        profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
+        context['profile'] = profile
+        context['tech_stack'] = TechStack.objects.select_related('section').all()
+        context['education'] = Education.objects.filter(user=user).order_by('-start_year')
+        context['certificates'] = Certificate.objects.filter(user=user)
+        context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
+        context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
+    context['social_links'] = SocialLink.objects.filter(user=user).first()
+        context['resume'] = Resume.objects.filter(user=user).first()
+        context['services'] = Service.objects.filter(user=user)
+        context['testimonials'] = Testimonial.objects.filter(user=user)
+        context['internships'] = Profession.objects.filter(user=user, experience='internship').order_by('-start_year')
         return context
 
 class DashboardView(SuperAdminMixin, TemplateView):
