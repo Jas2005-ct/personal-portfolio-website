@@ -33,7 +33,7 @@ class HomeView(TemplateView):
         context['certificates'] = Certificate.objects.filter(user=user)
         context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
         context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
-    context['social_links'] = SocialLink.objects.filter(user=user).first()
+        context['social_links'] = SocialLink.objects.filter(user=user).first()
         context['resume'] = Resume.objects.filter(user=user).first()
         context['services'] = Service.objects.filter(user=user)
         context['testimonials'] = Testimonial.objects.filter(user=user)
