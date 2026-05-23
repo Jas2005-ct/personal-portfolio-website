@@ -35,4 +35,4 @@ COPY . /app/
 EXPOSE 8000
 
 # Start Gunicorn
-CMD ["sh", "-c", "gunicorn project.wsgi:application --bind 0.0.0.0:"]
+CMD ["sh", "-c", "gunicorn project.wsgi:application --bind 0.0.0.0:$PORT"]
