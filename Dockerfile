@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:"
+ENV PATH="/root/.local/bin:$PATH"
 
 # Copy only requirements to cache them in docker layer
 COPY pyproject.toml poetry.lock* /app/
