@@ -3,11 +3,13 @@ from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
+from django.db.models import Count
 from .models import (
     Profile, Education, Certificate, Profession,
     TechStack, Tech_Section, Project, SocialLink, Resume, Service, Testimonial,
     ContactMessage, CustomUser
 )
+# pyright: ignore [missing-import]
 from .serializers import (
     ProfileSerializer, EducationSerializer, CertificateSerializer, ProfessionSerializer,
     ProjectSerializer, SocialLinkSerializer, ResumeSerializer,
@@ -17,6 +19,8 @@ from .serializers import (
 from .mixins import SuperAdminMixin
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
+
+EXCLUDE_SECTION = ['DataAnalytics', 'FrontEnd','Music-Production']
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -28,15 +32,20 @@ class HomeView(TemplateView):
             return context
         profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
         context['profile'] = profile
-        context['tech_stack'] = TechStack.objects.select_related('section').all()
-        context['education'] = Education.objects.filter(user=user).order_by('-start_year')
+        context['tech_stack'] = (
+            TechStack
+            .objects
+            .select_related('section')
+            .annotate(section_tech_count=Count('section__tech_section'))
+            .order_by('section_tech_count', 'name')
+            .exclude(section__name__in=EXCLUDE_SECTION))
+        context['education'] = Education.objects.filter(user=user)
         context['certificates'] = Certificate.objects.filter(user=user)
-        context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
+        context['professions'] = Profession.objects.filter(user=user, experience='professional')
+        context['internships'] = Profession.objects.filter(user=user, experience='internship')
         context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
         context['social_links'] = SocialLink.objects.filter(user=user).first()
         context['resume'] = Resume.objects.filter(user=user).first()
-        context['services'] = Service.objects.filter(user=user)
-        context['testimonials'] = Testimonial.objects.filter(user=user)
         return context
 
 class DashboardView(SuperAdminMixin, TemplateView):
@@ -54,8 +63,6 @@ class DashboardView(SuperAdminMixin, TemplateView):
         context['resume'] = Resume.objects.filter(user=user).first()
         context['services'] = Service.objects.filter(user=user)
         context['testimonials'] = Testimonial.objects.filter(user=user)
-        context['tech_stack'] = TechStack.objects.select_related('section').all()
-        context['tech_sections'] = Tech_Section.objects.all()
         return context
 
 def login_view(request):
@@ -108,6 +115,7 @@ class PortfolioDataView(APIView):
 
 class BasePortfolioViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -174,6 +182,7 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
 class TechStackViewSet(viewsets.ModelViewSet):
     queryset = TechStack.objects.all()
     serializer_class = TechStackSerializer
+    pagination_class = None
 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
@@ -189,26 +198,30 @@ class TechStackViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Name and section are required'}, status=400)
 
         try:
+            section_id = int(section_id)
             section = Tech_Section.objects.get(id=section_id)
-        except Tech_Section.DoesNotExist:
+        except (ValueError, Tech_Section.DoesNotExist):
             return Response({'error': 'Invalid section'}, status=400)
 
-        tech, created = TechStack.objects.get_or_create(
-            name=name,
-            defaults={'section': section}
-        )
-        if not created:
-            tech.section = section
-        if icon:
-            tech.icon = icon
-        tech.save()
-
-        serializer = self.get_serializer(tech)
-        return Response(serializer.data)
+        tech = TechStack.objects.filter(name=name, section=section).first()
+        if tech:
+            if icon:
+                tech.icon = icon
+            tech.save()
+            serializer = self.get_serializer(tech)
+            return Response(serializer.data, status=200)
+        else:
+            tech = TechStack(name=name, section=section)
+            if icon:
+                tech.icon = icon
+            tech.save()
+            serializer = self.get_serializer(tech)
+            return Response(serializer.data, status=201)
 
 class Tech_SectionViewSet(viewsets.ModelViewSet):
     queryset = Tech_Section.objects.all()
     serializer_class = Tech_SectionSerializer
+    pagination_class = None
 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:

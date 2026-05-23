@@ -23,7 +23,11 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "portfolio", from = "src"}]
+packages = [
+    {include = "portfolio"},
+    {include = "project"},
+    {include = "theme"},
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

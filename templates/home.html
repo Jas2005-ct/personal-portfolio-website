@@ -26,7 +26,7 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="{% if profile %}{{ profile.name }} | Portfolio{% else %}Portfolio{% endif %}">
     <meta property="og:description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% endif %}">
-    <meta property="og:image" content="{% if profile %}{{ profile.profile_image.url }}{% endif %}">
+    <meta property="og:image" content="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% endif %}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
