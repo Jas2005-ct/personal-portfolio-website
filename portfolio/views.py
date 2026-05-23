@@ -9,6 +9,7 @@ from .models import (
     TechStack, Tech_Section, Project, SocialLink, Resume, Service, Testimonial,
     ContactMessage, CustomUser
 )
+# pyright: ignore [missing-import]
 from .serializers import (
     ProfileSerializer, EducationSerializer, CertificateSerializer, ProfessionSerializer,
     ProjectSerializer, SocialLinkSerializer, ResumeSerializer,
@@ -19,7 +20,7 @@ from .mixins import SuperAdminMixin
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 
-EXCLUDE_SECTION = ['DataAnalytics', 'FrontEnd']
+EXCLUDE_SECTION = ['DataAnalytics', 'FrontEnd','Music-Production']
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -36,7 +37,7 @@ class HomeView(TemplateView):
             .objects
             .select_related('section')
             .annotate(section_tech_count=Count('section__tech_section'))
-            .order_by('-section_tech_count', 'name')
+            .order_by('section_tech_count', 'name')
             .exclude(section__name__in=EXCLUDE_SECTION))
         context['education'] = Education.objects.filter(user=user)
         context['certificates'] = Certificate.objects.filter(user=user)

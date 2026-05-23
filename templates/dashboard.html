@@ -488,12 +488,12 @@
             <div class="card p-4 mb-4">
                 <h5>Create Tech Section</h5>
                 <form id="create-section-form">
-                    <div class="row">
-                        <div class="col-md-8 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-8 col-span-12">
                             <input type="text" class="form-control" name="name" placeholder="Section name (e.g. Frontend, Backend, Tools)" required>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <button type="submit" class="btn btn-success w-100">Create Section</button>
+                        <div class="md:col-span-4 col-span-12">
+                            <button type="submit" class="btn btn-success w-full">Create Section</button>
                         </div>
                     </div>
                 </form>
@@ -514,9 +514,10 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Save Tech Stack</button>
                 </form>
-                <div id="selected-tech-list" class="row mt-3"></div>
+                <div id="selected-tech-list" class="grid grid-cols-12 gap-4 mt-3"></div>
             </div>
         </div>
+
 
         <!-- Projects Section -->
         <div id="projects-section" class="section" style="display:none;">
@@ -637,26 +638,6 @@
         </div>
     </div>
 
-    <!-- Tag Section Prompt Modal -->
-    <div id="tagSectionModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
-        <div class="modal-backdrop absolute inset-0" data-modal-close></div>
-        <div class="modal-panel relative w-full max-w-md bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
-            <div class="flex items-center justify-between mb-6">
-                <h5 class="text-xl font-bold text-slate-800">Select Section for New Technologies</h5>
-                <button type="button" data-modal-close aria-label="Close" class="text-slate-400 hover:text-slate-800 text-2xl leading-none transition-colors duration-300">&times;</button>
-            </div>
-            <div id="new-tags-list" class="mb-4"></div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-600 mb-1">Section</label>
-                <select id="tag-section-select" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-slate_blue focus:ring-1 focus:ring-slate_blue transition-colors duration-300" required>
-                    <option value="">Select a section...</option>
-                </select>
-            </div>
-            <button type="button" id="confirm-tag-section" class="w-full bg-slate_blue text-white font-bold uppercase tracking-wide py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong">
-                Confirm
-            </button>
-        </div>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Tom Select JS -->
@@ -896,32 +877,34 @@
                             const sectionTechs = (techs || []).filter(t => t.section === section.id);
                             const techBadges = sectionTechs.length > 0
                                 ? sectionTechs.map(t => `
-                                    <span class="badge bg-secondary me-2 mb-2 p-2" style="font-size:0.85rem;">
-                                        ${t.icon ? `<img src="${t.icon}" alt="" style="width:16px;height:16px;object-fit:contain;margin-right:4px;">` : ''}
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-zinc-800 text-white mr-2 mb-2 border border-zinc-700">
+                                        ${t.icon ? `<img src="${t.icon}" alt="" class="w-4 h-4 object-contain mr-1">` : ''}
                                         ${t.name}
-                                        <button class="btn-close btn-close-white ms-2 delete-tech-btn" data-id="${t.id}" style="font-size:0.5rem;" aria-label="Remove"></button>
+                                        <button class="delete-tech-btn hover:text-red-400 ml-1.5 transition-colors focus:outline-none" data-id="${t.id}" aria-label="Remove">
+                                            <i class="fas fa-times text-[10px]"></i>
+                                        </button>
                                     </span>
                                 `).join('')
                                 : '<p class="text-muted small mb-0">No technologies in this section yet.</p>';
 
                             html += `
                                 <div class="card p-4 mb-4" data-section-id="${section.id}">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="flex justify-between items-center mb-3">
                                         <h5 class="mb-0">${section.name}</h5>
                                         <button class="btn btn-danger btn-sm delete-section-btn" data-id="${section.id}">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </div>
                                     <div class="mb-3">${techBadges}</div>
-                                    <form class="add-tech-to-section-form row g-2" data-section-id="${section.id}">
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control form-control-sm" name="name" placeholder="Technology name" required>
+                                    <form class="add-tech-to-section-form grid grid-cols-12 gap-4" data-section-id="${section.id}">
+                                        <div class="md:col-span-6 col-span-12">
+                                            <input type="text" class="form-control" name="name" placeholder="Technology name" required>
                                         </div>
-                                        <div class="col-md-4">
-                                            <input type="file" class="form-control form-control-sm" name="icon" accept="image/*">
+                                        <div class="md:col-span-4 col-span-12">
+                                            <input type="file" class="form-control" name="icon" accept="image/*">
                                         </div>
-                                        <div class="col-md-2">
-                                            <button type="submit" class="btn btn-sm btn-primary w-100">Add</button>
+                                        <div class="md:col-span-2 col-span-12">
+                                            <button type="submit" class="btn btn-primary w-full">Add</button>
                                         </div>
                                     </form>
                                 </div>
@@ -937,6 +920,7 @@
                     }
                 });
             }
+
 
             let profileTechSelect = null;
             let projectTechSelect = null;
