@@ -31,10 +31,6 @@ RUN poetry config virtualenvs.create false \
 # Copy the rest of the application code
 COPY . /app/
 
-# Install Tailwind CLI and build CSS
-RUN python manage.py tailwind install
-RUN python manage.py tailwind build
-
 # Expose the port
 EXPOSE 8000
 
