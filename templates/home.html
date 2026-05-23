@@ -1,4 +1,4 @@
-{% load static %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
@@ -13,119 +13,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
-                    colors: {
-                        slate_blue: { DEFAULT: '#5e60ce', 100: '#170025', 200: '#2f0049', 300: '#46006e', 400: '#5d0093', 500: '#5e60ce', 600: '#9e00f9', 700: '#b73bff', 800: '#cf7cff', 900: '#e7beff' },
-                        cloudy_sky: { DEFAULT: '#6930c3', 100: '#150a27', 200: '#2a144e', 300: '#3f1d76', 400: '#54279d', 500: '#6930c3', 600: '#8655d5', 700: '#a480df', 800: '#c3aaea', 900: '#e1d5f4' },
-                        slate_blue: { DEFAULT: '#5e60ce', 100: '#0e0f2e', 200: '#1c1d5c', 300: '#2a2c8a', 400: '#393bb8', 500: '#5e60ce', 600: '#7f81d8', 700: '#9fa0e2', 800: '#bfc0eb', 900: '#dfdff5' },
-                        cloudy_sky: { DEFAULT: '#5390d9', 100: '#0b1c31', 200: '#163863', 300: '#205494', 400: '#2b71c5', 500: '#5390d9', 600: '#76a6e1', 700: '#98bce8', 800: '#bad3f0', 900: '#dde9f7' },
-                        fresh_sky: { DEFAULT: '#4ea8de', 100: '#092333', 200: '#134666', 300: '#1c6999', 400: '#258ccb', 500: '#4ea8de', 600: '#72b9e5', 700: '#95caec', 800: '#b8dcf2', 900: '#dcedf9' },
-                        sky_surge: { DEFAULT: '#48bfe3', 100: '#082a34', 200: '#105468', 300: '#187d9c', 400: '#20a7d0', 500: '#48bfe3', 600: '#6ecce8', 700: '#92d9ee', 800: '#b7e5f4', 900: '#dbf2f9' },
-                        sky_blue_light: { DEFAULT: '#56cfe1', 100: '#092f35', 200: '#135e6a', 300: '#1c8d9f', 400: '#25bcd4', 500: '#56cfe1', 600: '#78d8e7', 700: '#9ae2ed', 800: '#bbecf3', 900: '#ddf5f9' },
-                        pearl_aqua: { DEFAULT: '#64dfdf', 100: '#0b3535', 200: '#166b6b', 300: '#21a0a0', 400: '#2dd4d4', 500: '#64dfdf', 600: '#82e5e5', 700: '#a1ecec', 800: '#c0f2f2', 900: '#e0f9f9' },
-                        turquoise: { DEFAULT: '#72efdd', 100: '#073f37', 200: '#0e7f6e', 300: '#15bea5', 400: '#31e8cd', 500: '#72efdd', 600: '#8df2e3', 700: '#aaf6ea', 800: '#c6f9f1', 900: '#e3fcf8' },
-                        aquamarine: { DEFAULT: '#80ffdb', 100: '#004d37', 200: '#00996e', 300: '#00e6a4', 400: '#33ffc5', 500: '#80ffdb', 600: '#99ffe2', 700: '#b3ffe9', 800: '#ccfff1', 900: '#e5fff8' },
-                    },
-                    boxShadow: {
-                        soft: '0 4px 24px rgba(46, 0, 110, 0.06)',
-                        'soft-hover': '0 12px 32px rgba(94, 96, 206, 0.18)',
-                        'soft-strong': '0 8px 30px rgba(78, 168, 222, 0.35)',
-                    },
-                    keyframes: {
-                        fadeInDown: {
-                            from: { opacity: '0', transform: 'translateY(-2.5rem)', filter: 'blur(10px)' },
-                            to: { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
-                        },
-                        fadeInUp: {
-                            from: { opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(10px)' },
-                            to: { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
-                        },
-                        zoomIn: {
-                            from: { opacity: '0', transform: 'scale(0.5)', filter: 'blur(10px)' },
-                            to: { opacity: '1', transform: 'scale(1)', filter: 'blur(0)' },
-                        },
-                    },
-                    animation: {
-                        'fade-in-down': 'fadeInDown 1s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-                        'fade-in-up': 'fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s backwards',
-                        'zoom-in': 'zoomIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-                    },
-                    transitionTimingFunction: {
-                        smooth: 'cubic-bezier(0.22, 1, 0.36, 1)',
-                    },
-                },
-            },
-        };
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .icon { @apply inline-block shrink-0; }
-            .timeline-item::before {
-                content: '';
-                position: absolute;
-                left: -0.85rem;
-                top: 0;
-                width: 1.25rem;
-                height: 1.25rem;
-                background: #ffffff;
-                border: 4px solid #5e60ce;
-                border-radius: 50%;
-                box-shadow: 0 2px 8px rgba(94, 96, 206, 0.25);
-                transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            }
-            .timeline-item:hover::before {
-                background: #5e60ce;
-                box-shadow: 0 4px 12px rgba(94, 96, 206, 0.35);
-            }
-        }
-        section.scroll-reveal {
-            opacity: 0;
-            transform: translateY(3rem) scale(0.97);
-            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        section.scroll-reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-        section.scroll-reveal.is-visible .reveal-child {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-child {
-            opacity: 0;
-            transform: translateY(1.5rem);
-            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        @media (prefers-reduced-motion: reduce) {
-            section.scroll-reveal {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-            .reveal-child {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-        }
-        .modal-overlay.is-open {
-            opacity: 1;
-            pointer-events: auto;
-            visibility: visible;
-        }
-        .modal-overlay.is-open .modal-panel {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-    </style>
+    {% tailwind_css %}
+
 
     <!-- SEO & Metadata -->
     <meta name="description"
@@ -843,3 +732,4 @@
 </body>
 
 </html>
+
