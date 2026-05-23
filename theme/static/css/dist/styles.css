@@ -8,6 +8,8 @@
     --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-300: oklch(80.8% 0.114 19.571);
+    --color-red-400: oklch(70.4% 0.191 22.216);
     --color-sky-300: oklch(82.8% 0.111 230.318);
     --color-sky-700: oklch(50% 0.134 242.749);
     --color-sky-800: oklch(44.3% 0.11 240.79);
@@ -320,6 +322,12 @@
   .z-\[9999\] {
     z-index: 9999;
   }
+  .col-span-6 {
+    grid-column: span 6 / span 6;
+  }
+  .col-span-12 {
+    grid-column: span 12 / span 12;
+  }
   .col-span-full {
     grid-column: 1 / -1;
   }
@@ -377,6 +385,9 @@
   }
   .mr-1 {
     margin-right: calc(var(--spacing) * 1);
+  }
+  .mr-2 {
+    margin-right: calc(var(--spacing) * 2);
   }
   .mb-0 {
     margin-bottom: calc(var(--spacing) * 0);
@@ -570,6 +581,9 @@
   }
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
   }
   .flex-col {
     flex-direction: column;
@@ -1129,6 +1143,9 @@
   .text-pink-300 {
     color: var(--color-pink-300);
   }
+  .text-red-400 {
+    color: var(--color-red-400);
+  }
   .text-sky-300 {
     color: var(--color-sky-300);
   }
@@ -1379,6 +1396,11 @@
     }
   }
   @media (hover: hover) {
+    .hover\:text-red-300:hover {
+      color: var(--color-red-300);
+    }
+  }
+  @media (hover: hover) {
     .hover\:text-slate-800:hover {
       color: var(--color-slate-800);
     }
@@ -1485,6 +1507,26 @@
   @media (width >= 48rem) {
     .md\:top-auto {
       top: auto;
+    }
+  }
+  @media (width >= 48rem) {
+    .md\:col-span-2 {
+      grid-column: span 2 / span 2;
+    }
+  }
+  @media (width >= 48rem) {
+    .md\:col-span-4 {
+      grid-column: span 4 / span 4;
+    }
+  }
+  @media (width >= 48rem) {
+    .md\:col-span-6 {
+      grid-column: span 6 / span 6;
+    }
+  }
+  @media (width >= 48rem) {
+    .md\:col-span-12 {
+      grid-column: span 12 / span 12;
     }
   }
   @media (width >= 48rem) {

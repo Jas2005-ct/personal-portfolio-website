@@ -24,22 +24,23 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = CustomUser.objects.filter(is_superuser=True).first()
-        if user:
-            profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
-            context['profile'] = profile
-            context['tech_stack'] = TechStack.objects.select_related('section').all()
-            context['education'] = Education.objects.filter(user=user).order_by('-start_year')
-            context['certificates'] = Certificate.objects.filter(user=user)
-            context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
-            context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
-            context['social_links'] = SocialLink.objects.filter(user=user).first()
-            context['resume'] = Resume.objects.filter(user=user).first()
-            context['services'] = Service.objects.filter(user=user)
-            context['testimonials'] = Testimonial.objects.filter(user=user)
+        if not user:
+            return context
+        profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
+        context['profile'] = profile
+        context['tech_stack'] = TechStack.objects.select_related('section').all()
+        context['education'] = Education.objects.filter(user=user).order_by('-start_year')
+        context['certificates'] = Certificate.objects.filter(user=user)
+        context['professions'] = Profession.objects.filter(user=user).order_by('-start_year')
+        context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
+        context['social_links'] = SocialLink.objects.filter(user=user).first()
+        context['resume'] = Resume.objects.filter(user=user).first()
+        context['services'] = Service.objects.filter(user=user)
+        context['testimonials'] = Testimonial.objects.filter(user=user)
         return context
 
 class DashboardView(SuperAdminMixin, TemplateView):
-    template_name = 'dashboard.html'   
+    template_name = 'dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,6 +55,7 @@ class DashboardView(SuperAdminMixin, TemplateView):
         context['services'] = Service.objects.filter(user=user)
         context['testimonials'] = Testimonial.objects.filter(user=user)
         context['tech_stack'] = TechStack.objects.select_related('section').all()
+        context['tech_sections'] = Tech_Section.objects.all()
         return context
 
 def login_view(request):
@@ -74,10 +76,6 @@ def logout_view(request):
     return redirect('login')
 
 class PortfolioDataView(APIView):
-    """
-    API endpoint that returns all portfolio data in JSON format.
-    Used for AJAX loading if needed.
-    """
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
@@ -88,8 +86,11 @@ class PortfolioDataView(APIView):
             return Response({"error": "No data found"}, status=404)
 
         profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
+        social = SocialLink.objects.filter(user=user).first()
+        resume_obj = Resume.objects.filter(user=user).first()
+
         data = {
-            'profile': ProfileSerializer(profile).data,
+            'profile': ProfileSerializer(profile).data if profile else None,
             'education': EducationSerializer(Education.objects.filter(user=user), many=True).data,
             'certificates': CertificateSerializer(Certificate.objects.filter(user=user), many=True).data,
             'professions': ProfessionSerializer(Profession.objects.filter(user=user), many=True).data,
@@ -98,14 +99,13 @@ class PortfolioDataView(APIView):
                 profile.technologies.all(), many=True
             ).data if profile else [],
             'projects': ProjectSerializer(Project.objects.filter(user=user), many=True).data,
-            'social_links': SocialLinkSerializer(SocialLink.objects.filter(user=user).first()).data,
-            'resume': ResumeSerializer(Resume.objects.filter(user=user).first()).data,
+            'social_links': SocialLinkSerializer(social).data if social else None,
+            'resume': ResumeSerializer(resume_obj).data if resume_obj else None,
             'services': ServiceSerializer(Service.objects.filter(user=user), many=True).data,
             'testimonials': TestimonialSerializer(Testimonial.objects.filter(user=user), many=True).data,
         }
         return Response(data)
 
-# Base ViewSet for user-specific data
 class BasePortfolioViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -126,7 +126,6 @@ class EducationViewSet(BasePortfolioViewSet):
 class CertificateViewSet(BasePortfolioViewSet):
     queryset = Certificate.objects.all()
     serializer_class = CertificateSerializer
-
 
 class ProfessionViewSet(BasePortfolioViewSet):
     queryset = Profession.objects.all()
@@ -155,7 +154,7 @@ class TestimonialViewSet(BasePortfolioViewSet):
 class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    
+
     def get_permissions(self):
         if self.action == 'create':
             return [permissions.AllowAny()]
@@ -165,13 +164,11 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             return self.queryset.filter(user=self.request.user)
         return self.queryset.none()
-    
+
     def perform_create(self, serializer):
-        from .models import CustomUser
-        # Assign message to superuser (portfolio owner)
         user = CustomUser.objects.filter(is_superuser=True).first()
         if not user:
-            user = CustomUser.objects.first()  # Fallback if no superuser exists
+            user = CustomUser.objects.first()
         serializer.save(user=user)
 
 class TechStackViewSet(viewsets.ModelViewSet):
@@ -196,24 +193,24 @@ class TechStackViewSet(viewsets.ModelViewSet):
         except Tech_Section.DoesNotExist:
             return Response({'error': 'Invalid section'}, status=400)
 
-        tech = TechStack.objects.filter(name=name).first()
-        if not tech:
-            tech = TechStack(name=name, section=section)
-            if icon:
-                tech.icon = icon
-            tech.save()
-        else:
-            # Update if already exists
-            if icon:
-                tech.icon = icon
-            if section:
-                tech.section = section
-            tech.save()
-                
+        tech, created = TechStack.objects.get_or_create(
+            name=name,
+            defaults={'section': section}
+        )
+        if not created:
+            tech.section = section
+        if icon:
+            tech.icon = icon
+        tech.save()
+
         serializer = self.get_serializer(tech)
         return Response(serializer.data)
 
 class Tech_SectionViewSet(viewsets.ModelViewSet):
     queryset = Tech_Section.objects.all()
     serializer_class = Tech_SectionSerializer
-    permission_classes = [permissions.AllowAny]
+
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]

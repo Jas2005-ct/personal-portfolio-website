@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Dashboard</title>
+    {% load tailwind_tags %}
+    {% tailwind_css %}
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
     
     <style>
         :root {
@@ -153,6 +152,58 @@
             border-color: var(--secondary-color);
         }
 
+        .btn-success {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #059669;
+            border-color: #059669;
+        }
+
+        .btn-warning {
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+            color: white;
+        }
+        .btn-warning:hover {
+            background-color: #d97706;
+            border-color: #d97706;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            border-color: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            border-color: #6b7280;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+            border-color: #4b5563;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.75em;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 9999px;
+        }
+
+        .text-muted {
+            color: #9ca3af;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -189,7 +240,7 @@
         <a href="#" class="nav-link" data-target="projects"><i class="fas fa-project-diagram"></i> Projects</a>
         <a href="#" class="nav-link" data-target="resume"><i class="fas fa-file-alt"></i> Resume</a>
         <a href="#" class="nav-link" data-target="social"><i class="fas fa-share-alt"></i> Social Links</a>
-        <a href="{% url 'logout' %}" class="nav-link text-danger mt-4"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="{% url 'logout' %}" class="nav-link text-red-400 hover:text-red-300 mt-4"><i class="fas fa-sign-out-alt"></i> Logout</a>
         <a href="/" class="nav-link mt-2 border-top pt-3"><i class="fas fa-home"></i> View Portfolio</a>
     </div>
 
@@ -244,65 +295,65 @@
         <div id="education-section" class="section" style="display:none;">
             <h2>Education</h2>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Education</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="education">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="course" placeholder="Course / Degree" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="institution" placeholder="Institution" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="text" class="form-control" name="course_duration" placeholder="Duration (e.g. 4 years)">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="field_of_study" placeholder="Field of Study / Major">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="location" placeholder="Location (City, Country)">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="text" class="form-control" name="grade" placeholder="Grade / GPA">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="start_year" placeholder="Start Year" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="end_year" placeholder="End Year (leave empty if current)">
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <textarea class="form-control" name="description" placeholder="Description (Bullet points, achievements, etc.)" rows="3"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Education</button>
                 </form>
             </div>
-            <div id="education-list" class="row"></div>
+            <div id="education-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Certificates Section -->
         <div id="certificates-section" class="section" style="display:none;">
             <h2>Certificates</h2>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Certificate</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="certificates">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="course" placeholder="Course Name" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="platform" placeholder="Platform (e.g. Coursera)" required>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <label>Certificate Image</label>
                             <input type="file" class="form-control" name="image">
                         </div>
@@ -310,7 +361,7 @@
                     <button type="submit" class="btn btn-success submit-btn">Add Certificate</button>
                 </form>
             </div>
-            <div id="certificates-list" class="row"></div>
+            <div id="certificates-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Experience Section -->
@@ -319,53 +370,53 @@
             
             <!-- Unified Profession Form -->
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Experience</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="professions">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-4 col-span-12">
                             <select class="form-control" name="experience" required>
                                 <option value="">Select Experience Type</option>
                                 <option value="professional">Professional Job</option>
                                 <option value="internship">Internship</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="role" placeholder="Role / Job Title" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="company" placeholder="Company" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="text" class="form-control" name="duration" placeholder="Duration">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="start_year" placeholder="Start Year" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="end_year" placeholder="End Year">
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <input type="text" class="form-control" name="location" placeholder="Location (e.g. Remote, Bangalore)">
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <textarea class="form-control" name="description" placeholder="Description / Highlights / Achievements (supports bullet points)" rows="3"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Experience</button>
                 </form>
             </div>
-            <div id="professions-list" class="row"></div>
+            <div id="professions-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Tech Stack Section -->
         <div id="tech-stack-section" class="section" style="display:none;">
             <h2>Tech Stack</h2>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Select Tech Stack</h5>
                 </div>
                 <form id="tech-stack-form">
@@ -381,66 +432,66 @@
                 </form>
             </div>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Create New Technology</h5>
                 </div>
                 <form id="create-tech-form" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="text" class="form-control" name="name" placeholder="Technology Name" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <select class="form-control" name="section" id="create-tech-section" required>
                                 <option value="">Select Section</option>
                                 <!-- Options loaded dynamically -->
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="file" class="form-control" name="icon" accept="image/*">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success">Create Technology</button>
                 </form>
             </div>
-            <div id="selected-tech-list" class="row"></div>
+            <div id="selected-tech-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Projects Section -->
         <div id="projects-section" class="section" style="display:none;">
             <h2>Projects</h2>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Project</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="projects">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="title" placeholder="Project Title" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <label class="form-label">Technologies</label>
                             <select class="form-control project-tech-select" name="tech_stack_ids" multiple required>
                                 <!-- Options loaded via JS -->
                             </select>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <textarea class="form-control" name="description" placeholder="Description" required></textarea>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="motive" placeholder="Motive" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <textarea class="form-control" name="problem_statement" placeholder="Problem Statement" required></textarea>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="url" class="form-control" name="github_link" placeholder="GitHub URL">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="url" class="form-control" name="live_demo" placeholder="Live Demo URL">
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <label>Project Image</label>
                             <input type="file" class="form-control" name="image">
                             <small class="text-muted">Leave empty to keep current image</small>
@@ -449,7 +500,7 @@
                     <button type="submit" class="btn btn-success submit-btn">Add Project</button>
                 </form>
             </div>
-            <div id="projects-list" class="row"></div>
+            <div id="projects-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Resume Section -->
@@ -500,8 +551,6 @@
                 </form>
             </div>
         </div>
-
-    </div>
 
     </div>
 
@@ -571,7 +620,6 @@
                             
                             // Initialize Select2 with Tagging
                             $('#tech-select').select2({
-                                theme: 'bootstrap-5',
                                 placeholder: 'Select or Type to Add Technologies',
                                 allowClear: true,
                                 width: '100%',
@@ -598,7 +646,6 @@
 
                             // Initialize Select2 for Projects
                             $('.project-tech-select').select2({
-                                theme: 'bootstrap-5',
                                 placeholder: 'Select Technologies',
                                 allowClear: true,
                                 width: '100%',
@@ -664,15 +711,15 @@
                         if (item.location) subtitle += ` | ${item.location}`;
                         
                         html += `
-                            <div class="col-md-6 mb-3">
+                            <div class="md:col-span-6 col-span-12 mb-3">
                                 <div class="card p-3">
-                                    <div class="d-flex justify-content-between align-items-center">
+                                    <div class="flex justify-between items-center">
                                         <div>
                                             <h5 class="mb-1">${title}</h5>
                                             <small class="text-muted">${subtitle}</small>
                                         </div>
                                         <div>
-                                            <button class="btn btn-warning btn-sm edit-btn me-2" data-endpoint="${endpoint}" data-id="${item.id}">
+                                            <button class="btn btn-warning btn-sm edit-btn mr-2" data-endpoint="${endpoint}" data-id="${item.id}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button class="btn btn-danger btn-sm delete-btn" data-endpoint="${endpoint}" data-id="${item.id}">
@@ -837,9 +884,9 @@
                 if (technologies && technologies.length > 0) {
                     technologies.forEach(tech => {
                         html += `
-                            <div class="col-md-2 mb-3">
+                            <div class="md:col-span-2 col-span-6 mb-3">
                                 <div class="card p-2 text-center">
-                                    <span class="badge bg-primary p-2 w-100">${tech.name}</span>
+                                    <span class="badge" style="background-color: var(--primary-color); color: #000; padding: 0.5rem; width: 100%;">${tech.name}</span>
                                 </div>
                             </div>
                         `;
