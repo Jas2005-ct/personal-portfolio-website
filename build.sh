@@ -6,8 +6,6 @@ pip install poetry
 poetry config virtualenvs.create false --local
 poetry install
 
-python manage.py tailwind install
-python manage.py tailwind build
 python manage.py collectstatic --no-input
 python manage.py migrate
 python manage.py createsuperuser_if_none_exists
