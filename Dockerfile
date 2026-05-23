@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:$PATH"
+ENV PATH="/root/.local/bin:"
 
 # Copy only requirements to cache them in docker layer
 COPY pyproject.toml poetry.lock* /app/
@@ -31,13 +31,12 @@ RUN poetry config virtualenvs.create false \
 # Copy the rest of the application code
 COPY . /app/
 
-# Collect static files and prepare database
-# Note: Migrations usually run on deploy, but we can call a script
-RUN chmod +x build.sh
+# Install Tailwind CLI and build CSS
+RUN python manage.py tailwind install
+RUN python manage.py tailwind build
 
 # Expose the port
 EXPOSE 8000
 
 # Start Gunicorn
-# Using 0.0.0.0:$PORT allows Render to inject the port
-CMD ["sh", "-c", "gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
+CMD ["sh", "-c", "gunicorn project.wsgi:application --bind 0.0.0.0:"]
