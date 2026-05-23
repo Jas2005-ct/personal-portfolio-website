@@ -226,6 +226,26 @@ requests = ">=2.10.0"
 video = ["python-magic (>=0.4.12)"]
 
 [[package]]
+name = "django-tailwind"
+version = "4.3.1"
+description = "Tailwind CSS Framework for Django projects"
+optional = false
+python-versions = ">=3.11"
+groups = ["main"]
+files = [
+    {file = "django_tailwind-4.3.1-py3-none-any.whl", hash = "sha256:439d183e5c35d49a208a12d9554d0f1cae6c85e5f133b299f0f4a1785aa6f78c"},
+    {file = "django_tailwind-4.3.1.tar.gz", hash = "sha256:7c8be0bf181695c18356a6ba79d0b5c9379ea3336439eaf1b8647ed420631d94"},
+]
+
+[package.dependencies]
+django = ">=4.2.20"
+
+[package.extras]
+cookiecutter = ["cookiecutter (>=2.6.0,<3)"]
+honcho = ["honcho (>=2.0.0,<3)"]
+reload = ["django-browser-reload (>=1.21.0,<2)"]
+
+[[package]]
 name = "djangorestframework"
 version = "3.16.1"
 description = "Web APIs for Django, made easy."
@@ -619,4 +639,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "1dd1b7b3733d2cec42e510b0dc05d15232871ffc815c2f96a470c6bb397443a2"
+content-hash = "dadaaa4fbd870425c8739bf4012bf744ce8a25067a4af46b32af15b573b61bbd"
