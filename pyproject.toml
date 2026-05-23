@@ -26,9 +26,7 @@ dependencies = [
 packages = [
     {include = "portfolio"},
     {include = "project"},
-    {include = "templates"},
     {include = "theme"},
-    {include = "static"},
 ]
 
 [build-system]
