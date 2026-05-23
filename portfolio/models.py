@@ -46,24 +46,31 @@ class Profile(models.Model):
 
 class Tech_Section(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True,blank=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
 
 class TechStack(models.Model):
-
     name = models.CharField(max_length=100)
-    icon = models.ImageField(upload_to='tech_stack/',null=True,blank=True)
+    icon = models.ImageField(upload_to='tech_stack/', null=True, blank=True)
     section = models.ForeignKey(Tech_Section, on_delete=models.CASCADE, related_name='tech_section')
+
+    class Meta:
+        ordering = ['name']
+        unique_together = ('name', 'section')
+
     def __str__(self):
-            return f"{self.section} - {self.name}"
+        return f"{self.section} - {self.name}"
 
 
 class Education(models.Model):
@@ -168,7 +175,5 @@ class ContactMessage(models.Model):
     def __str__(self):
         return f"Message from {self.sender_name}"
 
-    def __str__(self):
-        return f"Message from {self.sender_name}"
 
 

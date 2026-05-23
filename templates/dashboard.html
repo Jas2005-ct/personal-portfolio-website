@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Dashboard</title>
+    {% load tailwind_tags %}
+    {% tailwind_css %}
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <!-- Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet" />
     
     <style>
         :root {
@@ -121,19 +120,35 @@
         }
 
         .form-label { 
+            display: block;
             font-weight: 600; 
-            color: #495057;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
         }
 
         .form-control {
+            display: block;
+            width: 100%;
             border-radius: 8px;
-            border: 1px solid #ced4da;
+            border: 1px solid #4b5563;
             padding: 10px 15px;
+            background: rgba(30, 30, 30, 0.9);
+            color: #f3f4f6;
+            font-size: 0.95rem;
         }
 
         .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 242, 234, 0.25);
             border-color: var(--primary-color);
+        }
+
+        select.form-control {
+            appearance: auto;
+        }
+
+        textarea.form-control {
+            min-height: 80px;
         }
 
         .btn {
@@ -151,6 +166,110 @@
         .btn-primary:hover {
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #059669;
+            border-color: #059669;
+        }
+
+        .btn-warning {
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+            color: white;
+        }
+        .btn-warning:hover {
+            background-color: #d97706;
+            border-color: #d97706;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            border-color: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            border-color: #6b7280;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+            border-color: #4b5563;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8125rem;
+        }
+
+        /* Select2 dark theme overrides */
+        .select2-container--default .select2-selection--multiple {
+            background: rgba(30, 30, 30, 0.9) !important;
+            border: 1px solid #4b5563 !important;
+            border-radius: 8px !important;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background: var(--primary-color) !important;
+            color: #000 !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-weight: 600;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #000 !important;
+        }
+        .select2-container--default .select2-search--inline .select2-search__field {
+            color: #f3f4f6 !important;
+        }
+        .select2-dropdown {
+            background: rgba(20, 20, 20, 0.95) !important;
+            border: 1px solid #4b5563 !important;
+        }
+        .select2-results__option {
+            color: #f3f4f6 !important;
+        }
+        .select2-results__option--highlighted {
+            background: var(--primary-color) !important;
+            color: #000 !important;
+        }
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background: rgba(0, 242, 234, 0.2) !important;
+        }
+        .select2-container--default .select2-selection--single {
+            background: rgba(30, 30, 30, 0.9) !important;
+            border: 1px solid #4b5563 !important;
+            border-radius: 8px !important;
+            height: 42px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #f3f4f6 !important;
+            line-height: 42px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px !important;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.75em;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 9999px;
+        }
+
+        .text-muted {
+            color: #9ca3af;
         }
 
         /* Custom Scrollbar */
@@ -189,8 +308,8 @@
         <a href="#" class="nav-link" data-target="projects"><i class="fas fa-project-diagram"></i> Projects</a>
         <a href="#" class="nav-link" data-target="resume"><i class="fas fa-file-alt"></i> Resume</a>
         <a href="#" class="nav-link" data-target="social"><i class="fas fa-share-alt"></i> Social Links</a>
-        <a href="{% url 'logout' %}" class="nav-link text-danger mt-4"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        <a href="/" class="nav-link mt-2 border-top pt-3"><i class="fas fa-home"></i> View Portfolio</a>
+        <a href="{% url 'logout' %}" class="nav-link text-red-400 hover:text-red-300 mt-4"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="/" class="nav-link mt-2 border-t border-gray-700 pt-3"><i class="fas fa-home"></i> View Portfolio</a>
     </div>
 
     <div class="content">
@@ -244,73 +363,73 @@
         <div id="education-section" class="section" style="display:none;">
             <h2>Education</h2>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Education</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="education">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="course" placeholder="Course / Degree" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="institution" placeholder="Institution" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="text" class="form-control" name="course_duration" placeholder="Duration (e.g. 4 years)">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="field_of_study" placeholder="Field of Study / Major">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="location" placeholder="Location (City, Country)">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="text" class="form-control" name="grade" placeholder="Grade / GPA">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="start_year" placeholder="Start Year" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="end_year" placeholder="End Year (leave empty if current)">
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <textarea class="form-control" name="description" placeholder="Description (Bullet points, achievements, etc.)" rows="3"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Education</button>
                 </form>
             </div>
-            <div id="education-list" class="row"></div>
+            <div id="education-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Certificates Section -->
         <div id="certificates-section" class="section" style="display:none;">
             <h2>Certificates</h2>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Certificate</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="certificates">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="course" placeholder="Course Name" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="platform" placeholder="Platform (e.g. Coursera)" required>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label>Certificate Image</label>
+                        <div class="md:col-span-12 col-span-12">
+                            <label class="form-label">Certificate Image</label>
                             <input type="file" class="form-control" name="image">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Certificate</button>
                 </form>
             </div>
-            <div id="certificates-list" class="row"></div>
+            <div id="certificates-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Experience Section -->
@@ -319,129 +438,124 @@
             
             <!-- Unified Profession Form -->
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Experience</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="professions">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-4 col-span-12">
                             <select class="form-control" name="experience" required>
                                 <option value="">Select Experience Type</option>
                                 <option value="professional">Professional Job</option>
                                 <option value="internship">Internship</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="role" placeholder="Role / Job Title" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="company" placeholder="Company" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="text" class="form-control" name="duration" placeholder="Duration">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="start_year" placeholder="Start Year" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="md:col-span-4 col-span-12">
                             <input type="number" class="form-control" name="end_year" placeholder="End Year">
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <input type="text" class="form-control" name="location" placeholder="Location (e.g. Remote, Bangalore)">
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <textarea class="form-control" name="description" placeholder="Description / Highlights / Achievements (supports bullet points)" rows="3"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success submit-btn">Add Experience</button>
                 </form>
             </div>
-            <div id="professions-list" class="row"></div>
+            <div id="professions-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Tech Stack Section -->
         <div id="tech-stack-section" class="section" style="display:none;">
             <h2>Tech Stack</h2>
+
+            <!-- Card 1: Create Tech Section -->
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Select Tech Stack</h5>
-                </div>
+                <h5>Create Tech Section</h5>
+                <form id="create-section-form">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-8 col-span-12">
+                            <input type="text" class="form-control" name="name" placeholder="Section name (e.g. Frontend, Backend, Tools)" required>
+                        </div>
+                        <div class="md:col-span-4 col-span-12">
+                            <button type="submit" class="btn btn-success w-full">Create Section</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Card 2: Technologies by Section (dynamically rendered) -->
+            <div id="tech-stack-by-section"></div>
+
+            <!-- Card 3: Profile Tech Stack Selection -->
+            <div class="card p-4 mb-4">
+                <h5>Select Your Tech Stack (for Profile Display)</h5>
                 <form id="tech-stack-form">
                     <input type="hidden" name="id" id="profile-tech-id">
                     <div class="mb-3">
-                        <label class="form-label">Select Technologies</label>
                         <select class="form-control" name="tech_stack_ids" id="tech-select" multiple style="height: 200px;">
-                            <!-- Options injected here -->
                         </select>
-                        <small class="text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple options.</small>
+                        <small class="text-muted">Select technologies to showcase on your profile.</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Save Tech Stack</button>
                 </form>
+                <div id="selected-tech-list" class="grid grid-cols-12 gap-4 mt-3"></div>
             </div>
-            <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Create New Technology</h5>
-                </div>
-                <form id="create-tech-form" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <input type="text" class="form-control" name="name" placeholder="Technology Name" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <select class="form-control" name="section" id="create-tech-section" required>
-                                <option value="">Select Section</option>
-                                <!-- Options loaded dynamically -->
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="file" class="form-control" name="icon" accept="image/*">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success">Create Technology</button>
-                </form>
-            </div>
-            <div id="selected-tech-list" class="row"></div>
         </div>
+
 
         <!-- Projects Section -->
         <div id="projects-section" class="section" style="display:none;">
             <h2>Projects</h2>
             <div class="card p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="flex justify-between items-center mb-3">
                     <h5>Manage Project</h5>
                     <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn" style="display:none;">Cancel Edit</button>
                 </div>
                 <form class="add-form" data-endpoint="projects">
                     <input type="hidden" name="id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="title" placeholder="Project Title" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <label class="form-label">Technologies</label>
                             <select class="form-control project-tech-select" name="tech_stack_ids" multiple required>
                                 <!-- Options loaded via JS -->
                             </select>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="md:col-span-12 col-span-12">
                             <textarea class="form-control" name="description" placeholder="Description" required></textarea>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="text" class="form-control" name="motive" placeholder="Motive" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <textarea class="form-control" name="problem_statement" placeholder="Problem Statement" required></textarea>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="url" class="form-control" name="github_link" placeholder="GitHub URL">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="md:col-span-6 col-span-12">
                             <input type="url" class="form-control" name="live_demo" placeholder="Live Demo URL">
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label>Project Image</label>
+                        <div class="md:col-span-12 col-span-12">
+                            <label class="form-label">Project Image</label>
                             <input type="file" class="form-control" name="image">
                             <small class="text-muted">Leave empty to keep current image</small>
                         </div>
@@ -449,7 +563,7 @@
                     <button type="submit" class="btn btn-success submit-btn">Add Project</button>
                 </form>
             </div>
-            <div id="projects-list" class="row"></div>
+            <div id="projects-list" class="grid grid-cols-12 gap-4"></div>
         </div>
 
         <!-- Resume Section -->
@@ -503,11 +617,31 @@
 
     </div>
 
+    <!-- Tag Section Prompt Modal -->
+    <div id="tagSectionModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+        <div class="modal-backdrop absolute inset-0" data-modal-close></div>
+        <div class="modal-panel relative w-full max-w-md bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+            <div class="flex items-center justify-between mb-6">
+                <h5 class="text-xl font-bold text-slate-800">Select Section for New Technologies</h5>
+                <button type="button" data-modal-close aria-label="Close" class="text-slate-400 hover:text-slate-800 text-2xl leading-none transition-colors duration-300">&times;</button>
+            </div>
+            <div id="new-tags-list" class="mb-4"></div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-600 mb-1">Section</label>
+                <select id="tag-section-select" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-slate_blue focus:ring-1 focus:ring-slate_blue transition-colors duration-300" required>
+                    <option value="">Select a section...</option>
+                </select>
+            </div>
+            <button type="button" id="confirm-tag-section" class="w-full bg-slate_blue text-white font-bold uppercase tracking-wide py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong">
+                Confirm
+            </button>
+        </div>
     </div>
 
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Tom Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
     <script>
         $(document).ready(function() {
             // Navigation
@@ -542,83 +676,15 @@
                 headers: { 'X-CSRFToken': csrftoken }
             });
 
-            // Fetch Initial Data
+            // Shared state for the tech stack after profile loads
+            let currentProfileTechs = [];
+
+            // Fetch Initial Data (decoupled — each loads independently)
             loadData();
 
             function loadData() {
-                // Profile
-                $.get('/api/profile/', function(data) {
-                    if (data.length > 0) {
-                        const profile = data[0];
-                        $('#profile-id').val(profile.id);
-                        $('input[name="name"]').val(profile.name);
-                        $('input[name="title"]').val(profile.title);
-                        $('textarea[name="bio"]').val(profile.bio);
-                        $('textarea[name="philosophy"]').val(profile.philosophy);
-                        $('input[name="phone"]').val(profile.phone);
-                        $('textarea[name="address"]').val(profile.address);
-                        
-                        $('#profile-tech-id').val(profile.id);
-                        
-                        // Load Tech Stack Options
-                        $.get('/api/tech-stack/', function(techs) {
-                            let options = '';
-                            techs.forEach(tech => {
-                                let selected = profile.technologies && profile.technologies.some(t => t.id === tech.id) ? 'selected' : '';
-                                options += `<option value="${tech.id}" ${selected}>${tech.name}</option>`;
-                            });
-                            $('#tech-select').html(options);
-                            
-                            // Initialize Select2 with Tagging
-                            $('#tech-select').select2({
-                                theme: 'bootstrap-5',
-                                placeholder: 'Select or Type to Add Technologies',
-                                allowClear: true,
-                                width: '100%',
-                                tags: true, // Allow creating new tags
-                                createTag: function (params) {
-                                    var term = $.trim(params.term);
-                                    if (term === '') {
-                                        return null;
-                                    }
-                                    return {
-                                        id: term,
-                                        text: term,
-                                        newTag: true // add additional parameters
-                                    }
-                                }
-                            });
-                            
-                            // Populate Project Tech Select as well
-                            let projectOptions = '';
-                            techs.forEach(tech => {
-                                projectOptions += `<option value="${tech.id}">${tech.name}</option>`;
-                            });
-                            $('.project-tech-select').html(projectOptions);
-
-                            // Initialize Select2 for Projects
-                            $('.project-tech-select').select2({
-                                theme: 'bootstrap-5',
-                                placeholder: 'Select Technologies',
-                                allowClear: true,
-                                width: '100%',
-                                dropdownParent: $('#projects-section') // Ensure it works inside the section
-                            });
-
-                            renderSelectedTechs(profile.technologies);
-                            
-                            // Load sections for creating new tech
-                            $.get('/api/tech-sections/', function(sections) {
-                                let sectionOptions = '';
-                                sections.forEach(section => {
-                                    sectionOptions += `<option value="${section.id}">${section.name}</option>`;
-                                });
-                                $('#create-tech-section').html(sectionOptions);
-                            });
-                        });
-                    }
-                });
-
+                loadProfile();
+                loadSections();
                 // Social
                 $.get('/api/social-links/', function(data) {
                     if (data.length > 0) {
@@ -631,7 +697,6 @@
                         $('input[name="facebook"]').val(social.facebook);
                     }
                 });
-
                 // Resume
                 $.get('/api/resume/', function(data) {
                     if (data.length > 0) {
@@ -640,12 +705,276 @@
                         $('#current-resume-link').attr('href', resume.file_url).show();
                     }
                 });
-
                 // Lists
                 loadList('education', '#education-list');
                 loadList('professions', '#professions-list');
                 loadList('certificates', '#certificates-list');
                 loadList('projects', '#projects-list');
+            }
+
+            function loadProfile() {
+                $.ajax({
+                    url: '/api/profile/',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.length > 0) {
+                            const profile = data[0];
+                            $('#profile-id').val(profile.id);
+                            $('input[name="name"]').val(profile.name);
+                            $('input[name="title"]').val(profile.title);
+                            $('textarea[name="bio"]').val(profile.bio);
+                            $('textarea[name="philosophy"]').val(profile.philosophy);
+                            $('input[name="phone"]').val(profile.phone);
+                            $('textarea[name="address"]').val(profile.address);
+                            $('#profile-tech-id').val(profile.id);
+                            currentProfileTechs = profile.technologies || [];
+                            // Sync Tom Select selection if already initialized
+                            if (profileTechSelect) {
+                                profileTechSelect.setValue(currentProfileTechs.map(t => t.id.toString()));
+                            }
+                            renderSelectedTechs(currentProfileTechs);
+                        }
+                    },
+                    error: function(err) {
+                        console.error('Error loading profile:', err);
+                    }
+                });
+            }
+
+            // Handle Create Section
+            $('#create-section-form').submit(function(e) {
+                e.preventDefault();
+                let name = $(this).find('input[name="name"]').val();
+                $.ajax({
+                    url: '/api/tech-sections/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ name: name }),
+                    success: function() {
+                        Swal.fire({ icon: 'success', title: 'Created!', text: 'Section created.', timer: 1500, showConfirmButton: false });
+                        $('#create-section-form')[0].reset();
+                        loadSections();
+                    },
+                    error: function(err) {
+                        console.error(err);
+                        Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to create section.' });
+                    }
+                });
+            });
+
+            // Handle Add Tech to Section
+            $(document).on('submit', '.add-tech-to-section-form', function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let sectionId = form.data('section-id');
+                let formData = new FormData(this);
+                formData.append('section', sectionId);
+                // Remove empty file entry if no file selected
+                let iconInput = form.find('input[name="icon"]')[0];
+                if (iconInput && iconInput.files.length === 0) {
+                    formData.delete('icon');
+                }
+
+                $.ajax({
+                    url: '/api/tech-stack/',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function() {
+                        Swal.fire({ icon: 'success', title: 'Added!', text: 'Technology added.', timer: 1500, showConfirmButton: false });
+                        loadSections();
+                    },
+                    error: function(err) {
+                        console.error(err);
+                        let msg = 'Failed to add technology.';
+                        if (err.responseJSON && err.responseJSON.error) {
+                            msg = err.responseJSON.error;
+                        }
+                        Swal.fire({ icon: 'error', title: 'Error', text: msg });
+                    }
+                });
+            });
+
+            // Handle Delete Tech
+            $(document).on('click', '.delete-tech-btn', function() {
+                let id = $(this).data('id');
+                Swal.fire({
+                    title: 'Delete this technology?', text: "You won't be able to revert this!", icon: 'warning',
+                    showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/api/tech-stack/${id}/`,
+                            type: 'DELETE',
+                            success: function() {
+                                loadSections();
+                                Swal.fire({ icon: 'success', title: 'Deleted!', timer: 1500, showConfirmButton: false });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Handle Delete Section
+            $(document).on('click', '.delete-section-btn', function() {
+                let id = $(this).data('id');
+                Swal.fire({
+                    title: 'Delete this section?', text: 'All technologies in this section will also be deleted.', icon: 'warning',
+                    showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/api/tech-sections/${id}/`,
+                            type: 'DELETE',
+                            success: function() {
+                                loadSections();
+                                Swal.fire({ icon: 'success', title: 'Deleted!', timer: 1500, showConfirmButton: false });
+                            }
+                        });
+                    }
+                });
+            });
+
+            function loadSections() {
+                $.ajax({
+                    url: '/api/tech-sections/',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(sections) {
+                        let sectionOptions = '<option value="">Select Section</option>';
+                        if (sections && sections.length > 0) {
+                            sections.forEach(section => {
+                                sectionOptions += `<option value="${section.id}">${section.name}</option>`;
+                            });
+                        }
+                        $('#tag-section-select').html(sectionOptions);
+                        renderTechStackBySection(sections || []);
+                    },
+                    error: function(err) {
+                        console.error('Error loading sections:', err);
+                        $('#tech-stack-by-section').html('<div class="card p-4 mb-4 text-danger"><p class="mb-0">Failed to load sections. Please refresh the page.</p></div>');
+                        updateTechSelectOptions([]);
+                    }
+                });
+            }
+
+            function renderTechStackBySection(sections) {
+                if (!sections || sections.length === 0) {
+                    $('#tech-stack-by-section').html('<div class="card p-4 mb-4"><p class="text-muted mb-0">No sections created yet. Create one above.</p></div>');
+                    updateTechSelectOptions([]);
+                    return;
+                }
+
+                $.ajax({
+                    url: '/api/tech-stack/',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(techs) {
+                        let html = '';
+                        sections.forEach(section => {
+                            const sectionTechs = (techs || []).filter(t => t.section === section.id);
+                            const techBadges = sectionTechs.length > 0
+                                ? sectionTechs.map(t => `
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-zinc-800 text-white mr-2 mb-2 border border-zinc-700">
+                                        ${t.icon ? `<img src="${t.icon}" alt="" class="w-4 h-4 object-contain mr-1">` : ''}
+                                        ${t.name}
+                                        <button class="delete-tech-btn hover:text-red-400 ml-1.5 transition-colors focus:outline-none" data-id="${t.id}" aria-label="Remove">
+                                            <i class="fas fa-times text-[10px]"></i>
+                                        </button>
+                                    </span>
+                                `).join('')
+                                : '<p class="text-muted small mb-0">No technologies in this section yet.</p>';
+
+                            html += `
+                                <div class="card p-4 mb-4" data-section-id="${section.id}">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <h5 class="mb-0">${section.name}</h5>
+                                        <button class="btn btn-danger btn-sm delete-section-btn" data-id="${section.id}">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                    <div class="mb-3">${techBadges}</div>
+                                    <form class="add-tech-to-section-form grid grid-cols-12 gap-4" data-section-id="${section.id}">
+                                        <div class="md:col-span-6 col-span-12">
+                                            <input type="text" class="form-control" name="name" placeholder="Technology name" required>
+                                        </div>
+                                        <div class="md:col-span-4 col-span-12">
+                                            <input type="file" class="form-control" name="icon" accept="image/*">
+                                        </div>
+                                        <div class="md:col-span-2 col-span-12">
+                                            <button type="submit" class="btn btn-primary w-full">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            `;
+                        });
+                        $('#tech-stack-by-section').html(html || '<div class="card p-4 mb-4"><p class="text-muted mb-0">No sections created yet. Create one above.</p></div>');
+                        updateTechSelectOptions(techs || []);
+                    },
+                    error: function(err) {
+                        console.error('Error loading tech stack:', err);
+                        $('#tech-stack-by-section').html('<div class="card p-4 mb-4 text-danger"><p class="mb-0">Failed to load technologies. Please refresh the page.</p></div>');
+                        updateTechSelectOptions([]);
+                    }
+                });
+            }
+
+
+            let profileTechSelect = null;
+            let projectTechSelect = null;
+
+            function updateTechSelectOptions(techs) {
+                // Build unique section groups from techs
+                const groups = {};
+                techs.forEach(t => {
+                    const gid = t.section.toString();
+                    if (!groups[gid]) groups[gid] = { value: gid, label: t.section_name || 'Uncategorized' };
+                });
+                const groupList = Object.values(groups);
+
+                const opts = techs.map(t => ({value: t.id.toString(), text: t.name, optgroup: t.section.toString()}));
+                const selected = currentProfileTechs.map(t => t.id.toString());
+
+                const baseConfig = {
+                    placeholder: 'Select Technologies',
+                    plugins: ['remove_button'],
+                    optgroupField: 'optgroup',
+                    optgroups: groupList,
+                };
+
+                // Profile Tech Select
+                if (!profileTechSelect) {
+                    profileTechSelect = new TomSelect('#tech-select', {
+                        ...baseConfig,
+                        options: opts,
+                        items: selected,
+                        create: true,
+                        createFilter: input => input.trim().length > 0,
+                    });
+                } else {
+                    profileTechSelect.clearOptionGroups();
+                    profileTechSelect.clearOptions();
+                    groupList.forEach(g => profileTechSelect.addOptionGroup(g.value, g));
+                    profileTechSelect.addOptions(opts);
+                    profileTechSelect.setValue(selected);
+                }
+
+                // Project Tech Select
+                const projectOpts = techs.map(t => ({value: t.id.toString(), text: t.name, optgroup: t.section.toString()}));
+                if (!projectTechSelect) {
+                    projectTechSelect = new TomSelect('.project-tech-select', {
+                        ...baseConfig,
+                        options: projectOpts,
+                        maxOptions: null,
+                    });
+                } else {
+                    projectTechSelect.clearOptionGroups();
+                    projectTechSelect.clearOptions();
+                    groupList.forEach(g => projectTechSelect.addOptionGroup(g.value, g));
+                    projectTechSelect.addOptions(projectOpts);
+                }
             }
 
             function loadList(endpoint, containerId) {
@@ -664,15 +993,15 @@
                         if (item.location) subtitle += ` | ${item.location}`;
                         
                         html += `
-                            <div class="col-md-6 mb-3">
-                                <div class="card p-3">
-                                    <div class="d-flex justify-content-between align-items-center">
+                            <div class="md:col-span-6 col-span-12">
+                                <div class="card p-3 h-full">
+                                    <div class="flex justify-between items-center h-full">
                                         <div>
                                             <h5 class="mb-1">${title}</h5>
                                             <small class="text-muted">${subtitle}</small>
                                         </div>
-                                        <div>
-                                            <button class="btn btn-warning btn-sm edit-btn me-2" data-endpoint="${endpoint}" data-id="${item.id}">
+                                        <div class="flex items-center gap-2">
+                                            <button class="btn btn-warning btn-sm edit-btn" data-endpoint="${endpoint}" data-id="${item.id}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button class="btn btn-danger btn-sm delete-btn" data-endpoint="${endpoint}" data-id="${item.id}">
@@ -733,12 +1062,13 @@
             // Handle Tech Stack Form
             $('#tech-stack-form').submit(function(e) {
                 e.preventDefault();
-                let id = $('#profile-tech-id').val();
-                let selectedValues = $('#tech-select').val(); // Array of IDs or Names (for new tags)
-                
-                if (!selectedValues) selectedValues = [];
+                let profileId = $('#profile-tech-id').val();
+                if (!profileId) {
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Save your profile first before adding tech stack.' });
+                    return;
+                }
 
-                // Separate existing IDs from new Tag names
+                let selectedValues = profileTechSelect ? profileTechSelect.getValue() : [];
                 let existingIds = [];
                 let newTags = [];
 
@@ -746,100 +1076,94 @@
                     if (isNaN(val)) {
                         newTags.push(val);
                     } else {
-                        existingIds.push(val);
+                        existingIds.push(parseInt(val));
                     }
                 });
 
-                // Function to create new technologies first
-                let createPromises = newTags.map(tagName => {
+                if (newTags.length > 0) {
+                    // Show section selection modal
+                    let listHtml = '<p class="text-sm text-slate-600 mb-2">New technologies to create:</p><ul class="list-disc list-inside mb-3">';
+                    newTags.forEach(tag => { listHtml += `<li class="text-slate-700">${tag}</li>`; });
+                    listHtml += '</ul>';
+                    $('#new-tags-list').html(listHtml);
+                    $('#confirm-tag-section').data('profileId', profileId);
+                    $('#confirm-tag-section').data('existingIds', existingIds);
+                    $('#confirm-tag-section').data('newTags', newTags);
+                    $('#tagSectionModal').removeClass('opacity-0 pointer-events-none invisible').addClass('is-open').attr('aria-hidden', 'false');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    updateProfileTechStack(profileId, existingIds);
+                }
+            });
+
+            // Close tag section modal on backdrop/close button
+            $('#tagSectionModal').on('click', '[data-modal-close]', function() {
+                $('#tagSectionModal').addClass('opacity-0 pointer-events-none invisible').removeClass('is-open').attr('aria-hidden', 'true');
+                if (!document.querySelector('.modal-overlay.is-open')) document.body.style.overflow = '';
+            });
+
+            $('#confirm-tag-section').click(function() {
+                let sectionId = $('#tag-section-select').val();
+                if (!sectionId) {
+                    Swal.fire({ icon: 'warning', title: 'Required', text: 'Please select a section.' });
+                    return;
+                }
+
+                let profileId = $(this).data('profileId');
+                let existingIds = $(this).data('existingIds');
+                let newTags = $(this).data('newTags');
+
+                let promises = newTags.map(tagName => {
                     return $.ajax({
                         url: '/api/tech-stack/',
                         type: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify({ name: tagName })
+                        data: JSON.stringify({ name: tagName, section: parseInt(sectionId) })
                     });
                 });
 
-                // Wait for all new tags to be created
-                Promise.all(createPromises)
+                Promise.all(promises)
                     .then(results => {
-                        // Add the newly created IDs to the list
-                        results.forEach(res => {
-                            existingIds.push(res.id);
-                        });
-
-                        // Now update the profile with all IDs
-                        return $.ajax({
-                            url: `/api/profile/${id}/`,
-                            type: 'PATCH',
-                            contentType: 'application/json',
-                            data: JSON.stringify({ tech_stack_ids: existingIds })
-                        });
+                        results.forEach(res => existingIds.push(res.id));
+                        return updateProfileTechStack(profileId, existingIds);
                     })
-                    .then(data => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Saved!',
-                            text: 'Tech stack updated successfully.',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                        // Update UI
-                        renderSelectedTechs(data.technologies);
-                        
-                        // Refresh options to include new tags properly
-                        // (Optional: reload page or re-fetch options to ensure Select2 has correct IDs)
+                    .then(() => {
+                        $('#tagSectionModal').addClass('opacity-0 pointer-events-none invisible').removeClass('is-open').attr('aria-hidden', 'true');
+                        if (!document.querySelector('.modal-overlay.is-open')) document.body.style.overflow = '';
                     })
                     .catch(err => {
                         console.error(err);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to update tech stack.'
-                        });
+                        Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to create technology.' });
+                        $('#tagSectionModal').addClass('opacity-0 pointer-events-none invisible').removeClass('is-open').attr('aria-hidden', 'true');
+                        if (!document.querySelector('.modal-overlay.is-open')) document.body.style.overflow = '';
                     });
             });
 
-            // Handle Create Tech Form
-            $('#create-tech-form').submit(function(e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-                $.ajax({
-                    url: '/api/tech-stack/',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function() {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Created!',
-                            text: 'Technology option created.',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                        $('#create-tech-form')[0].reset();
-                        loadData(); // To refresh select options
-                    },
-                    error: function(err) {
-                        console.error(err);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to create technology.'
-                        });
-                    }
+            function updateProfileTechStack(profileId, techStackIds) {
+                return $.ajax({
+                    url: `/api/profile/${profileId}/`,
+                    type: 'PATCH',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ tech_stack_ids: techStackIds })
+                }).then(data => {
+                    Swal.fire({ icon: 'success', title: 'Saved!', text: 'Tech stack updated successfully.', timer: 1500, showConfirmButton: false });
+                    currentProfileTechs = data.technologies || [];
+                    renderSelectedTechs(currentProfileTechs);
+                    loadSections();
+                }).catch(err => {
+                    console.error(err);
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to update tech stack.' });
                 });
-            });
+            }
 
             function renderSelectedTechs(technologies) {
                 let html = '';
                 if (technologies && technologies.length > 0) {
                     technologies.forEach(tech => {
                         html += `
-                            <div class="col-md-2 mb-3">
+                            <div class="md:col-span-2 col-span-6">
                                 <div class="card p-2 text-center">
-                                    <span class="badge bg-primary p-2 w-100">${tech.name}</span>
+                                    <span class="badge" style="background-color: var(--primary-color); color: #000; padding: 0.5rem; width: 100%;">${tech.name}</span>
                                 </div>
                             </div>
                         `;
@@ -870,7 +1194,7 @@
                     success: function() {
                         form[0].reset();
                         form.find('input[name="id"]').val(''); // Clear ID
-                        form.find('.project-tech-select').val(null).trigger('change'); // Reset Select2
+                        if (projectTechSelect) projectTechSelect.clear(); // Reset Tom Select
                         form.find('.submit-btn').text('Add ' + endpoint.slice(0, -1).charAt(0).toUpperCase() + endpoint.slice(0, -1).slice(1)); // Reset button text
                         form.find('.submit-btn').removeClass('btn-warning').addClass('btn-success');
                         form.closest('.card').find('.cancel-edit-btn').hide(); // Hide cancel button
@@ -916,10 +1240,10 @@
                         let input = form.find(`[name="${key}"]`);
                         if (input.attr('type') !== 'file') {
                             if (key === 'tech_stack_ids' && endpoint === 'projects') {
-                                // Handle Select2 for Projects
+                                // Handle Tom Select for Projects
                                 // Assuming 'technologies' is returned with full objects, map to IDs
                                 let selectedIds = data.technologies.map(t => t.id);
-                                form.find('.project-tech-select').val(selectedIds).trigger('change');
+                                if (projectTechSelect) projectTechSelect.setValue(selectedIds.map(String));
                             } else {
                                 input.val(value);
                             }
@@ -945,7 +1269,7 @@
                 
                 form[0].reset();
                 form.find('input[name="id"]').val('');
-                form.find('.project-tech-select').val(null).trigger('change'); // Reset Select2
+                if (projectTechSelect) projectTechSelect.clear(); // Reset Tom Select
                 form.find('.submit-btn').text('Add ' + endpoint.slice(0, -1).charAt(0).toUpperCase() + endpoint.slice(0, -1).slice(1));
                 form.find('.submit-btn').removeClass('btn-warning').addClass('btn-success');
                 btn.hide();
