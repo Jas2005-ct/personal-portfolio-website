@@ -120,19 +120,35 @@
         }
 
         .form-label { 
+            display: block;
             font-weight: 600; 
-            color: #495057;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
         }
 
         .form-control {
+            display: block;
+            width: 100%;
             border-radius: 8px;
-            border: 1px solid #ced4da;
+            border: 1px solid #4b5563;
             padding: 10px 15px;
+            background: rgba(30, 30, 30, 0.9);
+            color: #f3f4f6;
+            font-size: 0.95rem;
         }
 
         .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 242, 234, 0.25);
             border-color: var(--primary-color);
+        }
+
+        select.form-control {
+            appearance: auto;
+        }
+
+        textarea.form-control {
+            min-height: 80px;
         }
 
         .btn {
@@ -192,6 +208,58 @@
             border-color: #4b5563;
         }
 
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8125rem;
+        }
+
+        /* Select2 dark theme overrides */
+        .select2-container--default .select2-selection--multiple {
+            background: rgba(30, 30, 30, 0.9) !important;
+            border: 1px solid #4b5563 !important;
+            border-radius: 8px !important;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background: var(--primary-color) !important;
+            color: #000 !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-weight: 600;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #000 !important;
+        }
+        .select2-container--default .select2-search--inline .select2-search__field {
+            color: #f3f4f6 !important;
+        }
+        .select2-dropdown {
+            background: rgba(20, 20, 20, 0.95) !important;
+            border: 1px solid #4b5563 !important;
+        }
+        .select2-results__option {
+            color: #f3f4f6 !important;
+        }
+        .select2-results__option--highlighted {
+            background: var(--primary-color) !important;
+            color: #000 !important;
+        }
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background: rgba(0, 242, 234, 0.2) !important;
+        }
+        .select2-container--default .select2-selection--single {
+            background: rgba(30, 30, 30, 0.9) !important;
+            border: 1px solid #4b5563 !important;
+            border-radius: 8px !important;
+            height: 42px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #f3f4f6 !important;
+            line-height: 42px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px !important;
+        }
+
         .badge {
             display: inline-block;
             padding: 0.25em 0.75em;
@@ -241,7 +309,7 @@
         <a href="#" class="nav-link" data-target="resume"><i class="fas fa-file-alt"></i> Resume</a>
         <a href="#" class="nav-link" data-target="social"><i class="fas fa-share-alt"></i> Social Links</a>
         <a href="{% url 'logout' %}" class="nav-link text-red-400 hover:text-red-300 mt-4"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        <a href="/" class="nav-link mt-2 border-top pt-3"><i class="fas fa-home"></i> View Portfolio</a>
+        <a href="/" class="nav-link mt-2 border-t border-gray-700 pt-3"><i class="fas fa-home"></i> View Portfolio</a>
     </div>
 
     <div class="content">
@@ -354,7 +422,7 @@
                             <input type="text" class="form-control" name="platform" placeholder="Platform (e.g. Coursera)" required>
                         </div>
                         <div class="md:col-span-12 col-span-12">
-                            <label>Certificate Image</label>
+                            <label class="form-label">Certificate Image</label>
                             <input type="file" class="form-control" name="image">
                         </div>
                     </div>
@@ -492,7 +560,7 @@
                             <input type="url" class="form-control" name="live_demo" placeholder="Live Demo URL">
                         </div>
                         <div class="md:col-span-12 col-span-12">
-                            <label>Project Image</label>
+                            <label class="form-label">Project Image</label>
                             <input type="file" class="form-control" name="image">
                             <small class="text-muted">Leave empty to keep current image</small>
                         </div>
@@ -711,15 +779,15 @@
                         if (item.location) subtitle += ` | ${item.location}`;
                         
                         html += `
-                            <div class="md:col-span-6 col-span-12 mb-3">
-                                <div class="card p-3">
-                                    <div class="flex justify-between items-center">
+                            <div class="md:col-span-6 col-span-12">
+                                <div class="card p-3 h-full">
+                                    <div class="flex justify-between items-center h-full">
                                         <div>
                                             <h5 class="mb-1">${title}</h5>
                                             <small class="text-muted">${subtitle}</small>
                                         </div>
-                                        <div>
-                                            <button class="btn btn-warning btn-sm edit-btn mr-2" data-endpoint="${endpoint}" data-id="${item.id}">
+                                        <div class="flex items-center gap-2">
+                                            <button class="btn btn-warning btn-sm edit-btn" data-endpoint="${endpoint}" data-id="${item.id}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button class="btn btn-danger btn-sm delete-btn" data-endpoint="${endpoint}" data-id="${item.id}">
@@ -884,7 +952,7 @@
                 if (technologies && technologies.length > 0) {
                     technologies.forEach(tech => {
                         html += `
-                            <div class="md:col-span-2 col-span-6 mb-3">
+                            <div class="md:col-span-2 col-span-6">
                                 <div class="card p-2 text-center">
                                     <span class="badge" style="background-color: var(--primary-color); color: #000; padding: 0.5rem; width: 100%;">${tech.name}</span>
                                 </div>

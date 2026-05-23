@@ -34,6 +34,7 @@
     --color-slate-800: oklch(27.9% 0.041 260.031);
     --color-slate-900: oklch(20.8% 0.042 265.755);
     --color-gray-50: oklch(98.5% 0.002 247.839);
+    --color-gray-700: oklch(37.3% 0.034 259.733);
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-md: 28rem;
@@ -712,6 +713,9 @@
   .border-fresh_sky-700 {
     border-color: var(--color-fresh_sky-700);
   }
+  .border-gray-700 {
+    border-color: var(--color-gray-700);
+  }
   .border-pearl_aqua-800 {
     border-color: var(--color-pearl_aqua-800);
   }
@@ -1225,6 +1229,10 @@
   }
   .ring-fresh_sky-800 {
     --tw-ring-color: var(--color-fresh_sky-800);
+  }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
   }
   .backdrop-blur-sm {
     --tw-backdrop-blur: blur(var(--blur-sm));
@@ -1942,6 +1950,11 @@ section.scroll-reveal.is-visible .reveal-child {
   inherits: false;
   initial-value: 0 0 #0000;
 }
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
 @property --tw-backdrop-blur {
   syntax: "*";
   inherits: false;
@@ -2033,6 +2046,7 @@ section.scroll-reveal.is-visible .reveal-child {
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
       --tw-backdrop-blur: initial;
       --tw-backdrop-brightness: initial;
       --tw-backdrop-contrast: initial;
