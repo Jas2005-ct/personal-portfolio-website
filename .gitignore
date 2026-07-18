@@ -181,3 +181,5 @@ yarn-error.log*
 *.swo
 *~
 
+
+db.sqlite3
