@@ -156,16 +156,16 @@
     </section>
 
     <!-- About & Tech Stack Section (Side by Side) -->
-    <section id="about" class="py-28 md:py-32 scroll-reveal bg-pearl_aqua-900/40">
+    <section id="about" class="py-20 md:py-28 scroll-reveal bg-pearl_aqua-900/40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- <h2 class="text-4xl md:text-5xl font-extrabold mb-20 text-slate-800">
+            <!-- <h2 class="text-4xl md:text-5xl font-extrabold mb-16 text-slate-800">
                 About Me
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mt-4 rounded-full"></span>
             </h2> -->
             <!-- About Me + Highlights: side by side, 2 columns -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                 <!-- Left Column: About -->
-                <div class="w-full self-start">
+                <div class="w-full">
                     <div
                         class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 text-left transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
                         <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-slate-900">About Me</h3>
@@ -197,7 +197,7 @@
                 </div>
 
                 <!-- Right Column: Highlights Rail -->
-                <div class="w-full self-start">
+                <div class="w-full">
                     <div class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
                         <h3 class="text-2xl font-extrabold mb-6 text-slate-900">Highlights</h3>
 
@@ -223,30 +223,30 @@
 
             <!-- Tech Stack (full width, below) -->
             {% if tech_stack %}
-            <div id="tech-stack" class="w-full scroll-reveal mt-8 lg:mt-12">
-                <div class="bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
-                    <div class="mb-10">
+            <div id="tech-stack" class="w-full scroll-reveal mt-8">
+                <div class="bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
+                    <div class="mb-6">
                         <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Tech Stack</h3>
                         <p class="mt-3 text-slate_blue-400">A concise view of the tools, frameworks, and platforms I use every day.</p>
                     </div>
                     {% regroup tech_stack by section as tech_sections %}
-                    {% for section_group in tech_sections %}
-                    <div class="mb-8 last:mb-0">
-                        <h4 class="text-xs font-semibold uppercase tracking-[0.28em] text-slate_blue-500 mb-4 border-b border-pearl_aqua-800 pb-3">{{ section_group.grouper.name }}</h4>
-                        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {% for tech in section_group.list %}
-                            <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
-                                <div class="group h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl px-4 py-3 text-center transition-all duration-500 ease-smooth hover:-translate-y-1 hover:border-slate_blue hover:shadow-soft-hover hover:bg-pearl_aqua-900/80 flex flex-col items-center justify-center">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                        {% for section_group in tech_sections %}
+                        <div class="rounded-2xl border border-pearl_aqua-800 bg-white/70 p-6 transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover">
+                            <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate_blue-500 mb-5">{{ section_group.grouper.name }}</h4>
+                            <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                                {% for tech in section_group.list %}
+                                <div class="group flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-pearl_aqua-800 bg-white shadow-soft transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover hover:-translate-y-0.5">
                                     {% if tech.icon %}
-                                    <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}" class="w-10 h-10 object-contain mb-2 transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
+                                    <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}" class="w-7 h-7 object-contain transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
                                     {% endif %}
-                                    <h5 class="font-semibold text-slate-800 text-sm">{{ tech.name }}</h5>
+                                    <span class="font-semibold text-slate-800 text-sm whitespace-nowrap">{{ tech.name }}</span>
                                 </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
             </div>
             {% endif %}
@@ -254,9 +254,9 @@
     </section>
 
     <!-- Certificates Section -->
-    <section id="certificates" class="py-28 md:py-32 scroll-reveal bg-sky_surge-900/30">
+    <section id="certificates" class="py-20 md:py-28 scroll-reveal bg-sky_surge-900/30">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-slate-800">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800">
                 Certificates
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
@@ -285,9 +285,9 @@
     </section>
 
     <!-- Experience Section -->
-    <section id="experience" class="py-28 md:py-32 scroll-reveal">
+    <section id="experience" class="py-20 md:py-28 scroll-reveal">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-slate-800">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800">
                 Experience
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
@@ -366,9 +366,9 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-28 md:py-32 scroll-reveal">
+    <section id="projects" class="py-20 md:py-28 scroll-reveal">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-20 text-slate-800">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800">
                 Projects
                 <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
