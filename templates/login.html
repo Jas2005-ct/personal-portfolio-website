@@ -1,34 +1,33 @@
+{% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Portfolio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% tailwind_css %}
     <style>
-        body { background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .card { width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        body { background: radial-gradient(circle at 12% 18%, rgba(231,190,255,0.35) 0%, transparent 42%), radial-gradient(circle at 88% 82%, rgba(220,237,249,0.45) 0%, transparent 42%), #e5fff8; }
     </style>
 </head>
-<body>
-    <div class="card">
-        <h3 class="text-center mb-4">Login</h3>
+<body class="font-outfit bg-aquamarine-900 text-slate_blue-300 min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10">
+        <h3 class="text-3xl font-extrabold text-slate-900 mb-8 text-center">Login</h3>
         <form method="post">
             {% csrf_token %}
             {% for field in form %}
-                <div class="mb-3">
-                    <label class="form-label">{{ field.label }}</label>
-                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control" required>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-600 mb-1">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate_blue focus:ring-1 focus:ring-slate_blue transition-colors duration-300">
                     {% if field.errors %}
-                        <div class="text-danger small">{{ field.errors.0 }}</div>
+                        <div class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</div>
                     {% endif %}
                 </div>
             {% endfor %}
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="w-full bg-slate_blue text-white font-bold uppercase tracking-wide py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong">Login</button>
         </form>
-
-        <p class="text-center">
-            <a href="{% url 'home' %}">Back to Home</a>
+        <p class="text-center text-slate-500 text-sm mt-6">
+            <a href="{% url 'home' %}" class="text-slate_blue hover:underline">Back to Home</a>
         </p>
     </div>
 </body>

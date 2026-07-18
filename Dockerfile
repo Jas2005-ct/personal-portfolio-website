@@ -40,5 +40,5 @@ RUN python manage.py collectstatic --no-input
 # Expose the port
 EXPOSE 8000
 
-# Start Gunicorn
-CMD ["sh", "-c", "gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
+# Apply migrations, then start Gunicorn
+CMD ["sh", "-c", "python manage.py migrate --no-input && gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]

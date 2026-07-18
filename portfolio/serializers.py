@@ -32,19 +32,25 @@ class TechStackSerializer(serializers.ModelSerializer):
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Education
-        fields = '__all__'
+        fields = [
+            'id', 'course', 'institution', 'field_of_study', 'location', 'grade',
+            'description', 'course_duration', 'start_year', 'end_year',
+        ]
         read_only_fields = ['user']
 
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
-        fields = '__all__'
+        fields = ['id', 'course', 'platform', 'image']
         read_only_fields = ['user']
 
 class ProfessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profession
-        fields = '__all__'
+        fields = [
+            'id', 'experience', 'company', 'role', 'location', 'description',
+            'duration', 'start_year', 'end_year',
+        ]
         read_only_fields = ['user']
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -55,13 +61,17 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = [
+            'id', 'title', 'image', 'description', 'motive', 'problem_statement',
+            'technologies', 'tech_stack_ids', 'github_link', 'live_demo',
+            'impact', 'architecture_notes',
+        ]
         read_only_fields = ['user']
 
 class SocialLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialLink
-        fields = '__all__'
+        fields = ['id', 'github', 'linkedin', 'instagram', 'twitter', 'facebook']
         read_only_fields = ['user']
 
 class ResumeSerializer(serializers.ModelSerializer):
@@ -70,12 +80,14 @@ class ResumeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Resume
-        fields = ['id', 'user', 'resume', 'file_url', 'download_url']
+        fields = ['id', 'resume', 'file_url', 'download_url']
         read_only_fields = ['user']
 
     def get_file_url(self, obj):
+        if not obj.resume:
+            return None
         return obj.resume.url
-    
+
     def get_download_url(self, obj):
         if not obj.resume:
             return None
@@ -95,20 +107,40 @@ class ResumeSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'icon']
         read_only_fields = ['user']
 
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testimonial
-        fields = '__all__'
+        fields = ['id', 'name', 'role', 'company', 'quote', 'image']
         read_only_fields = ['user']
 
 class ContactMessageSerializer(serializers.ModelSerializer):
+    # Honeypot field - bots will fill this, humans won't see it
+    website = serializers.CharField(required=False, allow_blank=True, write_only=True, default='')
+
     class Meta:
         model = ContactMessage
-        fields = '__all__'
+        fields = ['id', 'sender_name', 'sender_email', 'subject', 'message', 'created_at', 'website']
         read_only_fields = ['user', 'created_at']
+
+    def validate_website(self, value):
+        """Honeypot validation - if filled, it's likely a bot"""
+        if value:
+            raise serializers.ValidationError("Spam detected.")
+        return value
+
+    def validate_sender_email(self, value):
+        """Basic email format validation"""
+        if not value or '@' not in value:
+            raise serializers.ValidationError("Invalid email format.")
+        return value
+
+    def create(self, validated_data):
+        # Remove honeypot field before saving
+        validated_data.pop('website', None)
+        return super().create(validated_data)
 
 
 class ProfileSerializer(serializers.ModelSerializer):
