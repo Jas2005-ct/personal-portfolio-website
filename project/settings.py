@@ -46,6 +46,9 @@ elif DEBUG:
 else:
     ALLOWED_HOSTS = []
 
+# Always allow the deployment host (fallback for Render/Railway)
+ALLOWED_HOSTS += ['dev.jaswantmayilsamy.dev']
+
 
 # Application definition
 
