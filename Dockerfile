@@ -43,4 +43,4 @@ RUN python manage.py collectstatic --no-input
 EXPOSE 8000
 
 # Apply migrations, then start Gunicorn
-CMD ["sh", "-c", "python manage.py migrate --no-input && gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
+CMD ["sh", "-c", "python manage.py migrate --no-input || echo 'Migrations skipped/failed - check DATABASE_URL'; gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
