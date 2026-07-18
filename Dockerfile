@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -32,7 +34,7 @@ RUN poetry config virtualenvs.create false \
 COPY . /app/
 
 # Build Tailwind CSS, collect static files, and prepare the database
-RUN cd theme && npm ci && npm run build && cd ..
+RUN cd theme/static_src && npm ci && npm run build && cd ../..
 RUN python manage.py collectstatic --no-input
 
 # Expose the port
