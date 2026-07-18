@@ -31,8 +31,12 @@ RUN poetry config virtualenvs.create false \
 # Copy the rest of the application code
 COPY . /app/
 
+# Build Tailwind CSS, collect static files, and prepare the database
+RUN cd theme && npm ci && npm run build && cd ..
+RUN python manage.py collectstatic --no-input
+
 # Expose the port
 EXPOSE 8000
 
-# Start Gunicorn
-CMD ["sh", "-c", "gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
+# Apply migrations, then start Gunicorn
+CMD ["sh", "-c", "python manage.py migrate --no-input && gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]

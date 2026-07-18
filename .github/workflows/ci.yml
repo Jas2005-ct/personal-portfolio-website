@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
+
+      - name: Check for missing migrations
+        run: poetry run python manage.py makemigrations --check --dry-run
+        env:
+          SECRET_KEY: ci-secret-key-not-for-production
+          DEBUG: "True"
+
+      - name: Django system check (deploy)
+        run: poetry run python manage.py check --deploy
+        env:
+          SECRET_KEY: ci-secret-key-not-for-production
+          DEBUG: "True"
+
+      - name: Run tests
+        run: poetry run python manage.py test
+        env:
+          SECRET_KEY: ci-secret-key-not-for-production
+          DEBUG: "True"

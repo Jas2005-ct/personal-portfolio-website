@@ -1,9 +1,15 @@
+import json
+
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.safestring import mark_safe
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, pagination, status
 from django.db.models import Count
+from django.db import connection
 from .models import (
     Profile, Education, Certificate, Profession,
     TechStack, Tech_Section, Project, SocialLink, Resume, Service, Testimonial,
@@ -20,8 +26,27 @@ from .mixins import SuperAdminMixin
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 
-EXCLUDE_SECTION = ['DataAnalytics', 'FrontEnd','Music-Production']
 
+class HealthCheckView(APIView):
+    """Health check endpoint for Render/load balancer"""
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+
+    def get(self, request):
+        db_ok = True
+        try:
+            connection.ensure_connection()
+        except Exception:
+            db_ok = False
+        
+        status = 200 if db_ok else 503
+        return Response({
+            "status": "ok" if db_ok else "degraded",
+            "database": "connected" if db_ok else "disconnected"
+        }, status=status)
+
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class HomeView(TemplateView):
     template_name = 'home.html'
 
@@ -30,23 +55,40 @@ class HomeView(TemplateView):
         user = CustomUser.objects.filter(is_superuser=True).first()
         if not user:
             return context
-        profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
+        profile = Profile.objects.filter(user=user).prefetch_related('technologies__section').first()
         context['profile'] = profile
+        context['json_ld'] = self._build_json_ld(profile, self.request)
         context['tech_stack'] = (
             TechStack
             .objects
             .select_related('section')
+            .filter(section__show_on_portfolio=True)
             .annotate(section_tech_count=Count('section__tech_section'))
             .order_by('section_tech_count', 'name')
-            .exclude(section__name__in=EXCLUDE_SECTION))
+        )
         context['education'] = Education.objects.filter(user=user)
         context['certificates'] = Certificate.objects.filter(user=user)
         context['professions'] = Profession.objects.filter(user=user, experience='professional')
         context['internships'] = Profession.objects.filter(user=user, experience='internship')
-        context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies')
+        context['projects'] = Project.objects.filter(user=user).prefetch_related('technologies__section')
         context['social_links'] = SocialLink.objects.filter(user=user).first()
         context['resume'] = Resume.objects.filter(user=user).first()
         return context
+
+    @staticmethod
+    def _build_json_ld(profile, request):
+        data = {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": profile.name if profile else "",
+            "jobTitle": profile.title if profile else "",
+            "description": profile.bio if profile else "",
+            "url": request.build_absolute_uri('/') if request else "",
+        }
+        # Serialize safely: escape characters that could break out of <script>.
+        safe = json.dumps(data, ensure_ascii=False)
+        safe = safe.replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026')
+        return mark_safe(safe)
 
 class DashboardView(SuperAdminMixin, TemplateView):
     template_name = 'dashboard.html'
@@ -92,7 +134,7 @@ class PortfolioDataView(APIView):
         if not user:
             return Response({"error": "No data found"}, status=404)
 
-        profile = Profile.objects.filter(user=user).prefetch_related('technologies').first()
+        profile = Profile.objects.filter(user=user).prefetch_related('technologies__section').first()
         social = SocialLink.objects.filter(user=user).first()
         resume_obj = Resume.objects.filter(user=user).first()
 
@@ -101,11 +143,17 @@ class PortfolioDataView(APIView):
             'education': EducationSerializer(Education.objects.filter(user=user), many=True).data,
             'certificates': CertificateSerializer(Certificate.objects.filter(user=user), many=True).data,
             'professions': ProfessionSerializer(Profession.objects.filter(user=user), many=True).data,
-            'tech_stack': TechStackSerializer(TechStack.objects.all(), many=True).data,
+            'tech_stack': TechStackSerializer(
+                TechStack.objects.select_related('section')
+                .filter(section__show_on_portfolio=True)
+                .order_by('section__name', 'name'), many=True
+            ).data,
             'profile_tech_stack': TechStackSerializer(
                 profile.technologies.all(), many=True
             ).data if profile else [],
-            'projects': ProjectSerializer(Project.objects.filter(user=user), many=True).data,
+            'projects': ProjectSerializer(
+                Project.objects.filter(user=user).prefetch_related('technologies__section'), many=True
+            ).data,
             'social_links': SocialLinkSerializer(social).data if social else None,
             'resume': ResumeSerializer(resume_obj).data if resume_obj else None,
             'services': ServiceSerializer(Service.objects.filter(user=user), many=True).data,
@@ -115,7 +163,6 @@ class PortfolioDataView(APIView):
 
 class BasePortfolioViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    pagination_class = None
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -126,6 +173,14 @@ class BasePortfolioViewSet(viewsets.ModelViewSet):
 class ProfileViewSet(BasePortfolioViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Profile is a OneToOne relation, so a second POST must update, not crash.
+        profile, _created = Profile.objects.get_or_create(user=request.user)
+        serializer = self.get_serializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class EducationViewSet(BasePortfolioViewSet):
     queryset = Education.objects.all()
@@ -162,6 +217,7 @@ class TestimonialViewSet(BasePortfolioViewSet):
 class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
+    throttle_scope = 'contact'
 
     def get_permissions(self):
         if self.action == 'create':
@@ -182,7 +238,6 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
 class TechStackViewSet(viewsets.ModelViewSet):
     queryset = TechStack.objects.all()
     serializer_class = TechStackSerializer
-    pagination_class = None
 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
