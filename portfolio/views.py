@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions, pagination, status
-from django.db.models import Count
+from django.db.models import Count, Case, When, IntegerField
 from django.db import connection
 from .models import (
     Profile, Education, Certificate, Profession,
@@ -58,13 +58,18 @@ class HomeView(TemplateView):
         profile = Profile.objects.filter(user=user).prefetch_related('technologies__section').first()
         context['profile'] = profile
         context['json_ld'] = self._build_json_ld(profile, self.request)
+        section_order = ['python', 'frontend', 'database', 'data-analytics']
+        preserve_order = Case(
+            *[When(section__slug=s, then=i) for i, s in enumerate(section_order)],
+            output_field=IntegerField()
+        )
         context['tech_stack'] = (
             TechStack
             .objects
             .select_related('section')
-            .filter(section__show_on_portfolio=True)
-            .annotate(section_tech_count=Count('section__tech_section'))
-            .order_by('section_tech_count', 'name')
+            .filter(section__slug__in=section_order, section__show_on_portfolio=True)
+            .annotate(section_order=preserve_order)
+            .order_by('section_order', 'name')
         )
         context['education'] = Education.objects.filter(user=user)
         context['certificates'] = Certificate.objects.filter(user=user)
@@ -138,6 +143,12 @@ class PortfolioDataView(APIView):
         social = SocialLink.objects.filter(user=user).first()
         resume_obj = Resume.objects.filter(user=user).first()
 
+        section_order = ['python', 'frontend', 'database', 'data-analytics']
+        preserve_order = Case(
+            *[When(section__slug=s, then=i) for i, s in enumerate(section_order)],
+            output_field=IntegerField()
+        )
+
         data = {
             'profile': ProfileSerializer(profile).data if profile else None,
             'education': EducationSerializer(Education.objects.filter(user=user), many=True).data,
@@ -145,8 +156,9 @@ class PortfolioDataView(APIView):
             'professions': ProfessionSerializer(Profession.objects.filter(user=user), many=True).data,
             'tech_stack': TechStackSerializer(
                 TechStack.objects.select_related('section')
-                .filter(section__show_on_portfolio=True)
-                .order_by('section__name', 'name'), many=True
+                .filter(section__slug__in=section_order, section__show_on_portfolio=True)
+                .annotate(section_order=preserve_order)
+                .order_by('section_order', 'name'), many=True
             ).data,
             'profile_tech_stack': TechStackSerializer(
                 profile.technologies.all(), many=True
