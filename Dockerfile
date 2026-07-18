@@ -34,6 +34,8 @@ RUN poetry config virtualenvs.create false \
 COPY . /app/
 
 # Build Tailwind CSS, collect static files, and prepare the database
+ENV SECRET_KEY=build-time-secret-key-not-for-production
+ENV DEBUG=true
 RUN cd theme/static_src && npm ci && npm run build && cd ../..
 RUN python manage.py collectstatic --no-input
 
