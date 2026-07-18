@@ -34,7 +34,7 @@ RUN poetry config virtualenvs.create false \
 COPY . /app/
 
 # Build Tailwind CSS, collect static files, and prepare the database
-RUN cd theme && npm ci && npm run build && cd ..
+RUN cd theme/static_src && npm ci && npm run build && cd ../..
 RUN python manage.py collectstatic --no-input
 
 # Expose the port
