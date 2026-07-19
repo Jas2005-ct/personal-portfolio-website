@@ -39,12 +39,15 @@ if not SECRET_KEY:
         raise ImproperlyConfigured('SECRET_KEY environment variable must be set in production.')
 
 # In production ALLOWED_HOSTS must be provided via env; fail closed if missing.
-if os.environ.get('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = [h.strip() for h in os.environ['ALLOWED_HOSTS'].split(',') if h.strip()]
-elif DEBUG:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
-else:
-    raise ImproperlyConfigured('ALLOWED_HOSTS environment variable must be set in production.')
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '').split(',') if h.strip()]
+
+if not ALLOWED_HOSTS:
+    if DEBUG:
+        ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+    else:
+        render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+        if render_host:
+            ALLOWED_HOSTS.append(render_host)
 
 
 # Application definition
