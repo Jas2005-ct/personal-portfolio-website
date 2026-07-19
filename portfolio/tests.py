@@ -30,7 +30,7 @@ class PortfolioTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = _make_superuser()
-        self.section = Tech_Section.objects.create(name='Backend')
+        self.section = Tech_Section.objects.create(name='Python')
         self.tech = TechStack.objects.create(name='Python', section=self.section)
         self.profile = Profile.objects.create(
             user=self.user,
