@@ -44,10 +44,7 @@ if os.environ.get('ALLOWED_HOSTS'):
 elif DEBUG:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 else:
-    ALLOWED_HOSTS = []
-
-# Always allow the deployment host (fallback for Render/Railway)
-ALLOWED_HOSTS += ['dev.jaswantmayilsamy.dev']
+    raise ImproperlyConfigured('ALLOWED_HOSTS environment variable must be set in production.')
 
 
 # Application definition
