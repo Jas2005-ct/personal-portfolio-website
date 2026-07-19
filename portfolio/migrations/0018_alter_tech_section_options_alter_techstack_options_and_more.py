@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                             ALTER TABLE portfolio_techstack
                             ADD CONSTRAINT portfolio_techstack_name_section_id_540187a8_uniq
                             UNIQUE (name, section_id);
-                        EXCEPTION WHEN duplicate_object THEN
+                        EXCEPTION WHEN duplicate_table THEN
                             NULL;
                         END $$;
                     """,
