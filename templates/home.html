@@ -177,7 +177,7 @@
                             <p id="about-philosophy" class="text-slate_blue-400 italic leading-relaxed">{{ profile.philosophy }}</p>
                         </div>
                         {% endif %}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 pt-8 border-t border-pearl_aqua-800">
+                        <div class="grid grid-cols-2 gap-8 mt-8 pt-8 border-t border-pearl_aqua-800">
                             <!-- Phone -->
                             <div class="reveal-child" style="transition-delay: 100ms">
                                 <div class="h-full bg-gradient-to-br from-fresh_sky-900 to-fresh_sky-800 border border-fresh_sky-700 shadow-soft rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:shadow-soft-hover hover:scale-105">
@@ -230,9 +230,9 @@
                         <p class="mt-3 text-slate_blue-400">A concise view of the tools, frameworks, and platforms I use every day.</p>
                     </div>
                     {% regroup tech_stack by section as tech_sections %}
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                    <div class="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory tech-scroll">
                         {% for section_group in tech_sections %}
-                        <div class="rounded-2xl border border-pearl_aqua-800 bg-white/70 p-6 transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover">
+                        <div class="min-w-[260px] sm:min-w-[280px] flex-shrink-0 snap-start rounded-2xl border border-pearl_aqua-800 bg-white/70 p-6 transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover">
                             <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate_blue-500 mb-5">{{ section_group.grouper.name }}</h4>
                             <div class="grid grid-cols-2 gap-3 sm:gap-4">
                                 {% for tech in section_group.list %}

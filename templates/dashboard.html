@@ -17,13 +17,13 @@
     
     <style>
         :root {
-            --primary-color: #00f2ea;
-            --secondary-color: #ff0055;
-            --accent-color: #7000ff;
-            --text-color: #ffffff;
-            --bg-gradient: linear-gradient(135deg, #050505 0%, #1a1a1a 100%);
-            --sidebar-bg: #050505;
-            --card-bg: rgba(20, 20, 20, 0.8);
+            --primary-color: #5e60ce;
+            --secondary-color: #48bfe3;
+            --accent-color: #5e60ce;
+            --text-color: #1e293b;
+            --bg-gradient: radial-gradient(circle at 12% 18%, rgba(231,190,255,0.45) 0%, transparent 42%), radial-gradient(circle at 88% 82%, rgba(220,237,249,0.55) 0%, transparent 42%), #e6fffa;
+            --sidebar-bg: rgba(255, 255, 255, 0.85);
+            --card-bg: rgba(255, 255, 255, 0.9);
         }
 
         body { 
@@ -37,25 +37,28 @@
         .sidebar { 
             height: 100vh; 
             background: var(--sidebar-bg); 
-            color: #fff; 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #334155; 
             position: fixed; 
             width: 260px; 
             padding-top: 30px; 
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 4px 0 10px rgba(46, 0, 110, 0.06);
+            border-right: 1px solid rgba(100, 223, 223, 0.4);
             z-index: 1000;
             transition: all 0.3s ease;
-            overflow-y: auto; /* Enable scrolling */
+            overflow-y: auto;
         }
 
         .sidebar h3 {
             font-weight: 700;
             letter-spacing: 1px;
-            color: #fff;
+            color: #0f172a;
             margin-bottom: 30px;
         }
 
         .sidebar .nav-link { 
-            color: rgba(255,255,255,0.7); 
+            color: #475569; 
             text-decoration: none; 
             display: block; 
             padding: 12px 25px; 
@@ -65,8 +68,8 @@
         }
 
         .sidebar .nav-link:hover, .sidebar .nav-link.active { 
-            background: rgba(255,255,255,0.1); 
-            color: #fff; 
+            background: rgba(94, 96, 206, 0.08); 
+            color: #1e293b; 
             border-left-color: var(--accent-color);
         }
 
@@ -98,48 +101,48 @@
             bottom: -8px;
             width: 50px;
             height: 4px;
-            background: var(--primary-color);
+            background: linear-gradient(90deg, #5e60ce, #48bfe3, #80ffdb);
             border-radius: 2px;
         }
 
         /* Cards */
         .card { 
-            border: none;
-            border-radius: 15px;
+            border: 1px solid rgba(100, 223, 223, 0.5);
+            border-radius: 24px;
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            box-shadow: 0 4px 24px rgba(46, 0, 110, 0.06);
             margin-bottom: 25px; 
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+            box-shadow: 0 12px 32px rgba(94, 96, 206, 0.18);
         }
 
         .form-label { 
             display: block;
             font-weight: 600; 
-            color: #d1d5db;
+            color: #334155;
             margin-bottom: 0.5rem;
         }
 
         .form-control {
             display: block;
             width: 100%;
-            border-radius: 8px;
-            border: 1px solid #4b5563;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
             padding: 10px 15px;
-            background: rgba(30, 30, 30, 0.9);
-            color: #f3f4f6;
+            background: #f8fafc;
+            color: #1e293b;
             font-size: 0.95rem;
         }
 
         .form-control:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 242, 234, 0.25);
+            box-shadow: 0 0 0 3px rgba(94, 96, 206, 0.18);
             border-color: var(--primary-color);
         }
 
@@ -152,7 +155,7 @@
         }
 
         .btn {
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 8px 20px;
             font-weight: 600;
             transition: all 0.3s;
@@ -161,11 +164,13 @@
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
+            color: #fff;
         }
 
         .btn-primary:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
+            background: linear-gradient(90deg, #5e60ce, #48bfe3);
+            border-color: transparent;
+            color: #fff;
         }
 
         .btn-success {
@@ -213,47 +218,47 @@
             font-size: 0.8125rem;
         }
 
-        /* Select2 dark theme overrides */
+        /* Select2 light theme overrides (match home palette) */
         .select2-container--default .select2-selection--multiple {
-            background: rgba(30, 30, 30, 0.9) !important;
-            border: 1px solid #4b5563 !important;
-            border-radius: 8px !important;
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 12px !important;
         }
         .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            background: var(--primary-color) !important;
-            color: #000 !important;
-            border: none !important;
+            background: rgba(94, 96, 206, 0.12) !important;
+            color: #1e293b !important;
+            border: 1px solid rgba(94, 96, 206, 0.3) !important;
             border-radius: 4px !important;
             font-weight: 600;
         }
         .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-            color: #000 !important;
+            color: #5e60ce !important;
         }
         .select2-container--default .select2-search--inline .select2-search__field {
-            color: #f3f4f6 !important;
+            color: #1e293b !important;
         }
         .select2-dropdown {
-            background: rgba(20, 20, 20, 0.95) !important;
-            border: 1px solid #4b5563 !important;
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
         }
         .select2-results__option {
-            color: #f3f4f6 !important;
+            color: #1e293b !important;
         }
         .select2-results__option--highlighted {
-            background: var(--primary-color) !important;
-            color: #000 !important;
+            background: rgba(94, 96, 206, 0.12) !important;
+            color: #1e293b !important;
         }
         .select2-container--default .select2-results__option[aria-selected=true] {
-            background: rgba(0, 242, 234, 0.2) !important;
+            background: rgba(94, 96, 206, 0.18) !important;
         }
         .select2-container--default .select2-selection--single {
-            background: rgba(30, 30, 30, 0.9) !important;
-            border: 1px solid #4b5563 !important;
-            border-radius: 8px !important;
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 12px !important;
             height: 42px !important;
         }
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #f3f4f6 !important;
+            color: #1e293b !important;
             line-height: 42px !important;
         }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -269,7 +274,7 @@
         }
 
         .text-muted {
-            color: #9ca3af;
+            color: #64748b;
         }
 
         /* Custom Scrollbar */
@@ -277,23 +282,68 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+            background: transparent; 
         }
         ::-webkit-scrollbar-thumb {
-            background: #888; 
+            background: rgba(100, 223, 223, 0.7); 
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #555; 
+            background: rgba(94, 96, 206, 0.8); 
         }
         
         /* Smooth Scrolling for whole page */
         html {
             scroll-behavior: smooth;
         }
+
+        /* Error / danger text */
+        .text-danger {
+            color: #ef4444 !important;
+        }
+
+        /* Mobile sidebar toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1100;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid rgba(100, 223, 223, 0.5);
+            box-shadow: 0 4px 24px rgba(46, 0, 110, 0.06);
+            color: #5e60ce;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0;
+                padding: 24px 16px;
+            }
+            .sidebar-toggle {
+                display: flex;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <div class="sidebar">
         <h3 class="text-center">Dashboard</h3>
@@ -309,7 +359,7 @@
         <a href="#" class="nav-link" data-target="resume"><i class="fas fa-file-alt"></i> Resume</a>
         <a href="#" class="nav-link" data-target="social"><i class="fas fa-share-alt"></i> Social Links</a>
         <a href="{% url 'logout' %}" class="nav-link text-red-400 hover:text-red-300 mt-4"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        <a href="/" class="nav-link mt-2 border-t border-gray-700 pt-3"><i class="fas fa-home"></i> View Portfolio</a>
+        <a href="/" class="nav-link mt-2 border-t border-slate-200 pt-3"><i class="fas fa-home"></i> View Portfolio</a>
     </div>
 
     <div class="content">
@@ -398,7 +448,7 @@
                             <textarea class="form-control" name="description" placeholder="Description (Bullet points, achievements, etc.)" rows="3"></textarea>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success submit-btn">Add Education</button>
+                    <button type="submit" class="btn btn-success submit-btn mt-4">Add Education</button>
                 </form>
             </div>
             <div id="education-list" class="grid grid-cols-12 gap-4"></div>
@@ -426,7 +476,7 @@
                             <input type="file" class="form-control" name="image">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success submit-btn">Add Certificate</button>
+                    <button type="submit" class="btn btn-success submit-btn mt-4">Add Certificate</button>
                 </form>
             </div>
             <div id="certificates-list" class="grid grid-cols-12 gap-4"></div>
@@ -474,7 +524,7 @@
                             <textarea class="form-control" name="description" placeholder="Description / Highlights / Achievements (supports bullet points)" rows="3"></textarea>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success submit-btn">Add Experience</button>
+                    <button type="submit" class="btn btn-success submit-btn mt-4">Add Experience</button>
                 </form>
             </div>
             <div id="professions-list" class="grid grid-cols-12 gap-4"></div>
@@ -560,7 +610,7 @@
                             <small class="text-muted">Leave empty to keep current image</small>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success submit-btn">Add Project</button>
+                    <button type="submit" class="btn btn-success submit-btn mt-4">Add Project</button>
                 </form>
             </div>
             <div id="projects-list" class="grid grid-cols-12 gap-4"></div>
@@ -653,6 +703,15 @@
                     $('.section').hide();
                     $('#' + $(this).data('target') + '-section').fadeIn();
                 }
+                // Close sidebar on mobile after selecting a section
+                if (window.innerWidth <= 900) {
+                    $('.sidebar').removeClass('open');
+                }
+            });
+
+            // Mobile sidebar toggle
+            $('#sidebarToggle').click(function() {
+                $('.sidebar').toggleClass('open');
             });
 
             // Helper: Get CSRF Token
@@ -877,7 +936,7 @@
                             const sectionTechs = (techs || []).filter(t => t.section === section.id);
                             const techBadges = sectionTechs.length > 0
                                 ? sectionTechs.map(t => `
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-zinc-800 text-white mr-2 mb-2 border border-zinc-700">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate_blue/10 text-slate_blue mr-2 mb-2 border border-slate_blue/30">
                                         ${t.icon ? `<img src="${t.icon}" alt="" class="w-4 h-4 object-contain mr-1">` : ''}
                                         ${t.name}
                                         <button class="delete-tech-btn hover:text-red-400 ml-1.5 transition-colors focus:outline-none" data-id="${t.id}" aria-label="Remove">
@@ -994,7 +1053,7 @@
                         
                         html += `
                             <div class="md:col-span-6 col-span-12">
-                                <div class="card p-3 h-full">
+                                <div class="card p-4 h-full">
                                     <div class="flex justify-between items-center h-full">
                                         <div>
                                             <h5 class="mb-1">${title}</h5>
