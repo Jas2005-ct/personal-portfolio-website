@@ -18,8 +18,26 @@ class Migration(migrations.Migration):
             name='techstack',
             options={'ordering': ['name']},
         ),
-        migrations.AlterUniqueTogether(
-            name='techstack',
-            unique_together={('name', 'section')},
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.AlterUniqueTogether(
+                    name='techstack',
+                    unique_together={('name', 'section')},
+                ),
+            ],
+            database_operations=[
+                migrations.RunSQL(
+                    sql="""
+                        DO $$ BEGIN
+                            ALTER TABLE portfolio_techstack
+                            ADD CONSTRAINT portfolio_techstack_name_section_id_540187a8_uniq
+                            UNIQUE (name, section_id);
+                        EXCEPTION WHEN duplicate_object THEN
+                            NULL;
+                        END $$;
+                    """,
+                    reverse_sql="ALTER TABLE portfolio_techstack DROP CONSTRAINT IF EXISTS portfolio_techstack_name_section_id_540187a8_uniq;",
+                ),
+            ],
         ),
     ]
