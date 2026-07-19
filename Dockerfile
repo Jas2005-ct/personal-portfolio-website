@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -31,8 +33,14 @@ RUN poetry config virtualenvs.create false \
 # Copy the rest of the application code
 COPY . /app/
 
+# Build Tailwind CSS, collect static files, and prepare the database
+ENV SECRET_KEY=build-time-secret-key-not-for-production
+ENV DEBUG=true
+RUN cd theme/static_src && npm ci && npm run build && cd ../..
+RUN python manage.py collectstatic --no-input
+
 # Expose the port
 EXPOSE 8000
 
-# Start Gunicorn
-CMD ["sh", "-c", "gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
+# Apply migrations, then start Gunicorn
+CMD ["sh", "-c", "python manage.py migrate --no-input || echo 'Migrations skipped/failed - check DATABASE_URL'; gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]

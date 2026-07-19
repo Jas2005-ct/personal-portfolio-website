@@ -35,10 +35,16 @@ class Profile(models.Model):
     title = models.CharField(max_length=100, help_text="e.g. Full Stack Developer", null=True, blank=True)
     bio = models.TextField(blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
-    phone = models.CharField(max_length=15)
-    address = models.TextField()
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
     technologies = models.ManyToManyField('TechStack', blank=True)
     philosophy = models.TextField(blank=True, help_text="Your engineering mindset and development approach")
+    now_building = models.TextField(
+        blank=True, null=True,
+        help_text="Short note on what you're currently building")
+    currently_learning = models.TextField(
+        blank=True, null=True,
+        help_text="Short note on what you're currently learning")
 
     def __str__(self):
         return self.name
@@ -46,24 +52,32 @@ class Profile(models.Model):
 
 class Tech_Section(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True,blank=True)
+    slug = models.SlugField(unique=True, blank=True)
+    show_on_portfolio = models.BooleanField(default=True, help_text="Display this section on the public portfolio")
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
 
 class TechStack(models.Model):
-
     name = models.CharField(max_length=100)
-    icon = models.ImageField(upload_to='tech_stack/',null=True,blank=True)
+    icon = models.ImageField(upload_to='tech_stack/', null=True, blank=True)
     section = models.ForeignKey(Tech_Section, on_delete=models.CASCADE, related_name='tech_section')
+
+    class Meta:
+        ordering = ['name']
+        unique_together = ('name', 'section')
+
     def __str__(self):
-            return f"{self.section} - {self.name}"
+        return f"{self.section} - {self.name}"
 
 
 class Education(models.Model):
@@ -167,8 +181,5 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"Message from {self.sender_name}"
-
-    def __str__(self):
-        return f"Message from {self.sender_name}"
-
+        
 

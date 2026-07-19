@@ -23,4 +23,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('api/', include(router.urls)),
     path('api/portfolio-data/', views.PortfolioDataView.as_view(), name='portfolio-data'),
+    path('healthz/', views.HealthCheckView.as_view(), name='health-check'),
 ]
