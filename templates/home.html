@@ -208,8 +208,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m1.5.189V6.75a4.5 4.5 0 1 0-9 0v6.111m9 0a9.006 9.006 0 0 1-7.2 0M12 18.75v1.875c0 .621-.504 1.125-1.125 1.125h-1.5a1.125 1.125 0 0 1-1.125-1.125V18.75" />
                                 </svg>Engineering Philosophy</h5>
-                            <p id="about-philosophy" class="text-slate_blue-400 italic leading-relaxed">{{
-                                profile.philosophy }}</p>
+                            <p id="about-philosophy" class="text-slate_blue-400 italic leading-relaxed">{{ profile.philosophy }}</p>
                         </div>
                         {% endif %}
                         <div
@@ -256,13 +255,11 @@
 
                         <h5 class="text-slate_blue font-semibold text-sm uppercase tracking-widest mb-3">Now Building
                         </h5>
-                        <p class="text-slate_blue-400 text-sm leading-relaxed mb-6">{{
-                            profile.now_building|default:"Exciting new projects in progress." }}</p>
+                        <p class="text-slate_blue-400 text-sm leading-relaxed mb-6">{{ profile.now_building|default:"Exciting new projects in progress." }}</p>
 
                         <h5 class="text-slate_blue font-semibold text-sm uppercase tracking-widest mb-3">Currently
                             Learning</h5>
-                        <p class="text-slate_blue-400 text-sm leading-relaxed mb-6">{{
-                            profile.currently_learning|default:"Exploring new tools and frameworks." }}</p>
+                        <p class="text-slate_blue-400 text-sm leading-relaxed mb-6">{{ profile.currently_learning|default:"Exploring new tools and frameworks." }}</p>
 
                         <div class="pt-8 border-t border-pearl_aqua-800 grid grid-cols-2 gap-3">
                             <div
@@ -295,8 +292,7 @@
                         {% for section_group in tech_sections %}
                         <div
                             class="min-w-[260px] sm:min-w-[280px] flex-shrink-0 snap-start rounded-2xl border border-pearl_aqua-800 bg-white/70 p-6 transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover">
-                            <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate_blue-500 mb-5">{{
-                                section_group.grouper.name }}</h4>
+                            <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate_blue-500 mb-5">{{ section_group.grouper.name }}</h4>
                             <div class="grid grid-cols-2 gap-3 sm:gap-4">
                                 {% for tech in section_group.list %}
                                 <div
@@ -305,8 +301,7 @@
                                     <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}"
                                         class="w-7 h-7 object-contain transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
                                     {% endif %}
-                                    <span class="font-semibold text-slate-800 text-sm whitespace-nowrap">{{ tech.name
-                                        }}</span>
+                                    <span class="font-semibold text-slate-800 text-sm whitespace-nowrap">{{ tech.name }}</span>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -381,8 +376,7 @@
                         {% for job in professions %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child"
                             style="transition-delay: {% widthratio forloop.counter0 1 80 %}ms">
-                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{
-                                job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ job.role }}</h5>
                             <p class="text-slate_blue mb-1">{{ job.company }}{% if job.location %} | <small
                                     class="text-slate_blue-500 inline-flex items-center gap-1"><svg
@@ -402,8 +396,7 @@
                         {% endfor %}
                         {% for job in internships %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child">
-                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{
-                                job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ job.role }} (Intern)</h5>
                             <p class="text-slate_blue mb-1">{{ job.company }}{% if job.location %} | <small
                                     class="text-slate_blue-500 inline-flex items-center gap-1"><svg
@@ -438,21 +431,17 @@
                         {% for edu in education %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child"
                             style="transition-delay: {% widthratio forloop.counter0 1 80 %}ms">
-                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{
-                                edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ edu.course }}</h5>
                             <p class="text-slate_blue mb-1">
                                 {{ edu.institution }}
-                                {% if edu.location %} | <small class="text-slate-500">{{ edu.location }}</small>{% endif
-                                %}
+                                {% if edu.location %} | <small class="text-slate-500">{{ edu.location }}</small>{% endif %}
                             </p>
                             {% if edu.field_of_study %}
                             <p class="mb-1"><strong>Major:</strong> {{ edu.field_of_study }}</p>
                             {% endif %}
                             {% if edu.grade %}
-                            <p class="mb-1"><span
-                                    class="inline-block bg-slate_blue text-white font-bold px-3 py-1 rounded-full text-sm">{{
-                                    edu.grade }}</span>
+                            <p class="mb-1"><span class="inline-block bg-slate_blue text-white font-bold px-3 py-1 rounded-full text-sm">{{ edu.grade }}</span>
                             </p>
                             {% endif %}
                             {% if edu.description %}
@@ -485,8 +474,7 @@
                         data-project-title="{{ proj.title }}" data-project-desc="{{ proj.description }}"
                         data-project-motive="{{ proj.motive }}" data-project-problem="{{ proj.problem_statement }}"
                         data-project-impact="{{ proj.impact }}" data-project-arch="{{ proj.architecture_notes }}"
-                        data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}" {% if
-                        proj.image %}data-project-img="{{ proj.image.url|optimized:1200 }}" {% endif %}
+                        data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}" {% if proj.image %}data-project-img="{{ proj.image.url|optimized:1200 }}" {% endif %}
                         data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
 
                         {% if proj.image %}
@@ -498,8 +486,7 @@
                         <div class="mb-2"><strong>Tech Used:</strong>
                             {% for tech in proj.technologies.all %}
                             <span
-                                class="inline-block mr-1 mb-1 px-2 py-0.5 text-sm rounded-full bg-cloudy_sky/15 border border-cloudy_sky/40 text-cloudy_sky font-medium">{{
-                                tech.name }}</span>
+                                class="inline-block mr-1 mb-1 px-2 py-0.5 text-sm rounded-full bg-cloudy_sky/15 border border-cloudy_sky/40 text-cloudy_sky font-medium">{{ tech.name }}</span>
                             {% endfor %}
                         </div>
                         <p class="text-slate-600 flex-grow">{{ proj.description|truncatechars:100 }}</p>
