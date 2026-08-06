@@ -376,7 +376,7 @@
                         {% for job in professions %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child"
                             style="transition-delay: {% widthratio forloop.counter0 1 80 %}ms">
-                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_date|date:"F Y" }} - {{ job.end_date|date:"F Y"|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ job.role }}</h5>
                             <p class="text-slate_blue mb-1">{{ job.company }}{% if job.location %} | <small
                                     class="text-slate_blue-500 inline-flex items-center gap-1"><svg
@@ -396,7 +396,7 @@
                         {% endfor %}
                         {% for job in internships %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child">
-                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_date|date:"F Y" }} - {{ job.end_date|date:"F Y"|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ job.role }} (Intern)</h5>
                             <p class="text-slate_blue mb-1">{{ job.company }}{% if job.location %} | <small
                                     class="text-slate_blue-500 inline-flex items-center gap-1"><svg
