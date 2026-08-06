@@ -26,7 +26,8 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="{% if profile %}{{ profile.name }} | Portfolio{% else %}Portfolio{% endif %}">
     <meta property="og:description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% endif %}">
-    <meta property="og:image" content="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% endif %}">
+    <meta property="og:image"
+        content="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% endif %}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -60,7 +61,11 @@
                 class="text-2xl font-extrabold text-slate-800 tracking-wide transition-all duration-300 hover:text-slate_blue">Portfolio</a>
             <button type="button" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"
                 class="md:hidden p-2 text-slate_blue-400 hover:text-slate_blue transition-colors duration-300">
-                <svg class="icon w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                <svg class="icon w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
             </button>
             <div id="navbarNav"
                 class="hidden md:flex md:items-center absolute md:static top-16 left-0 right-0 md:top-auto bg-white md:bg-transparent border-b md:border-0 border-pearl_aqua-800 md:border-none py-4 md:py-0 shadow-soft md:shadow-none">
@@ -73,7 +78,8 @@
                     </li>
                     {% if tech_stack %}
                     <li><a href="#tech-stack"
-                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-slate_blue">Tech Stack</a>
+                            class="block py-2 md:py-0 text-slate_blue-400 uppercase text-sm tracking-widest font-medium transition-all duration-300 hover:text-slate_blue">Tech
+                            Stack</a>
                     </li>
                     {% endif %}
                     <li><a href="#certificates"
@@ -91,7 +97,8 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen pt-40 md:pt-48 text-center px-6 sm:px-8" style="padding-top: clamp(10rem, 15vh, 12rem);">
+    <section id="home" class="min-h-screen pt-40 md:pt-48 text-center px-6 sm:px-8"
+        style="padding-top: clamp(10rem, 15vh, 12rem);">
         <div class="max-w-4xl mx-auto">
             {% if profile and profile.profile_image %}
             <div id="hero-img-container"
@@ -112,7 +119,11 @@
                 class="flex flex-wrap justify-center gap-4 motion-safe:animate-fade-in-up motion-safe:[animation-delay:600ms]">
                 <button type="button" data-modal-open="contactModal"
                     class="inline-flex items-center justify-center gap-2 bg-slate_blue text-white font-bold uppercase tracking-wide text-lg px-8 py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong hover:-translate-y-0.5 shadow-soft">
-                    <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" /></svg> Contact
+                    <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" />
+                    </svg> Contact
                 </button>
                 {% if resume %}
                 <a href="{{ resume.resume.url }}" id="resume-btn"
@@ -120,35 +131,53 @@
                 {% endif %}
             </div>
             <!-- Social Links -->
-            <div class="flex flex-wrap justify-center gap-4 mt-12 motion-safe:animate-fade-in-up motion-safe:[animation-delay:800ms]">
+            <div
+                class="flex flex-wrap justify-center gap-4 mt-12 motion-safe:animate-fade-in-up motion-safe:[animation-delay:800ms]">
                 {% if social_links.github %}
-                <a href="{{ social_links.github }}" target="_blank" rel="noopener noreferrer" 
+                <a href="{{ social_links.github }}" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 text-slate-300 transition-all duration-300 ease-smooth hover:scale-110 hover:shadow-soft-hover hover:text-white">
-                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" clip-rule="evenodd"/></svg>
+                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"
+                            clip-rule="evenodd" />
+                    </svg>
                 </a>
                 {% endif %}
                 {% if social_links.linkedin %}
                 <a href="{{ social_links.linkedin }}" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-sky-900 to-sky-800 border border-sky-700 text-sky-300 transition-all duration-300 ease-smooth hover:scale-110 hover:shadow-soft-hover hover:text-white">
-                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.732-2.004 1.438-.103.252-.129.604-.129.956v5.411h-3.554s.05-8.736 0-9.646h3.554v1.364c.4-.618 1.116-1.5 2.716-1.5 1.988 0 3.475 1.255 3.475 3.953v5.829zM5.337 9.052c-1.142 0-1.887-.766-1.887-1.724 0-.958.745-1.724 1.927-1.724 1.182 0 1.887.766 1.887 1.724 0 .958-.705 1.724-1.927 1.724zm1.554 11.4h-3.108V9.806h3.108v10.646zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.732-2.004 1.438-.103.252-.129.604-.129.956v5.411h-3.554s.05-8.736 0-9.646h3.554v1.364c.4-.618 1.116-1.5 2.716-1.5 1.988 0 3.475 1.255 3.475 3.953v5.829zM5.337 9.052c-1.142 0-1.887-.766-1.887-1.724 0-.958.745-1.724 1.927-1.724 1.182 0 1.887.766 1.887 1.724 0 .958-.705 1.724-1.927 1.724zm1.554 11.4h-3.108V9.806h3.108v10.646zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
+                    </svg>
                 </a>
                 {% endif %}
                 {% if social_links.twitter %}
                 <a href="{{ social_links.twitter }}" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-900 to-blue-800 border border-blue-700 text-blue-300 transition-all duration-300 ease-smooth hover:scale-110 hover:shadow-soft-hover hover:text-white">
-                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0 0 22 5.92a8.19 8.19 0 0 1-2.357.646 4.118 4.118 0 0 0 1.804-2.27 8.224 8.224 0 0 1-2.605.996 4.107 4.107 0 0 0-7.006 3.748 11.65 11.65 0 0 1-8.457-4.287 4.106 4.106 0 0 0 1.27 5.477A4.072 4.072 0 0 1 2.8 9.713v.052a4.105 4.105 0 0 0 3.292 4.022 4.095 4.095 0 0 1-1.853.07 4.108 4.108 0 0 0 3.834 2.85A8.233 8.233 0 0 1 2 18.407a11.616 11.616 0 0 0 6.29 1.84"/></svg>
+                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M8.29 20c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0 0 22 5.92a8.19 8.19 0 0 1-2.357.646 4.118 4.118 0 0 0 1.804-2.27 8.224 8.224 0 0 1-2.605.996 4.107 4.107 0 0 0-7.006 3.748 11.65 11.65 0 0 1-8.457-4.287 4.106 4.106 0 0 0 1.27 5.477A4.072 4.072 0 0 1 2.8 9.713v.052a4.105 4.105 0 0 0 3.292 4.022 4.095 4.095 0 0 1-1.853.07 4.108 4.108 0 0 0 3.834 2.85A8.233 8.233 0 0 1 2 18.407a11.616 11.616 0 0 0 6.29 1.84" />
+                    </svg>
                 </a>
                 {% endif %}
                 {% if social_links.instagram %}
                 <a href="{{ social_links.instagram }}" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-pink-900 to-pink-800 border border-pink-700 text-pink-300 transition-all duration-300 ease-smooth hover:scale-110 hover:shadow-soft-hover hover:text-white">
-                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 0 1 1.772 1.153 4.902 4.902 0 0 1 1.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 0 1-1.153 1.772 4.902 4.902 0 0 1-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 0 1-1.772-1.153 4.902 4.902 0 0 1-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 0 1 1.153-1.772A4.902 4.902 0 0 1 5.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 0 0-.748-1.15 3.098 3.098 0 0 0-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058ZM12 6.865a5.135 5.135 0 1 1 0 10.27 5.135 5.135 0 0 1 0-10.27Zm0 1.802a3.333 3.333 0 1 0 0 6.666 3.333 3.333 0 0 0 0-6.666Zm5.338-3.205a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z" clip-rule="evenodd"/></svg>
+                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 0 1 1.772 1.153 4.902 4.902 0 0 1 1.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 0 1-1.153 1.772 4.902 4.902 0 0 1-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 0 1-1.772-1.153 4.902 4.902 0 0 1-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 0 1 1.153-1.772A4.902 4.902 0 0 1 5.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 0 0-.748-1.15 3.098 3.098 0 0 0-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058ZM12 6.865a5.135 5.135 0 1 1 0 10.27 5.135 5.135 0 0 1 0-10.27Zm0 1.802a3.333 3.333 0 1 0 0 6.666 3.333 3.333 0 0 0 0-6.666Zm5.338-3.205a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"
+                            clip-rule="evenodd" />
+                    </svg>
                 </a>
                 {% endif %}
                 {% if social_links.facebook %}
                 <a href="{{ social_links.facebook }}" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-800 to-blue-700 border border-blue-600 text-blue-200 transition-all duration-300 ease-smooth hover:scale-110 hover:shadow-soft-hover hover:text-white">
-                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    <svg class="icon w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                    </svg>
                 </a>
                 {% endif %}
             </div>
@@ -167,29 +196,51 @@
                 <!-- Left Column: About -->
                 <div class="w-full">
                     <div
-                        class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10 text-left transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
+                        class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-4 sm:p-5 md:p-8 lg:p-10 text-left transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
                         <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-slate-900">About Me</h3>
                         <p id="about-bio" class="text-base md:text-lg text-slate_blue-500 mb-8 leading-relaxed">
                             {{ profile.bio|default:"No bio available." }}</p>
                         {% if profile.philosophy %}
                         <div id="philosophy-container" class="mb-8">
-                            <h5 class="text-slate_blue font-semibold text-lg mb-3 inline-flex items-center gap-2"><svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m1.5.189V6.75a4.5 4.5 0 1 0-9 0v6.111m9 0a9.006 9.006 0 0 1-7.2 0M12 18.75v1.875c0 .621-.504 1.125-1.125 1.125h-1.5a1.125 1.125 0 0 1-1.125-1.125V18.75" /></svg>Engineering Philosophy</h5>
+                            <h5 class="text-slate_blue font-semibold text-lg mb-3 inline-flex items-center gap-2"><svg
+                                    class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m1.5.189V6.75a4.5 4.5 0 1 0-9 0v6.111m9 0a9.006 9.006 0 0 1-7.2 0M12 18.75v1.875c0 .621-.504 1.125-1.125 1.125h-1.5a1.125 1.125 0 0 1-1.125-1.125V18.75" />
+                                </svg>Engineering Philosophy</h5>
                             <p id="about-philosophy" class="text-slate_blue-400 italic leading-relaxed">{{ profile.philosophy }}</p>
                         </div>
                         {% endif %}
-                        <div class="grid grid-cols-2 gap-8 mt-8 pt-8 border-t border-pearl_aqua-800">
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 mt-6 pt-6 border-t border-pearl_aqua-800">
                             <!-- Phone -->
                             <div class="reveal-child" style="transition-delay: 100ms">
-                                <div class="h-full bg-gradient-to-br from-fresh_sky-900 to-fresh_sky-800 border border-fresh_sky-700 shadow-soft rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:shadow-soft-hover hover:scale-105">
-                                    <svg class="icon w-8 h-2 text-fresh_sky-300 mb-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
-                                    <span id="about-phone" class="text-sm font-semibold text-fresh_sky-200">{{ profile.phone }}</span>
+                                <div
+                                    class="h-full bg-gradient-to-br from-fresh_sky-900 to-fresh_sky-800 border border-fresh_sky-700 shadow-soft rounded-2xl p-5 sm:p-6 flex flex-col items-center justify-center text-center overflow-hidden transition-all duration-500 ease-smooth hover:-translate-y-2 hover:shadow-soft-hover hover:scale-105">
+                                    <svg class="icon w-7 h-7 sm:w-8 sm:h-8 text-fresh_sky-300 mb-2 sm:mb-3 shrink-0"
+                                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                    </svg>
+                                    <span id="about-phone"
+                                        class="text-xs sm:text-sm font-semibold text-fresh_sky-200 break-all overflow-wrap-anywhere max-w-full"
+                                        title="{{ profile.phone }}">{{ profile.phone }}</span>
                                 </div>
                             </div>
                             <!-- Email -->
                             <div class="reveal-child" style="transition-delay: 200ms">
-                                <div class="h-full bg-gradient-to-br from-cloudy_sky-900 to-cloudy_sky-800 border border-cloudy_sky-700 shadow-soft rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-500 ease-smooth hover:-translate-y-2 hover:shadow-soft-hover hover:scale-105">
-                                    <svg class="icon w-8 h-8 text-cloudy_sky-300 mb-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
-                                    <span id="about-email" class="text-sm font-semibold text-cloudy_sky-200">{{ profile.user.email }}</span>
+                                <div
+                                    class="h-full bg-gradient-to-br from-cloudy_sky-900 to-cloudy_sky-800 border border-cloudy_sky-700 shadow-soft rounded-2xl p-5 sm:p-6 flex flex-col items-center justify-center text-center overflow-hidden transition-all duration-500 ease-smooth hover:-translate-y-2 hover:shadow-soft-hover hover:scale-105">
+                                    <svg class="icon w-7 h-7 sm:w-8 sm:h-8 text-cloudy_sky-300 mb-2 sm:mb-3 shrink-0"
+                                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                                    </svg>
+                                    <span id="about-email"
+                                        class="text-xs sm:text-sm font-semibold text-cloudy_sky-200 break-all overflow-wrap-anywhere max-w-full"
+                                        title="{{ profile.user.email }}">{{ profile.user.email }}</span>
                                 </div>
                             </div>
                         </div>
@@ -198,21 +249,26 @@
 
                 <!-- Right Column: Highlights Rail -->
                 <div class="w-full">
-                    <div class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
+                    <div
+                        class="h-full bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
                         <h3 class="text-2xl font-extrabold mb-6 text-slate-900">Highlights</h3>
 
-                        <h5 class="text-slate_blue font-semibold text-sm uppercase tracking-widest mb-3">Now Building</h5>
+                        <h5 class="text-slate_blue font-semibold text-sm uppercase tracking-widest mb-3">Now Building
+                        </h5>
                         <p class="text-slate_blue-400 text-sm leading-relaxed mb-6">{{ profile.now_building|default:"Exciting new projects in progress." }}</p>
 
-                        <h5 class="text-slate_blue font-semibold text-sm uppercase tracking-widest mb-3">Currently Learning</h5>
+                        <h5 class="text-slate_blue font-semibold text-sm uppercase tracking-widest mb-3">Currently
+                            Learning</h5>
                         <p class="text-slate_blue-400 text-sm leading-relaxed mb-6">{{ profile.currently_learning|default:"Exploring new tools and frameworks." }}</p>
 
                         <div class="pt-8 border-t border-pearl_aqua-800 grid grid-cols-2 gap-3">
-                            <div class="rounded-2xl bg-gradient-to-br from-slate_blue-900 to-slate_blue-800 p-4 text-center">
+                            <div
+                                class="rounded-2xl bg-gradient-to-br from-slate_blue-900 to-slate_blue-800 p-4 text-center">
                                 <div class="text-2xl font-black text-white">{{ projects|length }}</div>
                                 <div class="text-xs text-slate_blue-200">Projects</div>
                             </div>
-                            <div class="rounded-2xl bg-gradient-to-br from-fresh_sky-900 to-fresh_sky-800 p-4 text-center">
+                            <div
+                                class="rounded-2xl bg-gradient-to-br from-fresh_sky-900 to-fresh_sky-800 p-4 text-center">
                                 <div class="text-2xl font-black text-white">{{ tech_stack|length }}</div>
                                 <div class="text-xs text-fresh_sky-200">Technologies</div>
                             </div>
@@ -224,21 +280,26 @@
             <!-- Tech Stack (full width, below) -->
             {% if tech_stack %}
             <div id="tech-stack" class="w-full scroll-reveal mt-8">
-                <div class="bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
+                <div
+                    class="bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover">
                     <div class="mb-6">
                         <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Tech Stack</h3>
-                        <p class="mt-3 text-slate_blue-400">A concise view of the tools, frameworks, and platforms I use every day.</p>
+                        <p class="mt-3 text-slate_blue-400">A concise view of the tools, frameworks, and platforms I use
+                            every day.</p>
                     </div>
                     {% regroup tech_stack by section as tech_sections %}
                     <div class="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory tech-scroll">
                         {% for section_group in tech_sections %}
-                        <div class="min-w-[260px] sm:min-w-[280px] flex-shrink-0 snap-start rounded-2xl border border-pearl_aqua-800 bg-white/70 p-6 transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover">
+                        <div
+                            class="min-w-[260px] sm:min-w-[280px] flex-shrink-0 snap-start rounded-2xl border border-pearl_aqua-800 bg-white/70 p-6 transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover">
                             <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate_blue-500 mb-5">{{ section_group.grouper.name }}</h4>
                             <div class="grid grid-cols-2 gap-3 sm:gap-4">
                                 {% for tech in section_group.list %}
-                                <div class="group flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-pearl_aqua-800 bg-white shadow-soft transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover hover:-translate-y-0.5">
+                                <div
+                                    class="group flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-pearl_aqua-800 bg-white shadow-soft transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover hover:-translate-y-0.5">
                                     {% if tech.icon %}
-                                    <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}" class="w-7 h-7 object-contain transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
+                                    <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}"
+                                        class="w-7 h-7 object-contain transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
                                     {% endif %}
                                     <span class="font-semibold text-slate-800 text-sm whitespace-nowrap">{{ tech.name }}</span>
                                 </div>
@@ -258,25 +319,35 @@
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800">
                 Certificates
-                <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+                <span
+                    class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="certificates-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+                id="certificates-container">
                 {% for cert in certificates %}
                 <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
-                    <div class="cert-card h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover group">
-                    {% if cert.image %}
-                        <img src="{{ cert.image.url|optimized:600 }}" class="w-full h-60 object-cover border-b border-pearl_aqua-800 transition-transform duration-500 ease-smooth group-hover:scale-110" alt="{{ cert.course }}">
+                    <div
+                        class="cert-card h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover group">
+                        {% if cert.image %}
+                        <img src="{{ cert.image.url|optimized:600 }}"
+                            class="w-full h-60 object-cover border-b border-pearl_aqua-800 transition-transform duration-500 ease-smooth group-hover:scale-110"
+                            alt="{{ cert.course }}">
                         {% else %}
-                        <div class="w-full h-60 flex items-center justify-center bg-slate-50 border-b border-pearl_aqua-800">
-                            <svg class="icon w-14 h-14 text-fresh_sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m0 0a55.381 55.381 0 0 1 5.25 2.882V15" /></svg>
-                    </div>
-                    {% endif %}
+                        <div
+                            class="w-full h-60 flex items-center justify-center bg-slate-50 border-b border-pearl_aqua-800">
+                            <svg class="icon w-14 h-14 text-fresh_sky-600" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m0 0a55.381 55.381 0 0 1 5.25 2.882V15" />
+                            </svg>
+                        </div>
+                        {% endif %}
                         <div class="p-4">
                             <h5 class="font-semibold text-lg">{{ cert.course }}</h5>
                             <p class="text-slate-500 mb-0">{{ cert.platform }}</p>
                         </div>
                     </div>
-            </div>
+                </div>
                 {% empty %}
                 <p class="text-slate-500 text-center col-span-full w-full">No certificates listed.</p>
                 {% endfor %}
@@ -289,20 +360,33 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800">
                 Experience
-                <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+                <span
+                    class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div>
-                    <h3 class="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-2 text-slate-800"><svg class="icon w-6 h-6 text-slate_blue" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.89V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>Work</h3>
+                    <h3
+                        class="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-2 text-slate-800">
+                        <svg class="icon w-6 h-6 text-slate_blue" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.89V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>Work</h3>
                     <div id="work-container">
                         {% for job in professions %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child"
                             style="transition-delay: {% widthratio forloop.counter0 1 80 %}ms">
-                            <span
-                                class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_date|date:"F Y" }} - {{ job.end_date|date:"F Y"|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ job.role }}</h5>
                             <p class="text-slate_blue mb-1">{{ job.company }}{% if job.location %} | <small
-                                    class="text-slate_blue-500 inline-flex items-center gap-1"><svg class="icon w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>{{ job.location }}</small>{% endif %}</p>
+                                    class="text-slate_blue-500 inline-flex items-center gap-1"><svg
+                                        class="icon w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                        stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                    </svg>{{ job.location }}</small>{% endif %}</p>
                             {% if job.description %}
                             <div class="text-slate-500 text-sm mt-2 leading-relaxed">
                                 {{ job.description|linebreaksbr }}
@@ -312,11 +396,17 @@
                         {% endfor %}
                         {% for job in internships %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child">
-                            <span
-                                class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_year }} - {{ job.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ job.start_date|date:"F Y" }} - {{ job.end_date|date:"F Y"|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ job.role }} (Intern)</h5>
                             <p class="text-slate_blue mb-1">{{ job.company }}{% if job.location %} | <small
-                                    class="text-slate_blue-500 inline-flex items-center gap-1"><svg class="icon w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>{{ job.location }}</small>{% endif %}</p>
+                                    class="text-slate_blue-500 inline-flex items-center gap-1"><svg
+                                        class="icon w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                        stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                    </svg>{{ job.location }}</small>{% endif %}</p>
                             {% if job.description %}
                             <div class="text-slate-500 text-sm mt-2 leading-relaxed">
                                 {{ job.description|linebreaksbr }}
@@ -330,13 +420,18 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-2 text-slate-800"><svg class="icon w-6 h-6 text-cloudy_sky" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m0 0a55.381 55.381 0 0 1 5.25 2.882V15" /></svg>Education</h3>
+                    <h3
+                        class="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-2 text-slate-800">
+                        <svg class="icon w-6 h-6 text-cloudy_sky" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m0 0a55.381 55.381 0 0 1 5.25 2.882V15" />
+                        </svg>Education</h3>
                     <div id="education-container">
                         {% for edu in education %}
                         <div class="timeline-item border-l-4 border-cloudy_sky pl-10 mb-12 relative reveal-child"
                             style="transition-delay: {% widthratio forloop.counter0 1 80 %}ms">
-                            <span
-                                class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
+                            <span class="block text-slate_blue font-bold uppercase tracking-widest text-sm mb-2">{{ edu.start_year }} - {{ edu.end_year|default:"Present" }}</span>
                             <h5 class="text-xl font-semibold">{{ edu.course }}</h5>
                             <p class="text-slate_blue mb-1">
                                 {{ edu.institution }}
@@ -346,8 +441,7 @@
                             <p class="mb-1"><strong>Major:</strong> {{ edu.field_of_study }}</p>
                             {% endif %}
                             {% if edu.grade %}
-                            <p class="mb-1"><span
-                                    class="inline-block bg-slate_blue text-white font-bold px-3 py-1 rounded-full text-sm">{{ edu.grade }}</span>
+                            <p class="mb-1"><span class="inline-block bg-slate_blue text-white font-bold px-3 py-1 rounded-full text-sm">{{ edu.grade }}</span>
                             </p>
                             {% endif %}
                             {% if edu.description %}
@@ -370,7 +464,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800">
                 Projects
-                <span class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+                <span
+                    class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-container">
                 {% for proj in projects %}
@@ -379,8 +474,7 @@
                         data-project-title="{{ proj.title }}" data-project-desc="{{ proj.description }}"
                         data-project-motive="{{ proj.motive }}" data-project-problem="{{ proj.problem_statement }}"
                         data-project-impact="{{ proj.impact }}" data-project-arch="{{ proj.architecture_notes }}"
-                        data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}"
-                        {% if proj.image %}data-project-img="{{ proj.image.url|optimized:1200 }}"{% endif %}
+                        data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}" {% if proj.image %}data-project-img="{{ proj.image.url|optimized:1200 }}" {% endif %}
                         data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
 
                         {% if proj.image %}
@@ -397,10 +491,21 @@
                         </div>
                         <p class="text-slate-600 flex-grow">{{ proj.description|truncatechars:100 }}</p>
                         <div class="flex gap-6 mt-4 pt-4">
-                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank" aria-label="GitHub"
-                                class="text-slate_blue-400 transition-all duration-300 hover:text-slate_blue hover:scale-125"><svg class="icon w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" clip-rule="evenodd"/></svg></a>{% endif %}
+                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"
+                                aria-label="GitHub"
+                                class="text-slate_blue-400 transition-all duration-300 hover:text-slate_blue hover:scale-125"><svg
+                                    class="icon w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"
+                                        clip-rule="evenodd" />
+                                </svg></a>{% endif %}
                             {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank" aria-label="Live demo"
-                                class="text-slate_blue-400 transition-all duration-300 hover:text-fresh_sky hover:scale-125"><svg class="icon w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg></a>{% endif %}
+                                class="text-slate_blue-400 transition-all duration-300 hover:text-fresh_sky hover:scale-125"><svg
+                                    class="icon w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                </svg></a>{% endif %}
                         </div>
                     </div>
                 </div>
@@ -412,11 +517,16 @@
     </section>
 
     <!-- Contact Button Section -->
-    <section id="contact-btn-section" class="py-20 text-center scroll-reveal bg-gradient-to-b from-transparent to-fresh_sky/10">
+    <section id="contact-btn-section"
+        class="py-20 text-center scroll-reveal bg-gradient-to-b from-transparent to-fresh_sky/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <button type="button" data-modal-open="contactModal"
                 class="inline-flex items-center justify-center gap-2 bg-slate_blue text-white font-bold uppercase tracking-wide text-lg px-8 py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong hover:-translate-y-0.5 shadow-soft">
-                <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" /></svg> Send a Message
+                <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" />
+                </svg> Send a Message
             </button>
             <div class="flex flex-wrap justify-center gap-8 mt-10" id="social-links-container">
                 <!-- Social links injected here -->
@@ -425,16 +535,20 @@
     </section>
 
     <!-- Project Details Modal -->
-    <div id="projectModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+    <div id="projectModal"
+        class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth"
+        aria-hidden="true" role="dialog">
         <div class="modal-backdrop absolute inset-0" data-modal-close></div>
-        <div class="modal-panel relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+        <div
+            class="modal-panel relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
             <div class="flex items-center justify-between mb-6">
                 <h5 class="text-xl font-bold text-slate-800" id="projectModalTitle">Project Title</h5>
                 <button type="button" data-modal-close aria-label="Close"
                     class="text-slate-400 hover:text-slate-800 text-2xl leading-none transition-colors duration-300">&times;</button>
             </div>
             <div class="text-slate-700">
-                <img id="projectModalImg" src="" class="rounded-2xl mb-6 w-full max-h-[400px] object-cover hidden" alt="">
+                <img id="projectModalImg" src="" class="rounded-2xl mb-6 w-full max-h-[400px] object-cover hidden"
+                    alt="">
                 <div class="mb-4">
                     <h6 class="text-slate_blue font-semibold mb-2">Tech Stack</h6>
                     <div id="projectModalTech" class="flex flex-wrap gap-2"></div>
@@ -467,20 +581,27 @@
     </div>
 
     <!-- Resume Modal -->
-    <div id="resumeModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+    <div id="resumeModal"
+        class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth"
+        aria-hidden="true" role="dialog">
         <div class="modal-backdrop absolute inset-0" data-modal-close></div>
-        <div class="modal-panel relative w-full max-w-6xl h-[90vh] flex items-center justify-center opacity-0 scale-95 transition-all duration-300 ease-smooth">
+        <div
+            class="modal-panel relative w-full max-w-6xl h-[90vh] flex items-center justify-center opacity-0 scale-95 transition-all duration-300 ease-smooth">
             <button type="button" data-modal-close aria-label="Close"
                 class="absolute top-2 right-2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full text-slate-600 shadow-soft hover:bg-slate_blue hover:text-white transition-all duration-300">&times;</button>
-            <img id="resumeModalImg" src="" class="hidden max-h-full max-w-full object-contain rounded-lg shadow-2xl" alt="Resume preview">
+            <img id="resumeModalImg" src="" class="hidden max-h-full max-w-full object-contain rounded-lg shadow-2xl"
+                alt="Resume preview">
             <iframe id="resumeModalFrame" src="" class="hidden w-full h-full border-0 rounded-lg"></iframe>
         </div>
     </div>
 
     <!-- Contact Modal -->
-    <div id="contactModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+    <div id="contactModal"
+        class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth"
+        aria-hidden="true" role="dialog">
         <div class="modal-backdrop absolute inset-0" data-modal-close></div>
-        <div class="modal-panel relative w-full max-w-md bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+        <div
+            class="modal-panel relative w-full max-w-md bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 md:p-8 shadow-2xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
             <div class="flex items-center justify-between mb-6">
                 <h5 class="text-xl font-bold text-slate-800">Get In Touch</h5>
                 <button type="button" data-modal-close aria-label="Close"
@@ -488,8 +609,8 @@
             </div>
             <form id="contact-form" class="space-y-4">
                 <!-- Honeypot field - hidden from humans, bots will fill it -->
-                <input type="text" name="website" tabindex="-1" autocomplete="off" 
-                       style="display: none;" aria-hidden="true">
+                <input type="text" name="website" tabindex="-1" autocomplete="off" style="display: none;"
+                    aria-hidden="true">
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-1">Name</label>
                     <input type="text" name="sender_name" required
@@ -519,9 +640,12 @@
     </div>
 
     <!-- Certificate Modal -->
-    <div id="certificateModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth" aria-hidden="true" role="dialog">
+    <div id="certificateModal"
+        class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none invisible transition-all duration-300 ease-smooth"
+        aria-hidden="true" role="dialog">
         <div class="modal-backdrop absolute inset-0" data-modal-close></div>
-        <div class="modal-panel relative w-full max-w-3xl bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl overflow-hidden opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+        <div
+            class="modal-panel relative w-full max-w-3xl bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl overflow-hidden opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
             <div class="flex items-center justify-between p-4 border-b border-pearl_aqua-800">
                 <h5 class="text-lg font-bold text-slate-800" id="certModalTitle">Certificate</h5>
                 <button type="button" data-modal-close aria-label="Close"
@@ -744,4 +868,3 @@
 </body>
 
 </html>
-
