@@ -49,7 +49,7 @@ class ProfessionSerializer(serializers.ModelSerializer):
         model = Profession
         fields = [
             'id', 'experience', 'company', 'role', 'location', 'description',
-            'duration', 'start_year', 'end_year',
+            'duration', 'start_date', 'end_date',
         ]
         read_only_fields = ['user']
 
