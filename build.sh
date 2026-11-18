@@ -6,8 +6,8 @@ pip install poetry
 poetry config virtualenvs.create false --local
 poetry install
 
-# Build Tailwind CSS
-cd theme && npm ci && npm run build && cd ..
+# Build Tailwind CSS (package.json lives in theme/static_src)
+cd theme/static_src && npm ci && npm run build && cd ../..
 
 python manage.py collectstatic --no-input
 python manage.py migrate

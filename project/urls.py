@@ -15,15 +15,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
-from django.views.static import serve
-from django.http import HttpResponsePermanentRedirect
+from django.urls import path, include
+from django.http import HttpResponsePermanentRedirect, HttpResponse
 
 def favicon(request):
     return HttpResponsePermanentRedirect('/static/favicon.jpg')
+
+def robots_txt(request):
+    lines = [
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin/',
+        'Disallow: /dashboard/',
+        'Disallow: /api/',
+        'Disallow: /login/',
+    ]
+    return HttpResponse('\n'.join(lines), content_type='text/plain')
 
 urlpatterns = [
     path('', include('portfolio.urls')),
     path('admin/', admin.site.urls),
     path('favicon.ico', favicon),
+    path('robots.txt', robots_txt),
 ]

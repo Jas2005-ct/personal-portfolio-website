@@ -1,4 +1,5 @@
 from io import StringIO
+from unittest.mock import patch
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -10,6 +11,7 @@ from rest_framework import status
 from .models import (
     CustomUser, Profile, TechStack, Tech_Section, Project,
     Education, Certificate, Profession, SocialLink, Service, Testimonial, ContactMessage,
+    Resume,
 )
 from .serializers import (
     ProfileSerializer, EducationSerializer, CertificateSerializer, ProfessionSerializer,
@@ -161,6 +163,35 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['status'], 'ok')
 
+    def test_projects_carousel_controls_only_when_more_than_three(self):
+        """Scroll arrows appear only once a 4th project is added."""
+        cache.clear()
+        for i in range(3):
+            Project.objects.create(
+                user=self.user, title=f'Project {i}', description='D',
+                motive='M', problem_statement='P',
+            )
+        self.assertNotIn('id="projects-next"', self.client.get('/').content.decode())
+
+        Project.objects.create(
+            user=self.user, title='Fourth Project', description='D',
+            motive='M', problem_statement='P',
+        )
+        self.assertIn('id="projects-next"', self.client.get('/').content.decode())
+
+    def test_new_project_appears_immediately(self):
+        """Adding a project must be visible on the next home-page request (no stale cache)."""
+        cache.clear()
+        first = self.client.get('/')
+        self.assertNotContains(first, 'Brand New Project')
+
+        Project.objects.create(
+            user=self.user, title='Brand New Project', description='D',
+            motive='M', problem_statement='P',
+        )
+        second = self.client.get('/')
+        self.assertContains(second, 'Brand New Project')
+
 
 class SecurityHeaderTests(TestCase):
     def setUp(self):
@@ -232,7 +263,6 @@ class SerializerTests(TestCase):
         for serializer_class in serializers:
             self.assertNotIn('user', serializer_class.Meta.fields,
                              f'{serializer_class.__name__} exposes user PK')
-
     def test_contact_honeypot_validation(self):
         serializer = ContactMessageSerializer(data={
             'sender_name': 'X', 'sender_email': 'x@example.com',
@@ -260,6 +290,96 @@ class AdminRegistrationTests(TestCase):
         for model in (Svc, Tst, CMsg):
             self.assertIn(model, admin.site._registry,
                          f'{model.__name__} not registered in admin')
+
+
+class AuthHardeningTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = _make_superuser()
+
+    def test_logout_requires_post(self):
+        """A GET to /logout/ must not end the session (logout-CSRF protection)."""
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+
+        response = self.client.post(reverse('logout'))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_login_failure_shows_error(self):
+        response = self.client.post(reverse('login'), {
+            'username': 'admin@example.com', 'password': 'wrong-password',
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, 'Please enter a correct')
+
+    def test_login_brute_force_throttled(self):
+        for _ in range(10):
+            self.client.post(reverse('login'), {
+                'username': 'admin@example.com', 'password': 'wrong-password',
+            })
+        response = self.client.post(reverse('login'), {
+            'username': 'admin@example.com', 'password': 'wrong-password',
+        })
+        self.assertEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+
+    def test_robots_txt(self):
+        response = self.client.get('/robots.txt')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        content = response.content.decode()
+        self.assertIn('Disallow: /admin/', content)
+        self.assertIn('Disallow: /dashboard/', content)
+
+
+class ResumeUpsertTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = _make_superuser()
+
+    def test_second_resume_post_updates_instead_of_duplicating(self):
+        # CI has no Cloudinary credentials, so stub the URL fields (they are
+        # irrelevant to the upsert behavior under test).
+        self.client.force_authenticate(self.user)
+        with patch.object(ResumeSerializer, 'get_file_url', return_value=None), \
+             patch.object(ResumeSerializer, 'get_download_url', return_value=None):
+            r1 = self.client.post('/api/resume/', {'resume': 'old.pdf'})
+            self.assertEqual(r1.status_code, status.HTTP_200_OK)
+            r2 = self.client.post('/api/resume/', {'resume': 'new.pdf'})
+            self.assertEqual(r2.status_code, status.HTTP_200_OK)
+        self.assertEqual(Resume.objects.filter(user=self.user).count(), 1)
+
+
+class DashboardApiShapeTests(TestCase):
+    """Dashboard JS expects plain arrays; DRF pagination must not wrap these."""
+    def setUp(self):
+        self.client = APIClient()
+        self.user = _make_superuser()
+        self.section = Tech_Section.objects.create(name='Frontend')
+
+    def test_tech_stack_list_is_plain_array(self):
+        TechStack.objects.create(name='Django', section=self.section)
+        response = self.client.get('/api/tech-stack/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(response.data[0]['name'], 'Django')
+
+    def test_profile_list_is_plain_array(self):
+        self.client.force_authenticate(self.user)
+        Profile.objects.create(user=self.user, name='Owner')
+        response = self.client.get('/api/profile/')
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(response.data[0]['name'], 'Owner')
+
+    def test_projects_list_is_plain_array(self):
+        self.client.force_authenticate(self.user)
+        Project.objects.create(
+            user=self.user, title='Demo', description='D', motive='M', problem_statement='P'
+        )
+        response = self.client.get('/api/projects/')
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(response.data[0]['title'], 'Demo')
 
 
 class MigrationConsistencyTests(TestCase):

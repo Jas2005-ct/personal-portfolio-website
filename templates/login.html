@@ -13,12 +13,25 @@
 <body class="font-outfit bg-aquamarine-900 text-slate_blue-300 min-h-screen flex items-center justify-center px-4">
     <div class="w-full max-w-md bg-white/90 border border-pearl_aqua-800 shadow-soft rounded-3xl p-8 md:p-10">
         <h3 class="text-3xl font-extrabold text-slate-900 mb-8 text-center">Login</h3>
-        <form method="post">
+        <form method="post" novalidate>
             {% csrf_token %}
+            {% if rate_limited %}
+                <div class="mb-4 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2.5 text-amber-700 text-sm">
+                    Too many failed login attempts. Please try again later.
+                </div>
+            {% elif form.non_field_errors %}
+                <div class="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-2.5 text-red-600 text-sm">
+                    {{ form.non_field_errors.0 }}
+                </div>
+            {% endif %}
             {% for field in form %}
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-600 mb-1">{{ field.label }}</label>
-                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate_blue focus:ring-1 focus:ring-slate_blue transition-colors duration-300">
+                    <label class="block text-sm font-medium text-slate-600 mb-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
+                        id="{{ field.id_for_label }}"
+                        {% if forloop.first and not form.non_field_errors %}autofocus{% endif %}
+                        autocomplete="{% if field.name == 'username' %}email{% else %}current-password{% endif %}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate_blue focus:ring-1 focus:ring-slate_blue transition-colors duration-300">
                     {% if field.errors %}
                         <div class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</div>
                     {% endif %}

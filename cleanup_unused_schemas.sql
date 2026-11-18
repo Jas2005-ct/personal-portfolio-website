@@ -1,5 +1,5 @@
 -- Transactional script to drop unused Supabase schemas from local DB
--- Usage: psql "postgresql://postgres:0728@localhost:5432/personal_portfolio" -f cleanup_unused_schemas.sql
+-- Usage: psql "postgresql://postgres:<PASSWORD>@localhost:5432/personal_portfolio" -f cleanup_unused_schemas.sql
 
 \echo '=== Pre-drop inventory ==='
 SELECT nspname, count(*) as table_count
