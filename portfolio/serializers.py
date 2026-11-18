@@ -152,5 +152,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = '__all__'
-        read_only_fields = ['user']
+        # Explicit fields so the internal user PK is never exposed.
+        fields = [
+            'id', 'name', 'title', 'bio', 'profile_image', 'phone', 'address',
+            'technologies', 'tech_stack_ids', 'philosophy',
+            'now_building', 'currently_learning', 'email',
+        ]
+        read_only_fields = ['technologies', 'email']

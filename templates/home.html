@@ -28,6 +28,8 @@
     <meta property="og:description" content="{% if profile %}{{ profile.bio|truncatewords:30 }}{% endif %}">
     <meta property="og:image"
         content="{% if profile and profile.profile_image %}{{ profile.profile_image.url }}{% endif %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -43,8 +45,33 @@
 
     <!-- Background gradients -->
     <div class="fixed inset-0 -z-10 pointer-events-none bg-aquamarine-900"
-        style="background-image: radial-gradient(circle at 12% 18%, rgba(231,190,255,0.45) 0%, transparent 42%), radial-gradient(circle at 88% 82%, rgba(220,237,249,0.55) 0%, transparent 42%), radial-gradient(circle at 50% 50%, rgba(229,255,248,0.9) 0%, transparent 55%); background-attachment: fixed;">
+        style="background-image: radial-gradient(circle at 12% 18%, rgba(231,190,255,0.45) 0%, transparent 42%), radial-gradient(circle at 88% 82%, rgba(220,237,249,0.55) 0%, transparent 42%), radial-gradient(circle at 50% 50%, rgba(229,255,248,0.9) 0%, transparent 55%);">
     </div>
+
+    <!-- SVG sprite: icons reused across the page (avoids duplicating large paths) -->
+    <svg class="hidden" aria-hidden="true">
+        <symbol id="icon-github" viewBox="0 0 24 24">
+            <path fill="currentColor" fill-rule="evenodd"
+                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"
+                clip-rule="evenodd" />
+        </symbol>
+        <symbol id="icon-external" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        </symbol>
+        <symbol id="icon-send" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" />
+        </symbol>
+        <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </symbol>
+        <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </symbol>
+    </svg>
 
     <!-- Loader -->
     <div id="loader"
@@ -104,7 +131,14 @@
             <div id="hero-img-container"
                 class="w-60 h-60 rounded-full mx-auto mb-12 overflow-hidden border-4 border-slate_blue shadow-soft-hover ring-4 ring-fresh_sky-800 motion-safe:animate-zoom-in">
                 <img id="hero-img" src="{{ profile.profile_image.url|optimized:400 }}" alt="Profile"
+                    width="240" height="240" fetchpriority="high" decoding="async"
                     class="w-full h-full object-cover">
+            </div>
+            {% else %}
+            <div class="w-60 h-60 rounded-full mx-auto mb-12 bg-gradient-to-br from-slate_blue to-fresh_sky flex items-center justify-center shadow-soft-hover ring-4 ring-fresh_sky-800 motion-safe:animate-zoom-in">
+                <span class="text-6xl font-black text-white uppercase">
+                    {{ profile.name|default:"Portfolio"|slice:":1" }}
+                </span>
             </div>
             {% endif %}
             <h1 id="hero-name"
@@ -119,11 +153,7 @@
                 class="flex flex-wrap justify-center gap-4 motion-safe:animate-fade-in-up motion-safe:[animation-delay:600ms]">
                 <button type="button" data-modal-open="contactModal"
                     class="inline-flex items-center justify-center gap-2 bg-slate_blue text-white font-bold uppercase tracking-wide text-lg px-8 py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong hover:-translate-y-0.5 shadow-soft">
-                    <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" />
-                    </svg> Contact
+                    <svg class="icon w-5 h-5" aria-hidden="true"><use href="#icon-send"></use></svg> Contact
                 </button>
                 {% if resume %}
                 <a href="{{ resume.resume.url }}" id="resume-btn"
@@ -298,7 +328,7 @@
                                 <div
                                     class="group flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-pearl_aqua-800 bg-white shadow-soft transition-all duration-300 ease-smooth hover:border-slate_blue hover:shadow-soft-hover hover:-translate-y-0.5">
                                     {% if tech.icon %}
-                                    <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}"
+                                    <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}" loading="lazy" decoding="async"
                                         class="w-7 h-7 object-contain transition-transform duration-300 ease-smooth group-hover:scale-110 group-hover:rotate-6">
                                     {% endif %}
                                     <span class="font-semibold text-slate-800 text-sm whitespace-nowrap">{{ tech.name }}</span>
@@ -329,7 +359,7 @@
                     <div
                         class="cert-card h-full bg-white border border-pearl_aqua-800 shadow-soft rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover group">
                         {% if cert.image %}
-                        <img src="{{ cert.image.url|optimized:600 }}"
+                        <img src="{{ cert.image.url|optimized:600 }}" loading="lazy" decoding="async"
                             class="w-full h-60 object-cover border-b border-pearl_aqua-800 transition-transform duration-500 ease-smooth group-hover:scale-110"
                             alt="{{ cert.course }}">
                         {% else %}
@@ -462,14 +492,30 @@
     <!-- Projects Section -->
     <section id="projects" class="py-20 md:py-28 scroll-reveal">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-slate-800">
-                Projects
-                <span
-                    class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-container">
+            <div class="relative flex items-center justify-center mb-10 md:mb-16">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-center text-slate-800">
+                    Projects
+                    <span
+                        class="block w-28 h-1.5 bg-gradient-to-r from-slate_blue via-sky_surge to-aquamarine mx-auto mt-4 rounded-full"></span>
+                </h2>
+                {% if projects|length > 3 %}
+                <div class="hidden md:flex absolute right-0 gap-2">
+                    <button type="button" id="projects-prev" aria-label="Previous projects"
+                        class="w-11 h-11 flex items-center justify-center rounded-full bg-white/90 border border-pearl_aqua-800 text-slate_blue shadow-soft transition-all duration-300 hover:bg-slate_blue hover:text-white hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white/90 disabled:hover:text-slate_blue disabled:hover:scale-100">
+                        <svg class="icon w-5 h-5" aria-hidden="true"><use href="#icon-chevron-left"></use></svg>
+                    </button>
+                    <button type="button" id="projects-next" aria-label="Next projects"
+                        class="w-11 h-11 flex items-center justify-center rounded-full bg-white/90 border border-pearl_aqua-800 text-slate_blue shadow-soft transition-all duration-300 hover:bg-slate_blue hover:text-white hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white/90 disabled:hover:text-slate_blue disabled:hover:scale-100">
+                        <svg class="icon w-5 h-5" aria-hidden="true"><use href="#icon-chevron-right"></use></svg>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            <div id="projects-container"
+                class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 projects-scroll scroll-smooth">
                 {% for proj in projects %}
-                <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
+                <div class="reveal-child snap-start shrink-0 w-full sm:w-[calc(50%_-_0.75rem)] lg:w-[calc(33.333%_-_1rem)]"
+                    style="transition-delay: {% widthratio forloop.counter0 1 100 %}ms">
                     <div class="project-card h-full flex flex-col bg-white border border-pearl_aqua-800 shadow-soft rounded-3xl p-6 cursor-pointer transition-all duration-500 ease-smooth hover:-translate-y-2 hover:scale-[1.02] hover:border-slate_blue hover:shadow-soft-hover group"
                         data-project-title="{{ proj.title }}" data-project-desc="{{ proj.description }}"
                         data-project-motive="{{ proj.motive }}" data-project-problem="{{ proj.problem_statement }}"
@@ -478,7 +524,7 @@
                         data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
 
                         {% if proj.image %}
-                        <img src="{{ proj.image.url|optimized:800 }}"
+                        <img src="{{ proj.image.url|optimized:800 }}" loading="lazy" decoding="async"
                             class="w-full h-60 object-cover rounded-2xl mb-4 border border-pearl_aqua-800 transition-transform duration-500 ease-smooth group-hover:scale-[1.03] group-hover:border-slate_blue"
                             alt="{{ proj.title }}">
                         {% endif %}
@@ -492,25 +538,18 @@
                         <p class="text-slate-600 flex-grow">{{ proj.description|truncatechars:100 }}</p>
                         <div class="flex gap-6 mt-4 pt-4">
                             {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"
-                                aria-label="GitHub"
+                                aria-label="GitHub" rel="noopener noreferrer"
                                 class="text-slate_blue-400 transition-all duration-300 hover:text-slate_blue hover:scale-125"><svg
-                                    class="icon w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"
-                                        clip-rule="evenodd" />
-                                </svg></a>{% endif %}
+                                    class="icon w-7 h-7" aria-hidden="true"><use href="#icon-github"></use></svg></a>{% endif %}
                             {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank" aria-label="Live demo"
+                                rel="noopener noreferrer"
                                 class="text-slate_blue-400 transition-all duration-300 hover:text-fresh_sky hover:scale-125"><svg
-                                    class="icon w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                                </svg></a>{% endif %}
+                                    class="icon w-7 h-7" aria-hidden="true"><use href="#icon-external"></use></svg></a>{% endif %}
                         </div>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-center text-slate-500 col-span-full w-full">No projects listed.</p>
+                <p class="text-center text-slate-500 w-full">No projects listed.</p>
                 {% endfor %}
             </div>
         </div>
@@ -522,15 +561,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <button type="button" data-modal-open="contactModal"
                 class="inline-flex items-center justify-center gap-2 bg-slate_blue text-white font-bold uppercase tracking-wide text-lg px-8 py-3 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong hover:-translate-y-0.5 shadow-soft">
-                <svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                    aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875 5.25 5.25 0 0 0 6 12Zm0 0h13.5" />
-                </svg> Send a Message
+                <svg class="icon w-5 h-5" aria-hidden="true"><use href="#icon-send"></use></svg> Send a Message
             </button>
-            <div class="flex flex-wrap justify-center gap-8 mt-10" id="social-links-container">
-                <!-- Social links injected here -->
-            </div>
         </div>
     </section>
 
@@ -662,63 +694,105 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
         (function () {
-            const iconGithub = '<svg class="icon w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.117-1.46-1.117-1.46-.91-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" clip-rule="evenodd"/></svg>';
-            const iconExternal = '<svg class="icon w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>';
-            const badgeClass = 'inline-block mr-1 mb-1 px-2 py-0.5 text-sm rounded-full bg-cloudy_sky-900 border border-cloudy_sky-700 text-cloudy_sky-300 font-medium';
-            const btnPrimary = 'inline-flex items-center justify-center gap-2 bg-slate_blue text-white font-bold uppercase tracking-wide px-6 py-2.5 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong';
-            const btnOutline = 'inline-flex items-center justify-center gap-2 border-2 border-slate_blue-700 text-slate_blue-300 font-bold px-6 py-2.5 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-300 hover:text-white';
+            'use strict';
+
+            var openModals = [];
+            var lastFocused = null;
+
+            function showToast(message, isError) {
+                var toast = document.createElement('div');
+                toast.setAttribute('role', 'status');
+                toast.setAttribute('aria-live', 'polite');
+                toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[10000] px-6 py-3 rounded-full text-white font-semibold shadow-soft-strong transition-all duration-300 ease-smooth opacity-0 translate-y-4 ' +
+                    (isError ? 'bg-red-500' : 'bg-emerald-500');
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                requestAnimationFrame(function () {
+                    toast.classList.remove('opacity-0', 'translate-y-4');
+                });
+                setTimeout(function () {
+                    toast.classList.add('opacity-0', 'translate-y-4');
+                    setTimeout(function () { toast.remove(); }, 300);
+                }, 4000);
+            }
+
+            function getFocusable(modal) {
+                return modal.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])');
+            }
 
             function openModal(id) {
-                const modal = document.getElementById(id);
+                var modal = document.getElementById(id);
                 if (!modal) return;
+                lastFocused = document.activeElement;
+                openModals.push(modal);
                 modal.classList.add('is-open');
                 modal.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
+                var focusable = getFocusable(modal);
+                if (focusable.length) focusable[0].focus();
             }
 
             function closeModal(modal) {
                 modal.classList.remove('is-open');
                 modal.setAttribute('aria-hidden', 'true');
-                if (!document.querySelector('.modal-overlay.is-open')) {
+                openModals = openModals.filter(function (m) { return m !== modal; });
+                if (!openModals.length) {
                     document.body.style.overflow = '';
+                    if (lastFocused) { lastFocused.focus(); lastFocused = null; }
                 }
             }
 
             function closeAllModals() {
-                document.querySelectorAll('.modal-overlay.is-open').forEach(closeModal);
+                openModals.slice().forEach(closeModal);
             }
 
-            document.querySelectorAll('[data-modal-open]').forEach(btn => {
-                btn.addEventListener('click', () => openModal(btn.getAttribute('data-modal-open')));
+            document.querySelectorAll('[data-modal-open]').forEach(function (btn) {
+                btn.addEventListener('click', function () { openModal(btn.getAttribute('data-modal-open')); });
             });
 
-            document.querySelectorAll('[data-modal-close]').forEach(el => {
-                el.addEventListener('click', () => {
-                    const modal = el.closest('.modal-overlay');
+            document.querySelectorAll('[data-modal-close]').forEach(function (el) {
+                el.addEventListener('click', function () {
+                    var modal = el.closest('.modal-overlay');
                     if (modal) closeModal(modal);
                 });
             });
 
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') closeAllModals();
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && openModals.length) {
+                    closeAllModals();
+                    return;
+                }
+                // Focus trap: keep Tab cycling inside the topmost open modal.
+                if (e.key === 'Tab' && openModals.length) {
+                    var focusable = Array.prototype.slice.call(getFocusable(openModals[openModals.length - 1]))
+                        .filter(function (el) { return el.offsetParent !== null; });
+                    if (!focusable.length) return;
+                    var first = focusable[0];
+                    var last = focusable[focusable.length - 1];
+                    if (e.shiftKey && document.activeElement === first) {
+                        e.preventDefault(); last.focus();
+                    } else if (!e.shiftKey && document.activeElement === last) {
+                        e.preventDefault(); first.focus();
+                    } else if (!document.getElementById(openModals[openModals.length - 1].id).contains(document.activeElement)) {
+                        e.preventDefault(); first.focus();
+                    }
+                }
             });
 
             // Mobile nav
-            const navToggle = document.getElementById('nav-toggle');
-            const navbarNav = document.getElementById('navbarNav');
+            var navToggle = document.getElementById('nav-toggle');
+            var navbarNav = document.getElementById('navbarNav');
             if (navToggle && navbarNav) {
-                navToggle.addEventListener('click', () => {
-                    const isOpen = navbarNav.classList.toggle('hidden') === false;
+                navToggle.addEventListener('click', function () {
+                    var isOpen = navbarNav.classList.toggle('hidden') === false;
                     navbarNav.classList.toggle('flex', isOpen);
                     navbarNav.classList.toggle('flex-col', isOpen);
-                    navToggle.setAttribute('aria-expanded', isOpen);
+                    navToggle.setAttribute('aria-expanded', String(isOpen));
                 });
-                navbarNav.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
+                navbarNav.querySelectorAll('a').forEach(function (link) {
+                    link.addEventListener('click', function () {
                         if (window.innerWidth < 768) {
                             navbarNav.classList.add('hidden');
                             navbarNav.classList.remove('flex', 'flex-col');
@@ -728,130 +802,209 @@
                 });
             }
 
-            $(document).ready(function () {
-                $('#year').text(new Date().getFullYear());
+            function onReady(fn) {
+                if (document.readyState !== 'loading') { fn(); }
+                else { document.addEventListener('DOMContentLoaded', fn); }
+            }
 
-                setTimeout(function () {
-                    const loader = document.getElementById('loader');
+            onReady(function () {
+                document.getElementById('year').textContent = String(new Date().getFullYear());
+
+                // Hide the loader as soon as the page is ready (no artificial delay).
+                var loader = document.getElementById('loader');
+                function hideLoader() {
                     loader.style.opacity = '0';
-                    setTimeout(() => loader.classList.add('hidden'), 500);
-                }, 500);
+                    setTimeout(function () { loader.classList.add('hidden'); }, 500);
+                }
+                if (document.readyState === 'complete') { hideLoader(); }
+                else { window.addEventListener('load', hideLoader); }
 
-                $('.project-card').click(function (e) {
-                    if ($(e.target).closest('a').length) return;
+                var badgeClass = 'inline-block mr-1 mb-1 px-2 py-0.5 text-sm rounded-full bg-cloudy_sky-900 border border-cloudy_sky-700 text-cloudy_sky-300 font-medium';
+                var btnPrimary = 'inline-flex items-center justify-center gap-2 bg-slate_blue text-white font-bold uppercase tracking-wide px-6 py-2.5 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-600 hover:shadow-soft-strong';
+                var btnOutline = 'inline-flex items-center justify-center gap-2 border-2 border-slate_blue-700 text-slate_blue-300 font-bold px-6 py-2.5 rounded-full transition-all duration-300 ease-smooth hover:bg-slate_blue-300 hover:text-white';
 
-                    const card = $(this);
-                    $('#projectModalTitle').text(card.data('project-title'));
-                    $('#projectModalDesc').html(`<p class="text-lg text-slate-600 text-justify leading-relaxed">${card.data('project-desc')}</p>`);
-                    $('#projectModalMotive').html(`<p class="text-slate-600 text-justify leading-relaxed">${card.data('project-motive') || ''}</p>`);
-                    $('#projectModalProblem').html(`<p class="text-slate-600 text-justify leading-relaxed">${card.data('project-problem') || ''}</p>`);
+                function iconSvg(symbolId) {
+                    return '<svg class="icon w-5 h-5" aria-hidden="true"><use href="' + symbolId + '"></use></svg>';
+                }
 
-                    const impact = card.data('project-impact');
-                    const arch = card.data('project-arch');
+                // Project details modal (textContent only - never innerHTML for user data)
+                document.querySelectorAll('.project-card').forEach(function (card) {
+                    card.addEventListener('click', function (e) {
+                        if (e.target.closest('a')) return;
+                        var data = card.dataset;
+                        var setText = function (el, value, fallback) {
+                            el.textContent = value || fallback || '';
+                        };
 
-                    if (impact && impact !== 'None') {
-                        $('#projectModalImpact').html(`<p class="text-slate-600 text-justify leading-relaxed">${impact}</p>`);
-                        $('#impact-container').removeClass('hidden');
-                    } else {
-                        $('#impact-container').addClass('hidden');
-                    }
+                        setText(document.getElementById('projectModalTitle'), data.projectTitle, 'Project');
+                        var desc = document.getElementById('projectModalDesc');
+                        desc.innerHTML = '';
+                        var p = document.createElement('p');
+                        p.className = 'text-lg text-slate-600 text-justify leading-relaxed';
+                        p.textContent = data.projectDesc || '';
+                        desc.appendChild(p);
 
-                    if (arch && arch !== 'None') {
-                        $('#projectModalArchitecture').html(`<p class="text-slate-600 text-justify leading-relaxed">${arch}</p>`);
-                        $('#architecture-container').removeClass('hidden');
-                    } else {
-                        $('#architecture-container').addClass('hidden');
-                    }
+                        var fillBlock = function (blockId, textId, value) {
+                            var container = document.getElementById(blockId);
+                            var textEl = document.getElementById(textId);
+                            if (value && value !== 'None') {
+                                textEl.textContent = value;
+                                container.classList.remove('hidden');
+                            } else {
+                                container.classList.add('hidden');
+                            }
+                        };
+                        fillBlock('impact-container', 'projectModalImpact', data.projectImpact);
+                        fillBlock('architecture-container', 'projectModalArchitecture', data.projectArch);
 
-                    const img = card.data('project-img');
-                    if (img) {
-                        $('#projectModalImg').attr('src', img).removeClass('hidden');
-                    } else {
-                        $('#projectModalImg').addClass('hidden');
-                    }
-
-                    const tech = card.data('project-tech');
-                    let techHtml = '';
-                    if (tech) {
-                        tech.split(',').forEach(t => {
-                            const trimmed = t.trim();
-                            if (trimmed) techHtml += `<span class="${badgeClass}">${trimmed}</span>`;
+                        ['projectModalMotive', 'projectModalProblem'].forEach(function (id) {
+                            var el = document.getElementById(id);
+                            el.textContent = '';
+                            var block = document.createElement('p');
+                            block.className = 'text-slate-600 text-justify leading-relaxed';
+                            block.textContent = data[id === 'projectModalMotive' ? 'projectMotive' : 'projectProblem'] || '';
+                            el.appendChild(block);
                         });
-                    }
-                    $('#projectModalTech').html(techHtml);
 
-                    let linksHtml = '';
-                    const github = card.data('project-github');
-                    const live = card.data('project-live');
-                    if (github && github !== 'None') {
-                        linksHtml += `<a href="${github}" target="_blank" class="${btnOutline}">${iconGithub} GitHub</a>`;
-                    }
-                    if (live && live !== 'None') {
-                        linksHtml += `<a href="${live}" target="_blank" class="${btnPrimary}">${iconExternal} Live Demo</a>`;
-                    }
-                    $('#projectModalLinks').html(linksHtml);
+                        var img = document.getElementById('projectModalImg');
+                        if (data.projectImg) {
+                            img.src = data.projectImg;
+                            img.classList.remove('hidden');
+                        } else {
+                            img.classList.add('hidden');
+                            img.removeAttribute('src');
+                        }
 
-                    openModal('projectModal');
+                        var techWrap = document.getElementById('projectModalTech');
+                        techWrap.innerHTML = '';
+                        (data.projectTech || '').split(',').forEach(function (t) {
+                            var trimmed = t.trim();
+                            if (!trimmed) return;
+                            var badge = document.createElement('span');
+                            badge.className = badgeClass;
+                            badge.textContent = trimmed;
+                            techWrap.appendChild(badge);
+                        });
+
+                        var links = document.getElementById('projectModalLinks');
+                        links.innerHTML = '';
+                        var mkLink = function (href, symbol, label, cls) {
+                            var a = document.createElement('a');
+                            a.href = href;
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            a.className = cls;
+                            a.innerHTML = iconSvg(symbol);
+                            a.appendChild(document.createTextNode(' ' + label));
+                            return a;
+                        };
+                        if (data.projectGithub && data.projectGithub !== 'None') {
+                            links.appendChild(mkLink(data.projectGithub, '#icon-github', 'GitHub', btnOutline));
+                        }
+                        if (data.projectLive && data.projectLive !== 'None') {
+                            links.appendChild(mkLink(data.projectLive, '#icon-external', 'Live Demo', btnPrimary));
+                        }
+
+                        openModal('projectModal');
+                    });
                 });
 
-                $('#resume-btn').click(function (e) {
-                    e.preventDefault();
-                    const fileUrl = $(this).attr('href');
-                    const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+                // Resume preview: let the browser render PDFs natively (no third-party viewer).
+                var resumeBtn = document.getElementById('resume-btn');
+                if (resumeBtn) {
+                    resumeBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        var fileUrl = resumeBtn.getAttribute('href');
+                        var img = document.getElementById('resumeModalImg');
+                        var frame = document.getElementById('resumeModalFrame');
 
-                    $('#resumeModalImg').addClass('hidden');
-                    $('#resumeModalFrame').addClass('hidden');
+                        img.classList.add('hidden');
+                        frame.classList.add('hidden');
 
-                    if (isPdf) {
-                        const jpgUrl = fileUrl.replace(/\.pdf$/i, '.jpg');
-                        $('#resumeModalImg').attr('src', jpgUrl).removeClass('hidden');
+                        if (/\.(png|jpe?g|webp|gif)$/i.test(fileUrl)) {
+                            img.src = fileUrl;
+                            img.classList.remove('hidden');
+                        } else {
+                            frame.src = fileUrl;
+                            frame.classList.remove('hidden');
+                        }
+                        openModal('resumeModal');
+                    });
+                }
 
-                        $('#resumeModalImg').off('error').on('error', function () {
-                            $(this).addClass('hidden');
-                            const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-                            $('#resumeModalFrame').attr('src', viewerUrl).removeClass('hidden');
-                        });
-                    } else {
-                        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-                        $('#resumeModalFrame').attr('src', viewerUrl).removeClass('hidden');
-                    }
-                    openModal('resumeModal');
-                });
+                // Contact form: POST to the API, feedback via toast (no alert()).
+                var contactForm = document.getElementById('contact-form');
+                if (contactForm) {
+                    contactForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        var submitBtn = contactForm.querySelector('button[type="submit"]');
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
 
-                $('#contact-form').submit(function (e) {
-                    e.preventDefault();
-                    const formData = new FormData(this);
+                        fetch('/api/contact/', {
+                            method: 'POST',
+                            body: new FormData(contactForm),
+                        })
+                            .then(function (res) {
+                                if (!res.ok) throw new Error('Request failed');
+                                return res;
+                            })
+                            .then(function () {
+                                showToast('Message sent successfully!', false);
+                                contactForm.reset();
+                                closeModal(document.getElementById('contactModal'));
+                            })
+                            .catch(function () {
+                                showToast('Error sending message. Please try again.', true);
+                            })
+                            .finally(function () {
+                                submitBtn.disabled = false;
+                                submitBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+                            });
+                    });
+                }
 
-                    $.ajax({
-                        url: '/api/contact/',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function () {
-                            alert('Message sent successfully!');
-                            $('#contact-form')[0].reset();
-                            closeModal(document.getElementById('contactModal'));
-                        },
-                        error: function (err) {
-                            console.error(err);
-                            alert('Error sending message. Please try again.');
+                // Projects carousel (3 cards visible; scroll for the rest)
+                var projectsTrack = document.getElementById('projects-container');
+                var prevBtn = document.getElementById('projects-prev');
+                var nextBtn = document.getElementById('projects-next');
+                if (projectsTrack && prevBtn && nextBtn) {
+                    var scrollByCard = function (direction) {
+                        var wrapper = projectsTrack.querySelector('.reveal-child');
+                        if (!wrapper) return;
+                        var styles = window.getComputedStyle(projectsTrack);
+                        var gap = parseFloat(styles.columnGap || styles.gap) || 0;
+                        var amount = wrapper.getBoundingClientRect().width + gap;
+                        projectsTrack.scrollBy({ left: direction * amount, behavior: 'smooth' });
+                    };
+                    var updateArrows = function () {
+                        var maxScroll = projectsTrack.scrollWidth - projectsTrack.clientWidth;
+                        prevBtn.disabled = projectsTrack.scrollLeft <= 1;
+                        nextBtn.disabled = projectsTrack.scrollLeft >= maxScroll - 1;
+                    };
+                    prevBtn.addEventListener('click', function () { scrollByCard(-1); });
+                    nextBtn.addEventListener('click', function () { scrollByCard(1); });
+                    projectsTrack.addEventListener('scroll', updateArrows, { passive: true });
+                    window.addEventListener('resize', updateArrows);
+                    updateArrows();
+                }
+
+                // Certificate modal
+                document.querySelectorAll('.cert-card').forEach(function (card) {
+                    card.addEventListener('click', function () {
+                        var img = card.querySelector('img');
+                        var title = card.querySelector('h5');
+                        if (img && img.src) {
+                            document.getElementById('certModalImg').src = img.src;
+                            document.getElementById('certModalTitle').textContent = title ? title.textContent : 'Certificate';
+                            openModal('certificateModal');
                         }
                     });
                 });
 
-                $(document).on('click', '.cert-card', function () {
-                    const img = $(this).find('img').attr('src');
-                    const title = $(this).find('h5').text();
-                    if (img) {
-                        $('#certModalImg').attr('src', img);
-                        $('#certModalTitle').text(title);
-                        openModal('certificateModal');
-                    }
-                });
-
-                const observer = new IntersectionObserver((entries, obs) => {
-                    entries.forEach(entry => {
+                // Scroll-reveal
+                var observer = new IntersectionObserver(function (entries, obs) {
+                    entries.forEach(function (entry) {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('is-visible');
                             obs.unobserve(entry.target);
@@ -859,7 +1012,7 @@
                     });
                 }, { root: null, rootMargin: '0px', threshold: 0.1 });
 
-                document.querySelectorAll('section.scroll-reveal').forEach(section => {
+                document.querySelectorAll('section.scroll-reveal').forEach(function (section) {
                     observer.observe(section);
                 });
             });
