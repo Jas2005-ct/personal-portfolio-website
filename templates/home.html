@@ -305,24 +305,16 @@
                     <div
                         class="h-full bg-card border border-line shadow-soft rounded-xl p-5 md:p-6 transition-all duration-300 ease-smooth hover:border-accent-500 hover:shadow-soft-hover">
                         <h3 class="text-base font-bold mb-4 text-ink-900">Tech Stack</h3>
-                        {% regroup tech_stack by section as tech_sections %}
-                        <div class="flex flex-col gap-4 max-h-[22rem] overflow-y-auto pr-1 tech-scroll">
-                            {% for section_group in tech_sections %}
-                            <div class="shrink-0">
-                                <h4 class="text-[11px] font-semibold uppercase tracking-widest text-ink-500 mb-2">{{ section_group.grouper.name }}</h4>
-                                <div class="flex flex-wrap gap-1.5">
-                                    {% for tech in section_group.list %}
-                                    <span
-                                        class="group inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-line bg-surface text-xs font-medium text-ink-700 transition-all duration-300 ease-smooth hover:border-accent-500 hover:text-accent-500 cursor-default">
-                                        {% if tech.icon %}
-                                        <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}" loading="lazy" decoding="async"
-                                            class="w-3.5 h-3.5 object-contain transition-transform duration-300 ease-smooth group-hover:scale-110">
-                                        {% endif %}
-                                        <span class="whitespace-nowrap">{{ tech.name }}</span>
-                                    </span>
-                                    {% endfor %}
-                                </div>
-                            </div>
+                        <div class="flex flex-wrap gap-1.5 max-h-[22rem] overflow-y-auto pr-1 tech-scroll">
+                            {% for tech in tech_stack %}
+                            <span
+                                class="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-line bg-surface text-xs font-medium text-ink-700 transition-all duration-300 ease-smooth hover:border-accent-500 hover:text-accent-500 cursor-default">
+                                {% if tech.icon %}
+                                <img src="{{ tech.icon.url|optimized:80 }}" alt="{{ tech.name }}" loading="lazy" decoding="async"
+                                    class="w-3.5 h-3.5 object-contain transition-transform duration-300 ease-smooth group-hover:scale-110">
+                                {% endif %}
+                                <span class="whitespace-nowrap">{{ tech.name }}</span>
+                            </span>
                             {% endfor %}
                         </div>
                     </div>
