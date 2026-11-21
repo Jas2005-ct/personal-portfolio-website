@@ -466,28 +466,13 @@
     <!-- Projects Section -->
     <section id="projects" class="py-12 md:py-16 scroll-reveal border-t border-line">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
-            <div class="relative flex items-start justify-between mb-6">
-                <div>
-                    <span class="text-xs font-semibold uppercase tracking-widest text-accent-500">03 — Work</span>
-                    <h2 class="text-2xl md:text-3xl font-bold text-ink-900 mt-1">Projects</h2>
-                </div>
-                {% if projects|length > 3 %}
-                <div class="hidden md:flex gap-2">
-                    <button type="button" id="projects-prev" aria-label="Previous projects"
-                        class="w-9 h-9 flex items-center justify-center rounded-lg bg-card border border-line text-ink-500 shadow-soft transition-all duration-300 hover:bg-accent-500 hover:text-white hover:border-accent-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-card disabled:hover:text-ink-500 disabled:hover:border-line">
-                        <svg class="icon w-4 h-4" aria-hidden="true"><use href="#icon-chevron-left"></use></svg>
-                    </button>
-                    <button type="button" id="projects-next" aria-label="Next projects"
-                        class="w-9 h-9 flex items-center justify-center rounded-lg bg-card border border-line text-ink-500 shadow-soft transition-all duration-300 hover:bg-accent-500 hover:text-white hover:border-accent-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-card disabled:hover:text-ink-500 disabled:hover:border-line">
-                        <svg class="icon w-4 h-4" aria-hidden="true"><use href="#icon-chevron-right"></use></svg>
-                    </button>
-                </div>
-                {% endif %}
+            <div class="mb-6">
+                <span class="text-xs font-semibold uppercase tracking-widest text-accent-500">03 — Work</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-ink-900 mt-1">Projects</h2>
             </div>
-            <div id="projects-container"
-                class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 projects-scroll scroll-smooth">
+            <div id="projects-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {% for proj in projects %}
-                <div class="reveal-child snap-start shrink-0 w-full sm:w-[calc(50%_-_0.5rem)] lg:w-[calc(33.333%_-_0.667rem)]"
+                <div class="reveal-child"
                     style="transition-delay: {% widthratio forloop.counter0 1 60 %}ms">
                     <div class="project-card h-full flex flex-col bg-card border border-line shadow-soft rounded-xl p-4 cursor-pointer transition-all duration-300 ease-smooth hover:border-accent-500 hover:shadow-soft-hover group"
                         data-project-title="{{ proj.title }}" data-project-desc="{{ proj.description }}"
@@ -498,27 +483,29 @@
 
                         {% if proj.image %}
                         <img src="{{ proj.image.url|optimized:800 }}" loading="lazy" decoding="async"
-                            class="w-full h-40 object-cover rounded-lg mb-3 border border-line transition-transform duration-500 ease-smooth group-hover:scale-[1.02]"
+                            class="w-full h-28 object-cover rounded-lg mb-3 border border-line transition-transform duration-500 ease-smooth group-hover:scale-[1.02]"
                             alt="{{ proj.title }}">
                         {% endif %}
-                        <h4 class="text-sm font-semibold text-ink-900 mb-1.5 leading-snug">{{ proj.title }}</h4>
+                        <div class="flex items-start justify-between gap-2 mb-1.5">
+                            <h4 class="text-sm font-semibold text-ink-900 leading-snug">{{ proj.title }}</h4>
+                            <div class="flex items-center gap-2 shrink-0">
+                                {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"
+                                    aria-label="GitHub" rel="noopener noreferrer"
+                                    class="text-ink-400 transition-colors duration-300 hover:text-accent-500"><svg
+                                        class="icon w-4 h-4" aria-hidden="true"><use href="#icon-github"></use></svg></a>{% endif %}
+                                {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank" aria-label="Live demo"
+                                    rel="noopener noreferrer"
+                                    class="text-ink-400 transition-colors duration-300 hover:text-accent-500"><svg
+                                        class="icon w-4 h-4" aria-hidden="true"><use href="#icon-external"></use></svg></a>{% endif %}
+                            </div>
+                        </div>
                         <div class="mb-2 flex flex-wrap gap-1">
                             {% for tech in proj.technologies.all %}
                             <span
                                 class="inline-block px-1.5 py-0.5 text-[11px] rounded-md bg-accent-50 border border-accent-100 text-accent-600 font-medium">{{ tech.name }}</span>
                             {% endfor %}
                         </div>
-                        <p class="text-ink-500 text-sm flex-grow leading-relaxed">{{ proj.description|truncatechars:100 }}</p>
-                        <div class="flex gap-3 mt-3 pt-3 border-t border-line">
-                            {% if proj.github_link %}<a href="{{ proj.github_link }}" target="_blank"
-                                aria-label="GitHub" rel="noopener noreferrer"
-                                class="text-ink-400 transition-colors duration-300 hover:text-accent-500"><svg
-                                    class="icon w-5 h-5" aria-hidden="true"><use href="#icon-github"></use></svg></a>{% endif %}
-                            {% if proj.live_demo %}<a href="{{ proj.live_demo }}" target="_blank" aria-label="Live demo"
-                                rel="noopener noreferrer"
-                                class="text-ink-400 transition-colors duration-300 hover:text-accent-500"><svg
-                                    class="icon w-5 h-5" aria-hidden="true"><use href="#icon-external"></use></svg></a>{% endif %}
-                        </div>
+                        <p class="text-ink-500 text-sm leading-relaxed line-clamp-2">{{ proj.description }}</p>
                     </div>
                 </div>
                 {% empty %}
@@ -941,31 +928,6 @@
                                 submitBtn.classList.remove('opacity-60', 'cursor-not-allowed');
                             });
                     });
-                }
-
-                // Projects carousel (3 cards visible; scroll for the rest)
-                var projectsTrack = document.getElementById('projects-container');
-                var prevBtn = document.getElementById('projects-prev');
-                var nextBtn = document.getElementById('projects-next');
-                if (projectsTrack && prevBtn && nextBtn) {
-                    var scrollByCard = function (direction) {
-                        var wrapper = projectsTrack.querySelector('.reveal-child');
-                        if (!wrapper) return;
-                        var styles = window.getComputedStyle(projectsTrack);
-                        var gap = parseFloat(styles.columnGap || styles.gap) || 0;
-                        var amount = wrapper.getBoundingClientRect().width + gap;
-                        projectsTrack.scrollBy({ left: direction * amount, behavior: 'smooth' });
-                    };
-                    var updateArrows = function () {
-                        var maxScroll = projectsTrack.scrollWidth - projectsTrack.clientWidth;
-                        prevBtn.disabled = projectsTrack.scrollLeft <= 1;
-                        nextBtn.disabled = projectsTrack.scrollLeft >= maxScroll - 1;
-                    };
-                    prevBtn.addEventListener('click', function () { scrollByCard(-1); });
-                    nextBtn.addEventListener('click', function () { scrollByCard(1); });
-                    projectsTrack.addEventListener('scroll', updateArrows, { passive: true });
-                    window.addEventListener('resize', updateArrows);
-                    updateArrows();
                 }
 
                 // Certificate modal
