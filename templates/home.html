@@ -433,10 +433,7 @@
                         {% for cert in certificates %}
                         <div class="reveal-child" style="transition-delay: {% widthratio forloop.counter0 1 60 %}ms">
                             <div
-                                class="cert-card h-full w-full bg-card border border-line shadow-soft rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ease-smooth hover:border-accent-500 hover:shadow-soft-hover group flex gap-3 p-3"
-                                data-cert-title="{{ cert.course }}" data-cert-platform="{{ cert.platform }}"
-                                {% if cert.image %}data-cert-img="{{ cert.image.url|optimized:1600 }}"
-                                data-cert-full="{{ cert.image.url }}" {% endif %}>
+                                class="cert-card h-full w-full bg-card border border-line shadow-soft rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ease-smooth hover:border-accent-500 hover:shadow-soft-hover group flex gap-3 p-3">
                                 {% if cert.image %}
                                 <img src="{{ cert.image.url|optimized:600 }}" loading="lazy" decoding="async"
                                     class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg border border-line shrink-0 transition-transform duration-300 ease-smooth group-hover:scale-105"
@@ -651,31 +648,14 @@
         aria-hidden="true" role="dialog">
         <div class="modal-backdrop absolute inset-0" data-modal-close></div>
         <div
-            class="modal-panel relative w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden bg-card border border-line shadow-soft-hover rounded-xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
-            <!-- Header pinned while the image scrolls -->
-            <div class="flex items-start justify-between gap-3 shrink-0 px-5 py-4 border-b border-line">
-                <div class="min-w-0">
-                    <h5 class="text-base sm:text-lg font-bold text-ink-900 leading-snug" id="certModalTitle">
-                        Certificate</h5>
-                    <p class="text-ink-500 text-xs mt-0.5" id="certModalPlatform"></p>
-                </div>
+            class="modal-panel relative w-full max-w-3xl bg-card border border-line shadow-soft-hover rounded-xl overflow-hidden opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+            <div class="flex items-center justify-between p-4 border-b border-line">
+                <h5 class="text-base font-bold text-ink-900" id="certModalTitle">Certificate</h5>
                 <button type="button" data-modal-close aria-label="Close"
-                    class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg border border-line bg-card text-ink-500 shadow-soft transition-all duration-300 hover:bg-accent-500 hover:text-white hover:border-accent-500">&times;</button>
+                    class="text-ink-400 hover:text-ink-900 text-2xl leading-none transition-colors duration-300">&times;</button>
             </div>
-
-            <!-- Image body: never clips, scrolls if it must -->
-            <div class="flex-1 min-h-0 overflow-y-auto modal-scroll flex items-center justify-center p-4 bg-surface">
-                <img src="" id="certModalImg"
-                    class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg border border-line bg-card shadow-soft"
-                    alt="">
-            </div>
-
-            <!-- Action -->
-            <div class="shrink-0 px-5 py-3 border-t border-line flex items-center justify-between gap-3">
-                <span class="text-ink-400 text-xs">Certificate preview</span>
-                <a href="#" id="certModalLink" target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center justify-center gap-2 border border-line bg-card text-ink-700 font-medium text-sm px-4 py-2 rounded-lg transition-all duration-300 ease-smooth hover:border-accent-500 hover:text-accent-500">View
-                    full size</a>
+            <div class="p-0 text-center">
+                <img src="" id="certModalImg" class="w-full h-auto" alt="Certificate">
             </div>
         </div>
     </div>
@@ -964,23 +944,13 @@
                 // Certificate modal
                 document.querySelectorAll('.cert-card').forEach(function (card) {
                     card.addEventListener('click', function () {
-                        var src = card.getAttribute('data-cert-img');
-                        if (!src) return;
-                        var title = card.getAttribute('data-cert-title') || 'Certificate';
-                        var platform = card.getAttribute('data-cert-platform') || '';
-                        var full = card.getAttribute('data-cert-full') || src;
-
-                        var img = document.getElementById('certModalImg');
-                        img.src = src;
-                        img.alt = title;
-                        document.getElementById('certModalTitle').textContent = title;
-
-                        var platformEl = document.getElementById('certModalPlatform');
-                        platformEl.textContent = platform;
-                        platformEl.classList.toggle('hidden', !platform);
-
-                        document.getElementById('certModalLink').href = full;
-                        openModal('certificateModal');
+                        var img = card.querySelector('img');
+                        var title = card.querySelector('h5');
+                        if (img && img.src) {
+                            document.getElementById('certModalImg').src = img.src;
+                            document.getElementById('certModalTitle').textContent = title ? title.textContent : 'Certificate';
+                            openModal('certificateModal');
+                        }
                     });
                 });
 
