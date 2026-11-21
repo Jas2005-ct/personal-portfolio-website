@@ -526,42 +526,59 @@
         aria-hidden="true" role="dialog">
         <div class="modal-backdrop absolute inset-0" data-modal-close></div>
         <div
-            class="modal-panel relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-card border border-line shadow-soft-hover rounded-xl p-5 opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
-            <div class="flex items-center justify-between mb-4">
-                <h5 class="text-lg font-bold text-ink-900" id="projectModalTitle">Project Title</h5>
+            class="modal-panel relative w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden bg-card border border-line shadow-soft-hover rounded-xl opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-smooth">
+            <!-- Header stays pinned while the body scrolls -->
+            <div class="flex items-start justify-between gap-3 shrink-0 px-5 py-4 border-b border-line">
+                <h5 class="text-base sm:text-lg font-bold text-ink-900 leading-snug" id="projectModalTitle">Project
+                    Title</h5>
                 <button type="button" data-modal-close aria-label="Close"
-                    class="text-ink-400 hover:text-ink-900 text-2xl leading-none transition-colors duration-300">&times;</button>
+                    class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg border border-line bg-card text-ink-500 shadow-soft transition-all duration-300 hover:bg-accent-500 hover:text-white hover:border-accent-500">&times;</button>
             </div>
-            <div class="text-ink-700 text-sm">
-                <img id="projectModalImg" src="" class="rounded-lg mb-4 w-full max-h-[320px] object-cover hidden"
-                    alt="">
-                <div class="mb-3">
-                    <h6 class="text-accent-500 font-semibold mb-1.5 text-xs uppercase tracking-widest">Tech Stack</h6>
-                    <div id="projectModalTech" class="flex flex-wrap gap-1.5"></div>
-                </div>
-                <div class="mb-3">
-                    <h6 class="text-accent-500 font-semibold mb-1.5 text-xs uppercase tracking-widest">Description</h6>
-                    <div id="projectModalDesc"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                    <div>
-                        <h6 class="text-accent-500 font-semibold mb-1.5 text-xs uppercase tracking-widest">Motive</h6>
-                        <div id="projectModalMotive"></div>
+
+            <!-- Scrollable body: rail + narrative -->
+            <div class="flex-1 min-h-0 overflow-y-auto modal-scroll">
+                <div class="grid grid-cols-1 md:grid-cols-[280px_1fr]">
+
+                    <!-- Left rail: visual identity + actions -->
+                    <div
+                        class="p-5 border-b md:border-b-0 md:border-r border-line bg-card md:sticky md:top-0 md:self-start">
+                        <img id="projectModalImg" src=""
+                            class="w-full h-40 object-cover rounded-lg border border-line mb-4 hidden" alt="">
+                        <div class="mb-4">
+                            <h6 class="text-xs font-semibold uppercase tracking-widest text-ink-400 mb-2">Tech Stack</h6>
+                            <div id="projectModalTech" class="flex flex-wrap gap-1.5"></div>
+                        </div>
+                        <div class="flex flex-col gap-2" id="projectModalLinks"></div>
                     </div>
-                    <div>
-                        <h6 class="text-accent-500 font-semibold mb-1.5 text-xs uppercase tracking-widest">Problem Statement</h6>
-                        <div id="projectModalProblem"></div>
+
+                    <!-- Right: narrative, lead summary then details -->
+                    <div class="p-5 text-ink-700 text-sm">
+                        <div class="mb-5">
+                            <div id="projectModalDesc" class="text-[15px] text-ink-700 leading-relaxed"></div>
+                        </div>
+                        <div class="border-t border-line pt-4 mb-4" id="motive-container">
+                            <h6 class="text-xs font-semibold uppercase tracking-widest text-ink-400 mb-1.5">Motive</h6>
+                            <div id="projectModalMotive" class="text-sm text-ink-600 leading-relaxed"></div>
+                        </div>
+                        <div class="border-t border-line pt-4 mb-4" id="problem-container">
+                            <h6
+                                class="text-xs font-semibold uppercase tracking-widest text-ink-400 mb-1.5">Problem
+                                Statement</h6>
+                            <div id="projectModalProblem" class="text-sm text-ink-600 leading-relaxed"></div>
+                        </div>
+                        <div class="border-t border-line pt-4 mb-4 hidden" id="impact-container">
+                            <h6 class="text-xs font-semibold uppercase tracking-widest text-ink-400 mb-1.5">Impact
+                                &amp; Achievements</h6>
+                            <div id="projectModalImpact" class="text-sm text-ink-600 leading-relaxed"></div>
+                        </div>
+                        <div class="border-t border-line pt-4 hidden" id="architecture-container">
+                            <h6 class="text-xs font-semibold uppercase tracking-widest text-ink-400 mb-1.5">Architecture
+                                Notes</h6>
+                            <div id="projectModalArchitecture" class="text-sm text-ink-600 leading-relaxed"></div>
+                        </div>
                     </div>
+
                 </div>
-                <div class="mb-3 hidden" id="impact-container">
-                    <h6 class="text-accent-500 font-semibold mb-1.5 text-xs uppercase tracking-widest">Impact & Achievements</h6>
-                    <div id="projectModalImpact"></div>
-                </div>
-                <div class="mb-3 hidden" id="architecture-container">
-                    <h6 class="text-accent-500 font-semibold mb-1.5 text-xs uppercase tracking-widest">Architecture Notes</h6>
-                    <div id="projectModalArchitecture"></div>
-                </div>
-                <div class="flex flex-wrap gap-2 mt-3" id="projectModalLinks"></div>
             </div>
         </div>
     </div>
@@ -791,8 +808,8 @@
                 else { window.addEventListener('load', hideLoader); }
 
                 var badgeClass = 'inline-block px-1.5 py-0.5 text-xs rounded-md bg-accent-50 border border-accent-100 text-accent-600 font-medium';
-                var btnPrimary = 'inline-flex items-center justify-center gap-2 bg-accent-500 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all duration-300 ease-smooth hover:bg-accent-600';
-                var btnOutline = 'inline-flex items-center justify-center gap-2 border border-line bg-card text-ink-700 font-medium text-sm px-4 py-2 rounded-lg transition-all duration-300 ease-smooth hover:border-accent-500 hover:text-accent-500';
+                var btnPrimary = 'w-full inline-flex items-center justify-center gap-2 bg-accent-500 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all duration-300 ease-smooth hover:bg-accent-600';
+                var btnOutline = 'w-full inline-flex items-center justify-center gap-2 border border-line bg-card text-ink-700 font-medium text-sm px-4 py-2 rounded-lg transition-all duration-300 ease-smooth hover:border-accent-500 hover:text-accent-500';
 
                 function iconSvg(symbolId) {
                     return '<svg class="icon w-5 h-5" aria-hidden="true"><use href="' + symbolId + '"></use></svg>';
@@ -809,11 +826,7 @@
 
                         setText(document.getElementById('projectModalTitle'), data.projectTitle, 'Project');
                         var desc = document.getElementById('projectModalDesc');
-                        desc.innerHTML = '';
-                        var p = document.createElement('p');
-                        p.className = 'text-sm text-ink-600 leading-relaxed';
-                        p.textContent = data.projectDesc || '';
-                        desc.appendChild(p);
+                        desc.textContent = data.projectDesc || '';
 
                         var fillBlock = function (blockId, textId, value) {
                             var container = document.getElementById(blockId);
@@ -825,17 +838,10 @@
                                 container.classList.add('hidden');
                             }
                         };
+                        fillBlock('motive-container', 'projectModalMotive', data.projectMotive);
+                        fillBlock('problem-container', 'projectModalProblem', data.projectProblem);
                         fillBlock('impact-container', 'projectModalImpact', data.projectImpact);
                         fillBlock('architecture-container', 'projectModalArchitecture', data.projectArch);
-
-                        ['projectModalMotive', 'projectModalProblem'].forEach(function (id) {
-                            var el = document.getElementById(id);
-                            el.textContent = '';
-                            var block = document.createElement('p');
-                            block.className = 'text-sm text-ink-600 leading-relaxed';
-                            block.textContent = data[id === 'projectModalMotive' ? 'projectMotive' : 'projectProblem'] || '';
-                            el.appendChild(block);
-                        });
 
                         var img = document.getElementById('projectModalImg');
                         if (data.projectImg) {
