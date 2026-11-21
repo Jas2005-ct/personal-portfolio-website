@@ -478,13 +478,18 @@
                         data-project-title="{{ proj.title }}" data-project-desc="{{ proj.description }}"
                         data-project-motive="{{ proj.motive }}" data-project-problem="{{ proj.problem_statement }}"
                         data-project-impact="{{ proj.impact }}" data-project-arch="{{ proj.architecture_notes }}"
-                        data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}" {% if proj.image %}data-project-img="{{ proj.image.url|optimized:1200 }}" {% endif %}
+                        data-project-github="{{ proj.github_link }}" data-project-live="{{ proj.live_demo }}"
+                        data-project-img="{% if proj.image %}{{ proj.image.url|optimized:1200 }}{% else %}{% static 'img/project_fallback.jpg' %}{% endif %}"
                         data-project-tech="{% for tech in proj.technologies.all %}{{ tech.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if proj.tech_stack %}, {{ proj.tech_stack }}{% endif %}">
 
                         {% if proj.image %}
                         <img src="{{ proj.image.url|optimized:800 }}" loading="lazy" decoding="async"
                             class="w-full h-24 object-cover rounded-lg mb-3 border border-line transition-transform duration-500 ease-smooth group-hover:scale-[1.02]"
                             alt="{{ proj.title }}">
+                        {% else %}
+                        <img src="{% static 'img/project_fallback.jpg' %}" loading="lazy" decoding="async"
+                            class="w-full h-24 object-cover rounded-lg mb-3 border border-line transition-transform duration-500 ease-smooth group-hover:scale-[1.02]"
+                            alt="">
                         {% endif %}
                         <div class="flex items-start justify-between gap-2 mb-1.5">
                             <h4 class="text-sm font-semibold text-ink-900 leading-snug line-clamp-2 min-w-0">{{ proj.title }}</h4>
