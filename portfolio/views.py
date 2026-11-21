@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions, pagination, status
 from django.db.models import Count, Case, When, IntegerField
+from django.db.models.functions import Lower
 from django.db import connection
 from django.core.cache import cache
 from .models import (
@@ -61,17 +62,12 @@ class HomeView(TemplateView):
         context['profile'] = profile
         context['json_ld'] = self._build_json_ld(profile, self.request)
         section_order = ['python', 'frontend', 'database', 'data-analytics']
-        preserve_order = Case(
-            *[When(section__slug=s, then=i) for i, s in enumerate(section_order)],
-            output_field=IntegerField()
-        )
         context['tech_stack'] = (
             TechStack
             .objects
             .select_related('section')
             .filter(section__slug__in=section_order, section__show_on_portfolio=True)
-            .annotate(section_order=preserve_order)
-            .order_by('section_order', 'name')
+            .order_by(Lower('name'))
         )
         context['education'] = Education.objects.filter(user=user)
         context['certificates'] = Certificate.objects.filter(user=user)

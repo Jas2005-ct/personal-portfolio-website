@@ -163,21 +163,29 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['status'], 'ok')
 
-    def test_projects_carousel_controls_only_when_more_than_three(self):
-        """Scroll arrows appear only once a 4th project is added."""
+    def test_projects_render_in_static_grid_without_carousel(self):
+        """All projects render in a static grid; no carousel arrows are emitted."""
         cache.clear()
         for i in range(3):
             Project.objects.create(
                 user=self.user, title=f'Project {i}', description='D',
                 motive='M', problem_statement='P',
             )
-        self.assertNotIn('id="projects-next"', self.client.get('/').content.decode())
+        html = self.client.get('/').content.decode()
+        for i in range(3):
+            self.assertIn(f'Project {i}', html)
+        self.assertNotIn('id="projects-next"', html)
+        self.assertNotIn('id="projects-prev"', html)
+        self.assertNotIn('snap-x snap-mandatory', html)
 
         Project.objects.create(
             user=self.user, title='Fourth Project', description='D',
             motive='M', problem_statement='P',
         )
-        self.assertIn('id="projects-next"', self.client.get('/').content.decode())
+        html = self.client.get('/').content.decode()
+        self.assertIn('Fourth Project', html)
+        self.assertNotIn('id="projects-next"', html)
+        self.assertIn('lg:grid-cols-4', html)
 
     def test_new_project_appears_immediately(self):
         """Adding a project must be visible on the next home-page request (no stale cache)."""
