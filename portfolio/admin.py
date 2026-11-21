@@ -27,4 +27,10 @@ admin.site.register(SocialLink)
 admin.site.register(Resume)
 admin.site.register(Service)
 admin.site.register(Testimonial)
-admin.site.register(ContactMessage)
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('sender_name', 'sender_email', 'subject', 'created_at')
+    search_fields = ('sender_name', 'sender_email', 'subject')
+    readonly_fields = ('created_at',)
+    date_hierarchy = 'created_at'
+

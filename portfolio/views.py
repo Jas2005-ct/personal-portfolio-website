@@ -1,15 +1,15 @@
 import json
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions, pagination, status
 from django.db.models import Count, Case, When, IntegerField
+from django.db.models.functions import Lower
 from django.db import connection
+from django.core.cache import cache
 from .models import (
     Profile, Education, Certificate, Profession,
     TechStack, Tech_Section, Project, SocialLink, Resume, Service, Testimonial,
@@ -23,8 +23,12 @@ from .serializers import (
     TechStackSerializer, Tech_SectionSerializer
 )
 from .mixins import SuperAdminMixin
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
+
+# Basic brute-force protection for the login view (DRF throttling only covers /api/).
+MAX_LOGIN_ATTEMPTS = 10
+LOGIN_ATTEMPT_WINDOW = 60 * 15  # 15 minutes
 
 
 class HealthCheckView(APIView):
@@ -46,7 +50,6 @@ class HealthCheckView(APIView):
         }, status=status)
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
 class HomeView(TemplateView):
     template_name = 'home.html'
 
@@ -59,17 +62,12 @@ class HomeView(TemplateView):
         context['profile'] = profile
         context['json_ld'] = self._build_json_ld(profile, self.request)
         section_order = ['python', 'frontend', 'database', 'data-analytics']
-        preserve_order = Case(
-            *[When(section__slug=s, then=i) for i, s in enumerate(section_order)],
-            output_field=IntegerField()
-        )
         context['tech_stack'] = (
             TechStack
             .objects
             .select_related('section')
             .filter(section__slug__in=section_order, section__show_on_portfolio=True)
-            .annotate(section_order=preserve_order)
-            .order_by('section_order', 'name')
+            .order_by(Lower('name'))
         )
         context['education'] = Education.objects.filter(user=user)
         context['certificates'] = Certificate.objects.filter(user=user)
@@ -113,21 +111,39 @@ class DashboardView(SuperAdminMixin, TemplateView):
         return context
 
 def login_view(request):
+    rate_limited = False
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            if user.is_superuser:
-                return redirect('dashboard')
-            return redirect('home')
+        ip = request.META.get('REMOTE_ADDR', 'unknown')
+        attempts_key = f'login-failed-attempts:{ip}'
+        rate_limited = cache.get(attempts_key, 0) >= MAX_LOGIN_ATTEMPTS
+        if rate_limited:
+            form = AuthenticationForm(request)
+        else:
+            form = AuthenticationForm(request, data=request.POST)
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                cache.delete(attempts_key)
+                if user.is_superuser:
+                    return redirect('dashboard')
+                return redirect('home')
+            # Record the failed attempt for brute-force protection.
+            try:
+                cache.incr(attempts_key)
+            except ValueError:
+                cache.set(attempts_key, 1, LOGIN_ATTEMPT_WINDOW)
     else:
         form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+    response_status = status.HTTP_429_TOO_MANY_REQUESTS if rate_limited else 200
+    return render(request, 'login.html', {'form': form, 'rate_limited': rate_limited},
+                  status=response_status)
 
 def logout_view(request):
-    logout(request)
-    return redirect('login')
+    # Only POST is honoured so a link/img GET request can't log the user out.
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login')
+    return redirect('home')
 
 class PortfolioDataView(APIView):
     def get(self, request):
@@ -175,6 +191,8 @@ class PortfolioDataView(APIView):
 
 class BasePortfolioViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
+    # The dashboard JS consumes these endpoints as plain arrays (no .results wrapper).
+    pagination_class = None
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -218,6 +236,14 @@ class ResumeViewSet(BasePortfolioViewSet):
     queryset = Resume.objects.all()
     serializer_class = ResumeSerializer
 
+    def create(self, request, *args, **kwargs):
+        # A user has a single resume: a second POST updates the existing row.
+        resume, _created = Resume.objects.get_or_create(user=request.user)
+        serializer = self.get_serializer(resume, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class ServiceViewSet(BasePortfolioViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
@@ -242,14 +268,17 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         return self.queryset.none()
 
     def perform_create(self, serializer):
-        user = CustomUser.objects.filter(is_superuser=True).first()
-        if not user:
-            user = CustomUser.objects.first()
+        user = (
+            CustomUser.objects.filter(is_superuser=True).first()
+            or CustomUser.objects.filter(is_staff=True).first()
+            or CustomUser.objects.first()
+        )
         serializer.save(user=user)
 
 class TechStackViewSet(viewsets.ModelViewSet):
     queryset = TechStack.objects.all()
     serializer_class = TechStackSerializer
+    pagination_class = None
 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
@@ -257,7 +286,7 @@ class TechStackViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
-        name = request.data.get('name')
+        name = (request.data.get('name') or '').strip()
         section_id = request.data.get('section')
         icon = request.FILES.get('icon')
 
@@ -265,25 +294,21 @@ class TechStackViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Name and section are required'}, status=400)
 
         try:
-            section_id = int(section_id)
-            section = Tech_Section.objects.get(id=section_id)
-        except (ValueError, Tech_Section.DoesNotExist):
+            section = Tech_Section.objects.get(id=int(section_id))
+        except (ValueError, TypeError, Tech_Section.DoesNotExist):
             return Response({'error': 'Invalid section'}, status=400)
 
-        tech = TechStack.objects.filter(name=name, section=section).first()
-        if tech:
-            if icon:
-                tech.icon = icon
+        tech, created = TechStack.objects.get_or_create(
+            name=name,
+            section=section,
+            defaults={'icon': icon} if icon else {},
+        )
+        if not created and icon:
+            tech.icon = icon
             tech.save()
-            serializer = self.get_serializer(tech)
-            return Response(serializer.data, status=200)
-        else:
-            tech = TechStack(name=name, section=section)
-            if icon:
-                tech.icon = icon
-            tech.save()
-            serializer = self.get_serializer(tech)
-            return Response(serializer.data, status=201)
+
+        serializer = self.get_serializer(tech)
+        return Response(serializer.data, status=201 if created else 200)
 
 class Tech_SectionViewSet(viewsets.ModelViewSet):
     queryset = Tech_Section.objects.all()

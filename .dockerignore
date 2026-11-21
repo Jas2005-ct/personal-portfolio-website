@@ -4,7 +4,9 @@
 .env
 db.sqlite3
 media/
-static_files/
+staticfiles/
+node_modules/
+theme/static_src/node_modules/
 __pycache__/
 *.pyc
 *.pyo

@@ -38,16 +38,13 @@ if not SECRET_KEY:
     else:
         raise ImproperlyConfigured('SECRET_KEY environment variable must be set in production.')
 
-# In production ALLOWED_HOSTS must be provided via env; fail closed if missing.
-ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '').split(',') if h.strip()]
-
-if not ALLOWED_HOSTS:
-    if DEBUG:
-        ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
-    else:
-        render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-        if render_host:
-            ALLOWED_HOSTS.append(render_host)
+# ALLOWED_HOSTS must be provided via env (comma-separated); fail closed if missing.
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = [h.strip() for h in os.environ['ALLOWED_HOSTS'].split(',') if h.strip()]
+elif DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -74,13 +71,14 @@ if sys.platform == 'win32':
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # WhiteNoise must sit directly after SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -217,7 +215,6 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
     SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
     # Force HTTPS and secure cookies behind a proxy (e.g. Render)

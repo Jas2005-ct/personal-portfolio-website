@@ -33,14 +33,15 @@ RUN poetry config virtualenvs.create false \
 # Copy the rest of the application code
 COPY . /app/
 
-# Build Tailwind CSS, collect static files, and prepare the database
-ENV SECRET_KEY=build-time-secret-key-not-for-production
-ENV DEBUG=true
+# Build Tailwind CSS, collect static files
+# NOTE: build-only settings are passed inline (ARG-free) so they never persist
+# into the runtime image. DEBUG=true lets collectstatic run without a real
+# SECRET_KEY; runtime settings come exclusively from the deployment platform.
 RUN cd theme/static_src && npm ci && npm run build && cd ../..
-RUN python manage.py collectstatic --no-input
+RUN DEBUG=true python manage.py collectstatic --no-input
 
 # Expose the port
 EXPOSE 8000
 
-# Apply migrations, then start Gunicorn
-CMD ["sh", "-c", "python manage.py migrate --no-input || echo 'Migrations skipped/failed - check DATABASE_URL'; gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
+# Apply migrations (fail hard on error), then start Gunicorn via exec (signal-friendly)
+CMD ["sh", "-c", "python manage.py migrate --no-input && exec gunicorn project.wsgi:application --bind 0.0.0.0:${PORT}"]
