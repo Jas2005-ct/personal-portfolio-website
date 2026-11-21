@@ -80,7 +80,7 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-40 backdrop-blur-xl bg-white/90 border-b border-line shadow-soft">
+    <nav id="site-nav" class="fixed top-0 w-full z-40 backdrop-blur-xl border-b transition-all duration-300 ease-smooth">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
             <a href="#home"
                 class="text-lg font-bold text-ink-900 tracking-tight transition-colors duration-300 hover:text-accent-500">Portfolio</a>
@@ -769,6 +769,16 @@
                         }
                     });
                 });
+            }
+
+            // Header: transparent over the hero, frosted once the page scrolls
+            var siteNav = document.getElementById('site-nav');
+            if (siteNav) {
+                var syncNavTone = function () {
+                    siteNav.classList.toggle('is-transparent', window.scrollY <= 8);
+                };
+                syncNavTone();
+                window.addEventListener('scroll', syncNavTone, { passive: true });
             }
 
             function onReady(fn) {
